@@ -1,4 +1,7 @@
 # Praktikum Minggu 1
+# Nama  : Yesaya Mexi Dasalaku
+# NIM   : 255410029
+# Kelas : IF-1
 # Bab 1: Instalasi Git
 
 ## Tujuan
