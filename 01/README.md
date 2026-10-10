@@ -14,7 +14,7 @@
 
 | | |
 |---|---|
-| **Penulis** | Nama Mahasiswa |
+| **Penulis** | Yesaya Mexi Dasalaku |
 | **Peran** | Penulis |
 | **Pembaruan Terakhir** | 10 Oktober 2026 |
 
@@ -108,15 +108,11 @@ Agar file tersusun rapi, buat folder berdasarkan nomor praktikum.
 praktikum-komputer/
 ├── README.md
 ├── 01/
-│   ├── README.md
-│   └── Images/
-│       ├── foto1.png
-│       └── foto2.png
-└── 02/
     ├── README.md
     └── Images/
         ├── foto1.png
         └── foto2.png
+
 ```
 
 **Keterangan:**
