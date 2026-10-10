@@ -1,79 +1,129 @@
-## Praktikum Minggu 1
-## Nama  : Yesaya Mexi Dasalaku
-## NIM   : 255410029
-## Kelas : IF-1
+Petunjuk Penggunaan Git dan GitHub
 
+Nama| Peran| Pembaruan Terakhir
+Nama Mahasiswa| Penulis| 10 Oktober 2026
 
-# Instalasi Git
+Dokumen ini menjelaskan cara menggunakan Git dan GitHub untuk mengelola dokumen digital, menyimpan kode program, membuat folder tugas, mengunggah foto praktikum, dan mengelola laporan secara terstruktur.
 
-## Tujuan
+Modul ini disusun untuk membantu mahasiswa memahami penggunaan Git dan GitHub dalam kegiatan praktikum dan pengerjaan tugas perkuliahan.
 
-- Mengunduh dan memasang Git for Windows.
-- Memilih pengaturan installer yang tepat.
-- Memverifikasi bahwa Git berjalan.
+Daftar Isi
 
-## Langkah-langkah
+1. "Pengenalan Git dan GitHub" (#1-pengenalan-git-dan-github)
+2. "Instalasi Git" (#2-instalasi-git)
+3. "Konfigurasi Git" (#3-konfigurasi-git)
+4. "Membuat Repository GitHub" (#4-membuat-repository-github)
+5. "Membuat Folder dan File" (#5-membuat-folder-dan-file)
+6. "Mengunggah Laporan dan Foto" (#6-mengunggah-laporan-dan-foto)
+7. "Mengelola Perubahan File" (#7-mengelola-perubahan-file)
+8. "Kesimpulan" (#8-kesimpulan)
 
-1. Buka <https://git-scm.com/downloads/win> di browser, lalu unduh installer **64-bit Git for Windows Setup**.
+---
 
-   ![Halaman unduhan Git for Windows](images/install-git-01.png)
+1. Pengenalan Git dan GitHub
 
-2. Jalankan file installer yang sudah diunduh. Jika Windows menanyakan izin, klik **Yes**.
+Git adalah sistem pengontrol versi yang digunakan untuk mencatat perubahan pada file dan kode program.
 
-3. Pada halaman lisensi, klik **Next**. Pada halaman lokasi instalasi, biarkan bawaan lalu klik **Next**.
+GitHub adalah platform online yang memungkinkan pengguna menyimpan repository, mengelola proyek, dan berbagi pekerjaan dengan orang lain.
 
-4. Pada halaman **Select Components**, biarkan pilihan bawaan lalu klik **Next**. Anda juga boleh mencentang **Add a Git Bash Profile to Windows Terminal** jika memakai Windows Terminal.
+Tujuan penggunaan Git dan GitHub:
 
-   ![Memilih komponen instalasi](images/install-git-02.png)
+- Menyimpan file tugas secara online.
+- Mengelola perubahan dokumen.
+- Memisahkan laporan dan foto dalam folder.
+- Mempermudah pengumpulan tugas kepada dosen.
 
-5. Pilih editor yang akan digunakan bersama Git. Pada dasarnya Anda bebas memilih editor apa pun. Vim sulit dipakai pemula, jadi pilih **Use Visual Studio Code as Git's default editor** jika VS Code sudah terpasang. Jika belum, pilih editor lain seperti Notepad++.
+2. Instalasi Git
 
-   ![Memilih editor default Git](images/install-git-03.png)
+Langkah-langkah instalasi Git:
 
-6. Pada halaman **Adjusting the name of the initial branch**, pilih **Override the default branch name for new repositories** dan isi `main`. Ini sesuai dengan nama branch awal di GitHub.
+1. Buka website https://git-scm.com/.
+2. Unduh Git sesuai sistem operasi komputer.
+3. Jalankan file installer.
+4. Ikuti petunjuk instalasi hingga selesai.
+5. Buka Command Prompt atau terminal.
+6. Ketik perintah berikut untuk memeriksa instalasi:
 
-   ![Menentukan nama branch awal](images/install-git-04.png)
+"git --version"
 
-7. Pada halaman **Adjusting your PATH environment**, pilih **Git from the command line and also from 3rd-party software**. Pilihan ini membuat perintah `git` bisa dipakai dari Command Prompt dan PowerShell.
+Jika versi Git muncul, instalasi berhasil.
 
-   ![Memilih pengaturan PATH](images/install-git-05.png)
+3. Konfigurasi Git
 
-8. Pada halaman berikutnya, biarkan pilihan bawaan untuk SSH, HTTPS transport backend, line ending, dan terminal emulator. Klik **Next** di setiap halaman.
+Setelah Git terpasang, lakukan konfigurasi nama dan email.
 
-9. Pada halaman **Choose a credential helper**, biarkan **Git Credential Manager**. Fitur ini yang membuka jendela login GitHub saat Anda melakukan push pertama.
+Buka terminal, kemudian masukkan perintah:
 
-10. Klik **Install** dan tunggu sampai selesai, lalu klik **Finish**.
+git config --global user.name "Nama Mahasiswa"
+git config --global user.email "email@example.com"
 
-    ![Instalasi selesai](images/install-git-06.png)
+Ganti nama dan email tersebut dengan identitas yang digunakan untuk Git.
 
-## Verifikasi
+4. Membuat Repository GitHub
 
-Buka **Command Prompt** (tekan tombol Windows, ketik `cmd`, lalu Enter) dan jalankan:
+Langkah-langkah membuat repository:
 
-```
-git --version
-<img width="251" height="42" alt="image" src="https://github.com/user-attachments/assets/c74436b8-fa72-4d8e-b80b-ce746756318d" />
+1. Buka https://github.com/.
+2. Login ke akun GitHub.
+3. Klik tombol +, kemudian pilih New repository.
+4. Masukkan nama repository, misalnya "praktikum-komputer".
+5. Pilih Public atau Private sesuai kebutuhan.
+6. Klik Create repository.
 
+Repository digunakan sebagai tempat penyimpanan file tugas dan dokumentasi praktikum.
 
-Hasil yang diharapkan berupa nomor versi, misalnya:
+5. Membuat Folder dan File
 
-```
-git version 2.56.0.windows.2
-```
+Agar file tersusun rapi, buat folder berdasarkan nomor praktikum.
 
-Jika Anda menjalankan `git` saja, yang muncul adalah daftar bantuan perintah. Itu juga menandakan Git sudah terpasang.
+Contoh struktur repository:
 
-![Hasil git --version di Command Prompt](images/install-git-07.png)
+praktikum-komputer/
+├── README.md
+├── 01/
+│   ├── README.md
+│   └── Images/
+│       ├── foto1.png
+│       └── foto2.png
+└── 02/
+    ├── README.md
+    └── Images/
+        ├── foto1.png
+        └── foto2.png
 
-## Masalah yang sering muncul
+Keterangan:
 
-| Gejala | Penyebab | Solusi |
-| --- | --- | --- |
-| `'git' is not recognized` | Terminal dibuka sebelum instalasi selesai, atau PATH belum diatur | Tutup dan buka kembali terminal. Jika masih gagal, pasang ulang dan pilih opsi PATH pada langkah 7 |
-| Installer tidak mau berjalan | Izin administrator ditolak | Jalankan ulang installer dan klik **Yes** saat diminta izin |
+- "README.md" berisi penjelasan utama repository atau laporan.
+- Folder "01" dan "02" digunakan untuk memisahkan praktikum.
+- Folder "Images" digunakan untuk menyimpan foto dokumentasi.
+- File foto disimpan sesuai kegiatan praktikum.
 
-## Latihan
+6. Mengunggah Laporan dan Foto
 
-- [ ] Jalankan `git --version` dan tangkap layar hasilnya.
-- [ ] Jalankan `git help commit` dan lihat halaman bantuan yang terbuka di browser.
-- [ ] Sebutkan editor yang Anda pilih pada langkah 5 beserta alasannya.
+Langkah-langkah mengunggah file melalui website GitHub:
+
+1. Buka repository yang ingin digunakan.
+2. Masuk ke folder tujuan.
+3. Klik Add file.
+4. Pilih Upload files.
+5. Pilih file laporan atau foto dari komputer.
+6. Klik Commit changes untuk menyimpan perubahan.
+
+Laporan dapat disimpan dalam format PDF, DOCX, atau Markdown. Foto dapat disimpan dalam format JPG atau PNG.
+
+Pastikan laporan dan foto dimasukkan ke folder yang sesuai.
+
+7. Mengelola Perubahan File
+
+Jika ingin memperbarui laporan:
+
+1. Buka file laporan pada repository.
+2. Klik ikon pensil atau Edit jika tersedia.
+3. Lakukan perubahan.
+4. Klik Commit changes.
+
+Setiap perubahan yang disimpan akan tercatat dalam riwayat repository sehingga pengguna dapat melihat perkembangan file.
+
+8. Kesimpulan
+
+Git dan GitHub membantu mahasiswa menyimpan, mengatur, serta memperbarui file praktikum secara terstruktur. Dengan membuat folder terpisah untuk laporan dan foto, dokumen menjadi lebih mudah ditemukan dan diperiksa. Penggunaan repository juga mempermudah pengumpulan serta dokumentasi tugas perkuliahan.
