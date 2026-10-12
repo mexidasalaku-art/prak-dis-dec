@@ -65,15 +65,18 @@ Buka Task Manager (`Ctrl + Shift + Esc`).
 
 ### 2. Jalankan aplikasi dan perlihatkan prosesnya
 
-Contoh: menjalankan Notepad.
+Contoh: menjalankan word.
 
-<img src="images/02_Jalankan_Notepad.png" width="700">
+<img width="951" height="500" alt="02_proses_word" src="https://github.com/user-attachments/assets/0aa554fb-184d-42f4-9621-a24c8701e735" />
+
 
 Proses yang muncul dapat dilihat di Task Manager:
 
-<img src="images/03_Proses_Notepad.png" width="700">
+<img width="356" height="141" alt="03_detail_word" src="https://github.com/user-attachments/assets/bbdd66a6-0b98-4319-b5df-ca711676c5b5" />
 
-<img src="images/04_Detail_Proses.png" width="700">
+<img width="772" height="361" alt="04_and_task" src="https://github.com/user-attachments/assets/2cee7f17-0012-4f5d-97f5-c4cdcc622feb" />
+
+
 
 #### Pembahasan
 
