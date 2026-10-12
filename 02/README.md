@@ -1,4 +1,4 @@
-# Praktikum Minggu 02 - Komunikasi Antar Proses pada Sistem Terdistribusi
+# Praktikum Minggu MODUL 02 - Komunikasi Antar Proses pada Sistem Terdistribusi
 
 | | |
 | --- | --- |
@@ -10,25 +10,15 @@
 
 ---
 
-# 📑 Daftar Isi
-
-- [Tujuan Praktikum](#-tujuan-praktikum)
-- [Dasar Teori](#-dasar-teori)
-- [Praktik 1 - Proses pada Satu Node](#praktik-1---proses-pada-satu-node)
-- [Praktik 2 - Komunikasi Antar Proses pada Sistem Terdistribusi](#praktik-2---komunikasi-antar-proses-pada-sistem-terdistribusi)
-- [Tugas](#-pembahasan-tugas)
-- [Kesimpulan](#-kesimpulan)
-- [Referensi](#referensi)
 
 ---
 
 # 📚 Tujuan Praktikum
 
-1. Memahami konsep proses pada sistem operasi dan cara sistem operasi mengelola proses pada satu node.
-2. Menampilkan daftar proses yang berjalan pada Windows melalui Task Manager.
-3. Menjalankan aplikasi, serta mematikan dan me-restart prosesnya menggunakan perintah CMD.
-4. Memahami komunikasi antar proses pada sistem terdistribusi dengan membuat server GraphQL menggunakan Python (Strawberry) dan client yang berkomunikasi dengannya.
-
+1. Mempelajari apa itu proses dan bagaimana sistem operasi mengatur proses-proses yang berjalan dalam satu komputer.
+2. Melihat proses apa saja yang sedang aktif di Windows dengan memanfaatkan Task Manager.
+3. Mencoba membuka sebuah aplikasi, lalu menghentikan dan menjalankan kembali prosesnya lewat perintah di CMD.
+4. Mempraktikkan cara dua proses saling bertukar data pada sistem terdistribusi, yaitu dengan membangun server GraphQL berbasis Python (Strawberry) dan sebuah client yang meminta data darinya.
 ---
 
 # 📚 Dasar Teori
