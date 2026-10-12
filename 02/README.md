@@ -13,7 +13,7 @@
 
 ---
 
-# 📚 Tujuan Praktikum
+#  Tujuan Praktikum
 
 1. Mempelajari apa itu proses dan bagaimana sistem operasi mengatur proses-proses yang berjalan dalam satu komputer.
 2. Melihat proses apa saja yang sedang aktif di Windows dengan memanfaatkan Task Manager.
@@ -21,7 +21,7 @@
 4. Mempraktikkan cara dua proses saling bertukar data pada sistem terdistribusi, yaitu dengan membangun server GraphQL berbasis Python (Strawberry) dan sebuah client yang meminta data darinya.
 ---
 
-# 📚 Dasar Teori
+#  Dasar Teori
 
 ## Proses
 
@@ -54,7 +54,8 @@ Pada sistem terdistribusi, setiap node punya clock dan memori sendiri sehingga s
 
 Buka Task Manager (`Ctrl + Shift + Esc`).
 
-<img src="images/01_Tampilan_Proses.png" width="700">
+<img width="921" height="469" alt="image" src="https://github.com/user-attachments/assets/6849da7d-806a-4e91-b5cd-b11f35c90a3c" />
+
 
 #### Pembahasan
 
