@@ -59,7 +59,7 @@ Buka Task Manager (`Ctrl + Shift + Esc`).
 
 #### Pembahasan
 
-<p align="justify">Task Manager menampilkan semua proses yang sedang berjalan, baik aplikasi yang dibuka pengguna maupun layanan latar belakang milik sistem. Informasi yang terlihat antara lain nama proses, PID, serta pemakaian CPU dan memori. Semuanya diatur otomatis oleh sistem operasi.</p>
+<p align="justify">Task Manager adalah aplikasi bawaan Windows untuk melihat proses yang sedang berjalan beserta PID, CPU, dan memori yang dipakainya. Dari sini terlihat bahwa setiap aplikasi yang berjalan adalah sebuah proses yang dikelola sistem operasi secara otomatis.</p>
 
 ---
 
