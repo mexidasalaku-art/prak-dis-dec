@@ -46,7 +46,7 @@ Pada sistem terdistribusi, setiap node punya clock dan memori sendiri sehingga s
 
 ---
 
-# ⏩ PEMBAHASAN PRAKTIKUM
+#  PEMBAHASAN PRAKTIKUM
 
 ## PRAKTIK 1 - PROSES PADA SATU NODE
 
@@ -370,7 +370,7 @@ Untuk mematikan server tekan `Ctrl + C` pada terminal tempat server berjalan.
 
 ---
 
-# ⏩ PEMBAHASAN TUGAS
+#  PEMBAHASAN TUGAS
 
 ### 1. Buat file `client.py`
 
@@ -435,7 +435,7 @@ python client.py
 
 ---
 
-# 📝 Kesimpulan
+#  Kesimpulan
 
 1. Pada satu node, proses dikelola sepenuhnya oleh sistem operasi dan dapat dilihat dengan `tasklist`, dimatikan dengan `taskkill`, dan dijalankan kembali dengan `start`.
 2. Pada sistem terdistribusi, komunikasi antar proses memerlukan mekanisme khusus karena clock berbeda dan tidak ada shared memory. GraphQL adalah salah satu caranya.
