@@ -318,12 +318,6 @@ Untuk keluar dari environment:
 deactivate
 ```
 
-<img src="images/18_Deactivate.png" width="700">
-
-#### Pembahasan
-
-<p align="justify"><code>uv venv</code> membuat environment terisolasi di folder <code>.venv</code>. Setelah diaktifkan, prompt diawali nama environment dan <code>where python</code> menunjuk ke <code>.venv\Scripts\python.exe</code>, artinya semua paket yang dipasang masuk ke environment ini. <code>deactivate</code> mengembalikan terminal ke Python sistem.</p>
-
 <img width="404" height="38" alt="17_Menonaktifkan_Virtual_Environment" src="https://github.com/user-attachments/assets/71f9f342-8206-4f86-94e1-ad98445b8136" />
 
 #### Pembahasan
