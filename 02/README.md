@@ -101,7 +101,7 @@ Klik kanan proses `WINWORD.EXE`, lalu pilih **End task**.
 tasklist
 ```
 
-<img src="images/06_Tasklist.png" width="700">
+<img width="543" height="156" alt="05_tasklist" src="https://github.com/user-attachments/assets/b3a8f825-effc-43a3-bce0-ee5ea0ab79d5" />
 
 #### Pembahasan
 
@@ -112,10 +112,10 @@ tasklist
 #### Mencari proses tertentu
 
 ```powershell
-tasklist | findstr /i notepad
+tasklist | findstr /i winword
 ```
 
-<img src="images/07_Cari_Proses_Notepad.png" width="700">
+<img width="475" height="51" alt="06_tasklist_winword" src="https://github.com/user-attachments/assets/b96f1157-03d4-43e5-8138-50a3a295f515" />
 
 #### Pembahasan
 
