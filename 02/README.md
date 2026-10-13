@@ -271,26 +271,20 @@ uv self update
 
 ```powershell
 cd workspace-01
-mkdir workspace-002
+mkdir workspace-02
 uv python list
 ```
 
 <img width="446" height="156" alt="12_Membuat_Folder_Workspace_Baru" src="https://github.com/user-attachments/assets/3c8fb983-6a2c-46e4-aff4-48f4cdabc154" />
 
+#### Pembahasan
+<p align="justify">proses pembuatan folder baru bernama workspace-02 di dalam direktori workspace-01 menggunakan perintah mkdir pada PowerShell. Perintah cd workspace-01 digunakan untuk masuk ke direktori tersebut, sedangkan mkdir workspace-02 digunakan untuk membuat folder baru sebagai tempat menyimpan file atau proyek.</p>
 
-
-Pin versi Python memakai kolom kanan (path executable):
-
-```powershell
-uv python pin C:\Users\HP\AppData\Roaming\uv\python\cpython-3.14.8-windows-x86_64-none\python.exe
-type .python-version
-```
-
-<img src="images/15_Python_Pin.png" width="700">
+<img width="953" height="362" alt="13_Daftar_Versi_Python_dengan_uv" src="https://github.com/user-attachments/assets/011fb0ac-42ac-4ed6-8ff1-460a41e96b9d" />
 
 #### Pembahasan
 
-<p align="justify">Direktori terpisah menjaga file proyek tetap rapi. <code>uv python list</code> menampilkan versi Python yang tersedia. File <code>.python-version</code> mengunci versi Python proyek. Memakai path executable (kolom kanan) lebih aman karena tidak ambigu dan tidak memicu unduhan, sedangkan nama di kolom kiri akan mengambil entri paling atas dan mengunduh jika belum terpasang.</p>
+<p align="justify">penggunaan perintah uv python list untuk menampilkan berbagai versi Python yang tersedia. Daftar tersebut mencakup versi yang dapat diunduh maupun versi yang sudah terpasang di komputer. Perintah ini membantu pengguna mengetahui pilihan versi Python yang dapat digunakan untuk menjalankan proyek sesuai kebutuhan.</p>
 
 ---
 
