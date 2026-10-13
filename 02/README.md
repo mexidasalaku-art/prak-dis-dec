@@ -334,7 +334,10 @@ Pasang pandas:
 uv pip install pandas
 ```
 
-<img src="images/19_Install_Pandas.png" width="700">
+<img width="357" height="133" alt="18_Instalasi_Pandas_dengan_uv" src="https://github.com/user-attachments/assets/09febd92-0c54-45f5-af75-d54ab198f8e2" />
+#### Pembahasan
+
+<p align="justify">proses instalasi library Pandas menggunakan perintah uv pip install pandas melalui PowerShell. Proses instalasi berhasil dengan memasang lima paket, yaitu Pandas versi 3.0.6 beserta dependensinya, seperti NumPy, python-dateutil, six, dan tzdata. Instalasi ini memungkinkan Python digunakan untuk mengolah dan menganalisis data dalam bentuk tabel secara lebih mudah.</p>
 
 Pasang Strawberry GraphQL dan requests (requests dipakai oleh client pada tugas):
 
@@ -342,22 +345,36 @@ Pasang Strawberry GraphQL dan requests (requests dipakai oleh client pada tugas)
 uv pip install "strawberry-graphql[cli]" requests
 ```
 
-<img src="images/20_Install_Strawberry.png" width="700">
+<img width="496" height="392" alt="19_Instalasi_Strawberry_GraphQL_CLI" src="https://github.com/user-attachments/assets/9e6a855c-238a-4a71-b35f-4c5a3da4cf82" />
+
+#### Pembahasan
+
+<p align="justify">proses instalasi paket strawberry-graphql beserta fitur CLI (Command Line Interface) menggunakan perintah uv pip install "strawberry-graphql[cli]". Proses instalasi berhasil dengan memasang 23 paket yang dibutuhkan, termasuk Strawberry GraphQL, GraphQL Core, Typer, dan Uvicorn. Paket-paket tersebut digunakan untuk membangun API berbasis GraphQL dan menyediakan alat pendukung untuk menjalankan serta mengembangkan aplikasi Python.</p>
 
 Lihat paket terpasang dan simpan ke `requirements.txt`:
 
 ```powershell
 uv pip list
-uv pip freeze > requirements.txt
-type requirements.txt
 ```
 
-<img src="images/21_Daftar_Paket.png" width="700">
+<img width="313" height="461" alt="20_okumentasi_instalasi_library_python" src="https://github.com/user-attachments/assets/93f7859e-a0ac-4daa-9acd-3086e861af65" />
 
 #### Pembahasan
 
-<p align="justify"><code>uv pip install</code> mengunduh paket beserta dependensinya ke environment aktif. Tambahan <code>[cli]</code> pada Strawberry memasang perintah <code>strawberry</code> untuk menjalankan server. <code>uv pip freeze</code> menyimpan daftar paket berikut versinya ke <code>requirements.txt</code> sehingga lingkungan yang sama dapat dipasang ulang di komputer lain.</p>
+<p align="justify">asil perintah uv pip list yang menampilkan 30 package Python beserta versinya. Package tersebut mendukung pengembangan aplikasi web, pengolahan data, dan komunikasi asynchronous.</p>
 
+```powershell
+uv pip freeze > requirements.txt
+```
+
+```powershell
+type requirements.txt
+```
+<img width="437" height="434" alt="21_requirements txt" src="https://github.com/user-attachments/assets/cf3e1fc4-ff63-4ac2-97f2-9309709eee3a" />
+
+#### Pembahasan
+
+<p align="justify">File requirements.txt dibuat menggunakan perintah uv pip freeze > requirements.txt untuk menyimpan daftar package Python beserta versinya yang terpasang pada lingkungan aktif. Selanjutnya, perintah cat requirements.txt digunakan untuk menampilkan isi file tersebut di terminal. File ini berfungsi sebagai dokumentasi dependensi proyek sehingga package yang dibutuhkan dapat diinstal kembali menggunakan perintah uv pip install -r requirements.txt.</p>
 ---
 
 ### 6. Membuat Server GraphQL dengan Strawberry
