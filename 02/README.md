@@ -301,9 +301,16 @@ uv venv
 where python
 ```
 
-<img src="images/16_Membuat_Environment.png" width="700">
+<img width="842" height="85" alt="15_Membuat_Virtual_Environment_Python" src="https://github.com/user-attachments/assets/bb28a0ef-c35e-4e40-8124-7a1277b1c951" />
 
-<img src="images/17_Mengaktifkan_Environment.png" width="700">
+#### Pembahasan
+
+<p align="justify">proses pembuatan lingkungan virtual Python menggunakan perintah uv venv. Lingkungan virtual dibuat pada folder .venv dengan menggunakan interpreter CPython versi 3.14.8. Karena folder .venv sudah tersedia, sistem meminta konfirmasi untuk menggantinya. Pengguna memilih yes untuk melanjutkan proses penggantian lingkungan virtual yang sudah ada.</p>
+
+<img width="577" height="61" alt="16_Aktivasi_Virtual_Environment_Python" src="https://github.com/user-attachments/assets/4ec7e1d9-3e0e-4396-881c-8901e26d0774" />
+
+#### Pembahasan
+<p align="justify">proses aktivasi virtual environment menggunakan perintah .\.venv\Scripts\Activate pada PowerShell. Setelah aktivasi berhasil, muncul tanda (workspace-01) pada terminal. Selanjutnya, perintah python dijalankan untuk membuka interpreter Python versi 3.14.8. Hal ini menunjukkan bahwa lingkungan virtual telah aktif dan Python siap digunakan untuk menjalankan kode program.</p>
 
 Untuk keluar dari environment:
 
@@ -316,6 +323,12 @@ deactivate
 #### Pembahasan
 
 <p align="justify"><code>uv venv</code> membuat environment terisolasi di folder <code>.venv</code>. Setelah diaktifkan, prompt diawali nama environment dan <code>where python</code> menunjuk ke <code>.venv\Scripts\python.exe</code>, artinya semua paket yang dipasang masuk ke environment ini. <code>deactivate</code> mengembalikan terminal ke Python sistem.</p>
+
+<img width="404" height="38" alt="17_Menonaktifkan_Virtual_Environment" src="https://github.com/user-attachments/assets/71f9f342-8206-4f86-94e1-ad98445b8136" />
+
+#### Pembahasan
+
+<p align="justify">proses menonaktifkan virtual environment menggunakan perintah deactivate pada PowerShell. Setelah perintah dijalankan, tanda (workspace-01) menghilang dari terminal, yang menandakan bahwa virtual environment berhasil dinonaktifkan. Terminal kemudian kembali ke kondisi normal tanpa lingkungan virtual yang aktif.</p>
 
 ---
 
