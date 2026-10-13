@@ -286,6 +286,11 @@ uv python list
 
 <p align="justify">penggunaan perintah uv python list untuk menampilkan berbagai versi Python yang tersedia. Daftar tersebut mencakup versi yang dapat diunduh maupun versi yang sudah terpasang di komputer. Perintah ini membantu pengguna mengetahui pilihan versi Python yang dapat digunakan untuk menjalankan proyek sesuai kebutuhan.</p>
 
+<img width="626" height="61" alt="14_Konfigurasi_Versi_Python_uv" src="https://github.com/user-attachments/assets/fbe30200-f347-4a7b-892b-b6d4fbb730df" />
+
+#### Pembahasan
+<p align="justify">proses pengaturan versi Python menggunakan perintah uv python pin pada PowerShell. Perintah ini digunakan untuk menentukan interpreter Python yang akan digunakan dalam proyek dengan menyimpan lokasinya ke file .python-version. Selanjutnya, perintah cat .python-version digunakan untuk menampilkan isi file tersebut. Hasilnya menunjukkan lokasi Python di C:\Users\HP\.local\bin\python3.14.exe, sehingga konfigurasi versi Python berhasil disimpan.</p>
+
 ---
 
 ### 4. Membuat Environment
