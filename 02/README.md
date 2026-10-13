@@ -126,7 +126,7 @@ tasklist | findstr /i winword
 #### Mematikan proses lewat CMD
 
 ```powershell
-taskkill /IM notepad.exe /F
+taskkill /IM WINWORD.EXE /F
 ```
 
 <img width="518" height="47" alt="07_Menutup_Proses_Microsoft_Word" src="https://github.com/user-attachments/assets/2e93456e-c5ee-4fb8-954a-e0f3cb7ae707" />
