@@ -74,9 +74,6 @@ Proses yang muncul dapat dilihat di Task Manager:
 
 <img width="356" height="141" alt="03_detail_word" src="https://github.com/user-attachments/assets/bbdd66a6-0b98-4319-b5df-ca711676c5b5" />
 
-<img width="772" height="361" alt="04_and_task" src="https://github.com/user-attachments/assets/2cee7f17-0012-4f5d-97f5-c4cdcc622feb" />
-
-
 
 #### Pembahasan
 
@@ -88,9 +85,9 @@ Proses yang muncul dapat dilihat di Task Manager:
 
 #### Mematikan proses lewat Task Manager
 
-Klik kanan proses `notepad.exe`, lalu pilih **End task**.
+Klik kanan proses `WINWORD.EXE`, lalu pilih **End task**.
 
-<img src="images/05_Mematikan_Proses_Via_TaskManager.png" width="700">
+<img width="772" height="361" alt="04_and_task" src="https://github.com/user-attachments/assets/c91a2b85-02cc-46a4-a374-3b40cdfe8990" />
 
 #### Pembahasan
 
