@@ -185,7 +185,7 @@ uv --version
 
 #### Pembahasan
 
-<p align="justify">uv adalah package manager Python yang sangat cepat. Selain memasang paket, uv juga mengelola versi Python dan virtual environment. Agar perintah <code>uv</code> dikenali di mana saja, folder instalasinya harus ada di PATH.</p>
+<p align="justify">Gambar tersebut menunjukkan proses instalasi uv versi 0.13.0 melalui PowerShell. Instalasi berhasil dilakukan, dan perintah uv --version digunakan untuk memastikan bahwa uv telah terpasang dan dapat dijalankan dengan baik.</p>
 
 ---
 
