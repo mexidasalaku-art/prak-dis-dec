@@ -129,39 +129,39 @@ tasklist | findstr /i winword
 taskkill /IM notepad.exe /F
 ```
 
-<img src="images/08_Taskkill_Notepad.png" width="700">
+<img width="518" height="47" alt="07_Menutup_Proses_Microsoft_Word" src="https://github.com/user-attachments/assets/2e93456e-c5ee-4fb8-954a-e0f3cb7ae707" />
 
 #### Pembahasan
 
-<p align="justify"><code>/IM</code> menunjuk proses berdasarkan nama file executable, sedangkan <code>/F</code> memaksa proses berhenti meskipun tidak merespons. Setelah dijalankan, jendela Notepad tertutup.</p>
+<p align="justify"><code>/IM</code> Menunjuk proses berdasarkan nama file executable, sedangkan /F memaksa proses berhenti meskipun tidak merespons. Setelah dijalankan, aplikasi Microsoft Word tertutup.</p>
 
 ---
 
 #### Memastikan proses sudah berhenti
 
 ```powershell
-tasklist | findstr /i notepad
+tasklist | findstr /i winword
 ```
 
-<img src="images/09_Memastikan_Proses_Berhenti.png" width="700">
+<img width="392" height="34" alt="08_Mengecek_Proses_Winword" src="https://github.com/user-attachments/assets/d3dea140-c79d-4207-ab93-ff00882ab6b6" />
 
 #### Pembahasan
 
-<p align="justify">Tidak ada hasil yang keluar, sehingga terbukti proses <code>notepad.exe</code> sudah tidak berjalan.</p>
+<p align="justify">Tidak terdapat hasil yang ditampilkan, sehingga dapat disimpulkan bahwa proses WINWORD.EXE sudah tidak berjalan pada sistem.</p>
 
 ---
 
 #### Me-restart proses
 
 ```powershell
-start "" notepad
+start "" winword
 ```
 
-<img src="images/10_Restart_Proses.png" width="700">
+<img width="301" height="52" alt="09_Menjalankan_Microsoft_Winword" src="https://github.com/user-attachments/assets/c8291a6f-31c9-4297-8248-2079bdce4181" />
 
 #### Pembahasan
 
-<p align="justify">Perintah <code>start</code> menganggap argumen pertama sebagai judul jendela, sehingga tanda <code>""</code> diperlukan agar <code>notepad</code> dibaca sebagai nama program. Proses <code>notepad.exe</code> kembali muncul dengan PID yang baru.</p>
+<p align="justify">Perintah start menganggap argumen pertama sebagai judul jendela, sehingga tanda "" diperlukan agar winword dibaca sebagai nama program. Setelah perintah dijalankan, proses WINWORD.EXE kembali berjalan dengan PID yang baru.</p>
 
 ---
 
