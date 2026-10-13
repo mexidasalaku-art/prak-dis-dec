@@ -80,7 +80,7 @@ Proses yang muncul dapat dilihat di Task Manager:
 
 #### Pembahasan
 
-<p align="justify">Setelah Notepad dibuka, muncul proses <code>notepad.exe</code>. Artinya file program yang semula hanya tersimpan di disk kini dieksekusi sistem operasi menjadi proses. Pada tab Details terlihat PID dan status proses sehingga dapat dibedakan dari proses lain.</p>
+<p align="justify">Setelah Word dibuka, muncul proses WINWORD.EXE. Artinya file program yang semula hanya tersimpan di disk kini dieksekusi sistem operasi menjadi proses. Pada tab Details terlihat PID dan status proses sehingga dapat dibedakan dari proses lain.</p>
 
 ---
 
