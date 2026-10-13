@@ -181,7 +181,7 @@ Pastikan folder instalasi (`C:\Users\HP\.local\bin`) ada di PATH, lalu cek:
 uv --version
 ```
 
-<img src="images/11_Instalasi_uv.png" width="700">
+<img width="695" height="212" alt="10_Instalasi_uv" src="https://github.com/user-attachments/assets/5e84816c-b091-4586-b8a4-e7ba6000e74a" />
 
 #### Pembahasan
 
