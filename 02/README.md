@@ -252,31 +252,32 @@ PS C:\Users\HP>
 #### Pembahasan
 
 <p align="justify">uv berhasil dijalankan melalui PowerShell. Tampilan yang muncul berisi daftar perintah dan fungsi uv, seperti init untuk membuat proyek baru, run untuk menjalankan program, dan venv untuk membuat lingkungan virtual Python. Hal ini menandakan bahwa uv telah terpasang dan siap digunakan.</p>
+
 ### 2. Update uv
 
 ```powershell
 uv self update
 ```
 
-<img src="images/12_Update_uv.png" width="700">
+<img width="497" height="65" alt="11_Verifikasi_Update_uv" src="https://github.com/user-attachments/assets/07f6249d-a34a-4937-8a1b-78c67ec4c599" />
 
 #### Pembahasan
 
-<p align="justify">Perintah ini memperbarui uv ke versi terbaru. Jika sudah terbaru, uv hanya menampilkan pemberitahuan tanpa mengunduh apa pun. Perintah ini membutuhkan koneksi internet.</p>
+<p align="justify">proses pemeriksaan pembaruan aplikasi uv menggunakan perintah uv self update melalui Windows PowerShell. Perintah ini digunakan untuk memeriksa apakah tersedia versi uv yang lebih baru. Setelah proses pemeriksaan selesai, muncul pesan bahwa uv versi 0.13.0 sudah merupakan versi terbaru. Dengan demikian, aplikasi uv tidak memerlukan pembaruan lebih lanjut dan siap digunakan untuk mengelola paket Python, membuat lingkungan virtual, serta menjalankan proyek Python.</p>
 
 ---
 
 ### 3. Membuat Workspace
 
 ```powershell
-mkdir workspace-01
 cd workspace-01
+mkdir workspace-002
 uv python list
 ```
 
-<img src="images/13_Membuat_Workspace.png" width="700">
+<img width="446" height="156" alt="12_Membuat_Folder_Workspace_Baru" src="https://github.com/user-attachments/assets/3c8fb983-6a2c-46e4-aff4-48f4cdabc154" />
 
-<img src="images/14_Python_List.png" width="700">
+
 
 Pin versi Python memakai kolom kanan (path executable):
 
