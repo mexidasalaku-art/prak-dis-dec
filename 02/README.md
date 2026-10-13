@@ -249,6 +249,7 @@ Global options:
 Use `uv help` for more details.
 PS C:\Users\HP>
 ```
+#### Pembahasan
 
 <p align="justify">uv berhasil dijalankan melalui PowerShell. Tampilan yang muncul berisi daftar perintah dan fungsi uv, seperti init untuk membuat proyek baru, run untuk menjalankan program, dan venv untuk membuat lingkungan virtual Python. Hal ini menandakan bahwa uv telah terpasang dan siap digunakan.</p>
 ### 2. Update uv
