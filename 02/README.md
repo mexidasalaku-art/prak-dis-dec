@@ -379,6 +379,8 @@ type requirements.txt
 
 ### 6. Membuat Server GraphQL dengan Strawberry
 
+### Mendefinisikan skema
+
 Buat file `schema.py`. Urutan penulisan penting: `Book` dan `get_books` harus didefinisikan sebelum `Query` yang memakainya.
 
 ```python
@@ -415,6 +417,7 @@ schema = strawberry.Schema(query=Query)
 
 <p align="justify">Kode di schema.py ini mendefinisikan skema GraphQL sederhana dengan Strawberry: class Book adalah tipe data dengan field title dan author bertipe string, sedangkan class Query memiliki field books yang mengembalikan daftar objek Book, dan dekorator @strawberry.type mengubah class Python biasa menjadi tipe GraphQL. Namun, skema ini baru berisi definisi tipe, sehingga agar bisa dijalankan kamu masih perlu menambahkan resolver yang mengisi data buku serta membuat strawberry.Schema(query=Query).</p>
 
+### Definisikan kumpulan data
 ---
 
 Jalankan server:
@@ -436,16 +439,11 @@ def get_books():
 
 <p align="justify">Kode ini mendefinisikan skema GraphQL dengan Strawberry: Book adalah tipe dengan field title dan author, get_books() menyediakan data contoh berupa satu buku, dan Query punya field books. Namun books belum terhubung ke get_books(), jadi ubah menjadi books: typing.List[Book] = strawberry.field(resolver=get_books), lalu tambahkan schema = strawberry.Schema(query=Query) di bagian bawah agar skema bisa dijalankan.</p>
 
+### Mendefinisikan Resolver
 ```powershell
-```powershell
-def get_books():
-    return [
-        Book(
-            title="The Great Gatsby",
-            author="F. Scott Fitzgerald",
-        ),
-    ]
-```
+@strawberry.type
+class Query:
+    books: typing.List[Book] = strawberry.field(resolver=get_books)
 ```
 
 <img width="474" height="290" alt="24_Mendefinisikan_Resolver" src="https://github.com/user-attachments/assets/3c1b32e4-0238-4bdb-97e8-b5c7b701670f" />
@@ -455,7 +453,8 @@ def get_books():
 
 <p align="justify">Kode ini mendefinisikan skema GraphQL dengan Strawberry: Book adalah tipe dengan field title dan author, get_books() menyediakan data contoh, dan field books di Query sudah terhubung ke fungsi itu lewat strawberry.field(resolver=get_books). Yang masih kurang hanya schema = strawberry.Schema(query=Query) di bagian bawah agar skema bisa dijalankan.</p>
 
----
+### Buat skema dan jalankan
+
 
 #  PEMBAHASAN TUGAS
 
