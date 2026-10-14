@@ -570,15 +570,14 @@ python client.py
 
 #  Kesimpulan
 
-1. Pada satu node, proses dikelola sepenuhnya oleh sistem operasi dan dapat dilihat dengan `tasklist`, dimatikan dengan `taskkill`, dan dijalankan kembali dengan `start`.
-2. Pada sistem terdistribusi, komunikasi antar proses memerlukan mekanisme khusus karena clock berbeda dan tidak ada shared memory. GraphQL adalah salah satu caranya.
-3. Server GraphQL berhasil dibuat dengan Python dan Strawberry, serta dapat diakses di `http://localhost:8000/graphql`.
-4. `client.py` berhasil mengirim query ke server dan menampilkan data buku yang diminta.
+1. Dalam satu node, siklus hidup proses sepenuhnya diatur oleh sistem operasi: proses dapat dipantau dengan `tasklist`, dihentikan dengan `taskkill`, dan diaktifkan lagi dengan `start`.
+2. Dalam sistem terdistribusi, proses-proses berada di mesin berbeda yang tidak berbagi memori dan memiliki clock sendiri-sendiri, sehingga komunikasinya butuh mekanisme khusus. GraphQL merupakan salah satu pilihannya.
+3. Sebuah server GraphQL berhasil dibangun menggunakan Python dan Strawberry, lalu dijalankan dan bisa dibuka melalui `http://localhost:8000/graphql`.
+4. Skrip `client.py` sukses mengirim query ke server dan menerima kembali data buku yang diminta, sehingga komunikasi antara client dan server terbukti berjalan.
 
 ---
 
 ## Referensi
 
 - https://strawberry.rocks/docs
-- https://docs.astral.sh/uv/getting-started/installation/
-- https://github.com/NEO-X-School/notes/blob/main/uv/00.mdc
+
