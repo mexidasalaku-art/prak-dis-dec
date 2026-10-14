@@ -454,6 +454,52 @@ class Query:
 <p align="justify">Kode ini mendefinisikan skema GraphQL dengan Strawberry: Book adalah tipe dengan field title dan author, get_books() menyediakan data contoh, dan field books di Query sudah terhubung ke fungsi itu lewat strawberry.field(resolver=get_books). Yang masih kurang hanya schema = strawberry.Schema(query=Query) di bagian bawah agar skema bisa dijalankan.</p>
 
 ### Buat skema dan jalankan
+```powershell
+schema = strawberry.Schema(query=Query)
+```
+
+<img width="500" height="314" alt="25_graphql_schema py" src="https://github.com/user-attachments/assets/0ead68a6-0642-473d-98fb-c7860f80a3e4" />
+
+#### Pembahasan
+
+<p align="justify">Program ini membuat API GraphQL sederhana dengan Strawberry: Book mendefinisikan data buku (title dan author), get_books() menyediakan data contoh, field books di Query mengambil data dari fungsi itu, dan strawberry.Schema(query=Query) menyatukan semuanya agar bisa dijalankan.</p>
+
+```powershell
+strawberry dev schema
+
+```
+
+<img width="283" height="101" alt="26_strawberry_server_running" src="https://github.com/user-attachments/assets/81fb78bb-a83e-4c38-a873-e7c7d32a46b6" />
+#### Pembahasan
+
+<p align="justify">Server berjalan di http://0.0.0.0:8000/graphql dan skemanya sudah benar: Book punya title dan author (String!, wajib terisi), sedangkan books: [Book!]! berarti daftar buku yang pasti ada. Buka http://localhost:8000/graphql di browser, lalu jalankan { books { title author } } untuk melihat hasilnya.</p>
+
+<img width="814" height="350" alt="27_graphiql_interface" src="https://github.com/user-attachments/assets/b9a28fa8-67d1-4e6d-83dc-6818ad7302b2" />
+
+#### Pembahasan
+
+<p align="justify">Gambar ini menampilkan GraphiQL, alat bawaan Strawberry untuk menulis dan menguji query langsung di browser. Panel kiri adalah editor query, tombol pink di sebelahnya untuk menjalankan query, dan panel kanan akan menampilkan hasilnya. Ketik { books { title author } } di editor, lalu klik tombol run.</p>
+
+### Pada bagian kiri uliskan query berikut:
+```powershell
+{
+  books {
+    title
+    author
+  }
+}
+```
+<img width="814" height="356" alt="28_graphiql_syntax_error" src="https://github.com/user-attachments/assets/b6e18874-5f2c-4caf-8923-4163251ede17" />
+
+#### Pembahasan
+
+<p align="justify">Gambar ini menunjukkan hasil "data": null dengan pesan error Syntax Error: Unexpected <EOF> di baris 26 kolom 2. Artinya query belum lengkap: editor masih berisi teks komentar bawaan (baris berawalan #) tanpa query yang sebenarnya, sehingga GraphQL menemukan akhir file sebelum ada perintah yang valid. Hapus semua isi editor, ketik { books { title author } }, lalu klik tombol run, dan hasilnya akan berisi data “The Great Gatsby”.</p>
+
+<img width="813" height="348" alt="29_graphiql_query_berhasil" src="https://github.com/user-attachments/assets/97c16c61-6fe6-436c-b0fb-bd10189043ff" />
+#### Pembahasan
+
+<p align="justify">Gambar ini menunjukkan query berhasil dijalankan di GraphiQL. Di panel kiri, query { books { title author } } meminta field title dan author dari books, dan panel kanan menampilkan hasilnya berupa "data" yang berisi buku “The Great Gatsby” karya F. Scott Fitzgerald, sama persis dengan data dari fungsi get_books(). Tidak ada pesan error lagi, jadi API GraphQL-mu sudah berfungsi dengan benar.</p>
+
 
 
 #  PEMBAHASAN TUGAS
