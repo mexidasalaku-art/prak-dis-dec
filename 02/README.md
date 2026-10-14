@@ -505,11 +505,12 @@ strawberry dev schema
 
 #  PEMBAHASAN TUGAS
 
-### 1. Buat file `client.py`
+### 1. Membuat file `client.py`
 
-<img src="images/27_Tugas_File_client.png" width="700">
+<img width="120" height="94" alt="32_file client" src="https://github.com/user-attachments/assets/cc6760a4-0e9a-4941-9c30-028ff089fe10" />
 
-### 2. Isi file dengan kode berikut
+
+### 2. kode Program
 
 ```python
 import requests
@@ -544,15 +545,15 @@ except Exception as e:
   print(f"Terjadi kesalahan: {e}")
 ```
 
-<img src="images/28_Tugas_Isi_client.png" width="700">
+<img width="356" height="374" alt="30_code_client" src="https://github.com/user-attachments/assets/924d38ff-a1b6-4257-be95-f1299784bc26" />
 
 #### Pembahasan
 
-<p align="justify">Client memakai library <code>requests</code> untuk mengirim HTTP POST berisi query ke server. Jika status code 200, data buku diambil dari <code>data.books</code> pada response JSON dan ditampilkan satu per satu. Jika gagal, pesan error ditampilkan.</p>
+<p align="justify">client.py adalah klien yang mengirim query { books { title author } } ke server GraphQL di http://localhost:8000/graphql memakai requests.post(). Jika respons berhasil (status 200), datanya dibaca dan setiap buku dicetak sebagai judul dan penulis, sedangkan jika gagal atau server belum berjalan, program menampilkan pesan error lewat try...except.</p>
 
 ---
 
-### 3. Jalankan `client.py`
+### 3. Output `client.py`
 
 Biarkan server tetap berjalan di satu terminal, lalu buka terminal kedua, aktifkan environment, dan jalankan:
 
@@ -560,11 +561,11 @@ Biarkan server tetap berjalan di satu terminal, lalu buka terminal kedua, aktifk
 python client.py
 ```
 
-<img src="images/29_Output_client.png" width="700">
+<img width="323" height="114" alt="31_output_client" src="https://github.com/user-attachments/assets/ec0d2ea1-f397-43c0-a84e-400fd91ab37e" />
 
 #### Pembahasan
 
-<p align="justify">Client menampilkan judul dan penulis buku yang diambil dari server. Ini menunjukkan dua proses terpisah, client dan server, berhasil berkomunikasi dan bertukar data melalui GraphQL.</p>
+<p align="justify">Output py client.py menampilkan judul “The Great Gatsby” dan penulis “F. Scott Fitzgerald”, yang menandakan klien berhasil terhubung ke server GraphQL dan menerima data dari get_books(). Garis putus-putus hanyalah pemisah antarbuku, sedangkan jika server belum berjalan, yang muncul adalah pesan “Terjadi kesalahan”.</p>
 
 ---
 
