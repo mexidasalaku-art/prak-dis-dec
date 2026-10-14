@@ -409,11 +409,11 @@ class Query:
 schema = strawberry.Schema(query=Query)
 ```
 
-<img src="images/22_File_schema.png" width="700">
+<img width="316" height="212" alt="22_schema py" src="https://github.com/user-attachments/assets/45f66278-cc98-4673-b492-cb921b091eaa" />
 
 #### Pembahasan
 
-<p align="justify">Skema terdiri dari empat bagian. <code>Book</code> adalah tipe data dengan field <code>title</code> dan <code>author</code>. <code>get_books</code> menyediakan data. <code>Query</code> mendefinisikan field <code>books</code> yang dihubungkan ke <code>get_books</code> lewat resolver. Terakhir, <code>strawberry.Schema(query=Query)</code> merangkai semuanya menjadi skema yang dilayani server.</p>
+<p align="justify">Kode di schema.py ini mendefinisikan skema GraphQL sederhana dengan Strawberry: class Book adalah tipe data dengan field title dan author bertipe string, sedangkan class Query memiliki field books yang mengembalikan daftar objek Book, dan dekorator @strawberry.type mengubah class Python biasa menjadi tipe GraphQL. Namun, skema ini baru berisi definisi tipe, sehingga agar bisa dijalankan kamu masih perlu menambahkan resolver yang mengisi data buku serta membuat strawberry.Schema(query=Query).</p>
 
 ---
 
