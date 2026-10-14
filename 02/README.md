@@ -436,28 +436,24 @@ def get_books():
 
 <p align="justify">Kode ini mendefinisikan skema GraphQL dengan Strawberry: Book adalah tipe dengan field title dan author, get_books() menyediakan data contoh berupa satu buku, dan Query punya field books. Namun books belum terhubung ke get_books(), jadi ubah menjadi books: typing.List[Book] = strawberry.field(resolver=get_books), lalu tambahkan schema = strawberry.Schema(query=Query) di bagian bawah agar skema bisa dijalankan.</p>
 
----
-
-Tulis query berikut di sisi kiri lalu klik tombol **Run**:
-
-```graphql
-{
-  books {
-    title
-    author
-  }
-}
+```powershell
+```powershell
+def get_books():
+    return [
+        Book(
+            title="The Great Gatsby",
+            author="F. Scott Fitzgerald",
+        ),
+    ]
+```
 ```
 
-<img src="images/25_Query_GraphQL.png" width="700">
+<img width="474" height="290" alt="24_Mendefinisikan_Resolver" src="https://github.com/user-attachments/assets/3c1b32e4-0238-4bdb-97e8-b5c7b701670f" />
 
-<img src="images/26_Output_Query.png" width="700">
-
-Untuk mematikan server tekan `Ctrl + C` pada terminal tempat server berjalan.
 
 #### Pembahasan
 
-<p align="justify">Query meminta field <code>books</code> beserta <code>title</code> dan <code>author</code>. Server menjalankan resolver <code>get_books</code> dan mengembalikan data The Great Gatsby karya F. Scott Fitzgerald. Alurnya: client mengirim query, server menjalankan resolver, hasil dikembalikan ke client.</p>
+<p align="justify">Kode ini mendefinisikan skema GraphQL dengan Strawberry: Book adalah tipe dengan field title dan author, get_books() menyediakan data contoh, dan field books di Query sudah terhubung ke fungsi itu lewat strawberry.field(resolver=get_books). Yang masih kurang hanya schema = strawberry.Schema(query=Query) di bagian bawah agar skema bisa dijalankan.</p>
 
 ---
 
