@@ -496,6 +496,7 @@ strawberry dev schema
 <p align="justify">Gambar ini menunjukkan hasil "data": null dengan pesan error Syntax Error: Unexpected <EOF> di baris 26 kolom 2. Artinya query belum lengkap: editor masih berisi teks komentar bawaan (baris berawalan #) tanpa query yang sebenarnya, sehingga GraphQL menemukan akhir file sebelum ada perintah yang valid. Hapus semua isi editor, ketik { books { title author } }, lalu klik tombol run, dan hasilnya akan berisi data “The Great Gatsby”.</p>
 
 <img width="813" height="348" alt="29_graphiql_query_berhasil" src="https://github.com/user-attachments/assets/97c16c61-6fe6-436c-b0fb-bd10189043ff" />
+
 #### Pembahasan
 
 <p align="justify">Gambar ini menunjukkan query berhasil dijalankan di GraphiQL. Di panel kiri, query { books { title author } } meminta field title dan author dari books, dan panel kanan menampilkan hasilnya berupa "data" yang berisi buku “The Great Gatsby” karya F. Scott Fitzgerald, sama persis dengan data dari fungsi get_books(). Tidak ada pesan error lagi, jadi API GraphQL-mu sudah berfungsi dengan benar.</p>
