@@ -420,18 +420,21 @@ schema = strawberry.Schema(query=Query)
 Jalankan server:
 
 ```powershell
-strawberry dev schema
+def get_books():
+    return [
+        Book(
+            title="The Great Gatsby",
+            author="F. Scott Fitzgerald",
+        ),
+    ]
 ```
 
-<img src="images/23_Jalankan_Server.png" width="700">
+<img width="344" height="293" alt="23_schema py" src="https://github.com/user-attachments/assets/0f95c539-7331-4547-82eb-2435c9d11f11" />
 
-Output: `Running strawberry on http://0.0.0.0:8000/graphql` (dapat diakses lewat `http://localhost:8000/graphql`).
-
-<img src="images/24_Tampilan_GraphQL.png" width="700">
 
 #### Pembahasan
 
-<p align="justify">Server berjalan di port 8000. Saat alamatnya dibuka di browser, muncul antarmuka GraphQL bawaan Strawberry: sisi kiri untuk menulis query dan sisi kanan untuk melihat hasil. Alamat <code>0.0.0.0</code>, <code>localhost</code>, dan <code>127.0.0.1</code> merujuk ke komputer yang sama.</p>
+<p align="justify">Kode ini mendefinisikan skema GraphQL dengan Strawberry: Book adalah tipe dengan field title dan author, get_books() menyediakan data contoh berupa satu buku, dan Query punya field books. Namun books belum terhubung ke get_books(), jadi ubah menjadi books: typing.List[Book] = strawberry.field(resolver=get_books), lalu tambahkan schema = strawberry.Schema(query=Query) di bagian bawah agar skema bisa dijalankan.</p>
 
 ---
 
