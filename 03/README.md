@@ -10,17 +10,23 @@
 
 ---
 
-
-## Daftar Isi
-
-- [3.1 Sinkronisasi Waktu](#31-sinkronisasi-waktu)
-- [3.2 Vector Clock](#32-vector-clock)
-- [3.3 Problem Tanpa Sinkronisasi](#33-problem-tanpa-sinkronisasi)
-  - [3.3.1 Data Race / Race Conditions](#331-data-race--race-conditions)
-  - [3.3.2 Deadlock](#332-deadlock)
-- [3.4 Algoritma Raft](#34-algoritma-raft)
-
 ---
+#  Dasar Teori
+
+
+#  Tujuan Praktikum
+
+1. Mempelajari apa itu proses dan bagaimana sistem operasi mengatur proses-proses yang berjalan dalam satu komputer.
+2. Melihat proses apa saja yang sedang aktif di Windows dengan memanfaatkan Task Manager.
+3. Mencoba membuka sebuah aplikasi, lalu menghentikan dan menjalankan kembali prosesnya lewat perintah di CMD.
+4. Mempraktikkan cara dua proses saling bertukar data pada sistem terdistribusi, yaitu dengan membangun server GraphQL berbasis Python (Strawberry) dan sebuah client yang meminta data darinya.
+---
+
+
+
+#  PEMBAHASAN PRAKTIKUM
+
+## PRAKTIK 1 - PROSES PADA SATU NODE
 
 ## 3.1 Sinkronisasi Waktu
 
