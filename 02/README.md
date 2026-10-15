@@ -25,7 +25,16 @@
 
 ## Proses
 
-Proses adalah hasil eksekusi sebuah program. Proses dikelola oleh sistem operasi dan terdiri atas kode executable, data, resources, serta informasi state (stack dan heap). Setiap aplikasi yang dijalankan menjadi sebuah proses.
+Proses adalah hasil#  Tujuan Praktikum
+
+1. Mempelajari apa itu proses dan bagaimana sistem operasi mengatur proses-proses yang berjalan dalam satu komputer.
+2. Melihat proses apa saja yang sedang aktif di Windows dengan memanfaatkan Task Manager.
+3. Mencoba membuka sebuah aplikasi, lalu menghentikan dan menjalankan kembali prosesnya lewat perintah di CMD.
+4. Mempraktikkan cara dua proses saling bertukar data pada sistem terdistribusi, yaitu dengan membangun server GraphQL berbasis Python (Strawberry) dan sebuah client yang meminta data darinya.
+---
+
+#  Dasar Teori
+ eksekusi sebuah program. Proses dikelola oleh sistem operasi dan terdiri atas kode executable, data, resources, serta informasi state (stack dan heap). Setiap aplikasi yang dijalankan menjadi sebuah proses.
 
 ## Proses pada Satu Node
 
