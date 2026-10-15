@@ -1,4 +1,4 @@
-# NetTime
+# Praktikum Minggu MODUL 03 - Sinkronisasi pada Sistem Terdistribusi
 
 NetTime is a Simple Network Time Protocol (SNTP) client for Windows 95/98/Me/NT/2000/XP/Vista/7/8/10/11 and Server 2003/2008/2012/2016/2019/2022. (32 bit and 64 bit operating systems are both supported and future versions are expected to work without needing to update NetTime.)
 
