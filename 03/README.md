@@ -23,12 +23,7 @@ Setelah menyelesaikan modul ini, peserta mampu:
 
 ---
 
-## 2. Prasyarat dan Alat
 
-**Pengetahuan awal**
-
-- Dasar penggunaan Command Prompt atau PowerShell.
-- Pengertian dasar jaringan: alamat IP, port, protokol TCP/UDP.
 
 **Alat dan bahan**
 
@@ -39,7 +34,7 @@ Setelah menyelesaikan modul ini, peserta mampu:
 | Command Prompt atau PowerShell | Dijalankan sebagai Administrator untuk Praktik 3 |
 | (Opsional) Klien SNTP pihak ketiga | Dipakai pada Praktik 4 |
 
-> **Peringatan:** Mengubah pengaturan waktu sistem memengaruhi seluruh aplikasi. Catat pengaturan awal sebelum mengubah apa pun agar bisa dikembalikan.
+
 
 ---
 
