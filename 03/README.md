@@ -10,16 +10,21 @@
 
 ---
 
----
+
 #  Dasar Teori
+
+Pada sistem terdistribusi, setiap komputer memiliki jam sendiri yang bisa melenceng (clock drift), sehingga urutan log dan transaksi antar komputer dapat keliru; karena itu dipakai sinkronisasi waktu dengan NTP, yang bekerja lewat UDP port 123 dengan menukar empat cap waktu dengan server untuk menghitung selisih waktu (offset) dan lama perjalanan (delay), atau PTP yang lebih akurat karena dibantu perangkat keras, dengan Chrony dan NetTime sebagai klien yang dipakai pada praktikum ini. Karena tidak ada jam global yang benar-benar sinkron, urutan event ditentukan dari hubungan sebab-akibat menggunakan vector clock, yaitu penghitung untuk tiap proses yang bertambah pada setiap event dan digabung dengan mengambil nilai maksimum saat pesan diterima, sehingga dapat diketahui apakah suatu event terjadi lebih dulu atau konkuren dengan event lain. Selain itu, ketiadaan sinkronisasi pada program multithreaded menimbulkan data race, yaitu ketika beberapa thread mengakses data bersama dan hasilnya bergantung pada urutan eksekusi sehingga pembaruan bisa hilang (diatasi dengan lock agar hanya satu thread yang masuk ke bagian kritis), serta deadlock, yaitu ketika thread saling menunggu sumber daya yang dipegang satu sama lain sehingga tidak ada yang dapat melanjutkan (dicegah antara lain dengan mengunci sumber daya dalam urutan yang sama). Terakhir, agar beberapa node tetap sepakat meski sebagian gagal, digunakan algoritma konsensus Raft, di mana node berperan sebagai follower, candidate, atau leader; jika follower tidak menerima heartbeat dari leader sampai batas waktu, ia menjadi candidate dan meminta suara, dan candidate yang memperoleh suara mayoritas menjadi leader yang baru.
+
+---
 
 
 #  Tujuan Praktikum
 
-1. Mempelajari apa itu proses dan bagaimana sistem operasi mengatur proses-proses yang berjalan dalam satu komputer.
-2. Melihat proses apa saja yang sedang aktif di Windows dengan memanfaatkan Task Manager.
-3. Mencoba membuka sebuah aplikasi, lalu menghentikan dan menjalankan kembali prosesnya lewat perintah di CMD.
-4. Mempraktikkan cara dua proses saling bertukar data pada sistem terdistribusi, yaitu dengan membangun server GraphQL berbasis Python (Strawberry) dan sebuah client yang meminta data darinya.
+1. Menjelaskan pentingnya sinkronisasi waktu pada sistem terdistribusi dan melakukan sinkronisasi waktu ke NTP server memakai Chrony atau NetTime.
+2. Menjelaskan cara kerja vector clock dalam mengurutkan event pada sistem terdistribusi, serta mengimplementasikannya sebagai modul Python.
+3. Mengamati dan menjelaskan terjadinya data race (race condition) dan deadlock pada program multithreaded.
+4. Menerapkan mekanisme sinkronisasi untuk mencegah data race dan deadlock.
+5. Menjelaskan algoritma Raft dalam pemilihan leader untuk mencapai konsensus, serta mensimulasikannya dengan Python.
 ---
 
 
