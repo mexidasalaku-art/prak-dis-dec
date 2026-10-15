@@ -26,10 +26,6 @@
 
 Ada 2 protokol yang biasanya digunakan untuk sinkronisasi waktu: NTP (Network Time Protocol) dan PTP (Precision Time Protocol). Tapi disini saya menggunakan windows
 
-**Linux / \*BSD / Mac**
-
-1. Install Chrony (<https://chrony-project.org/>). Gunakan perintah dari Chrony untuk sinkronisasi waktu ke suatu NTP server.
-2. Jelaskan proses sinkronisasi tersebut.
 
 **Windows**
 
