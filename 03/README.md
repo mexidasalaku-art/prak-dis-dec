@@ -11,15 +11,6 @@
 ---
 
 
-# Modul 3
-# Sinkronisasi pada Sistem Terdistribusi
-
-**Praktikum Sistem Terdistribusi dan Terdesentralisasi**
-Universitas Teknologi Digital Indonesia, Prodi Informatika
-Penulis: Dr. Bambang Purnomosidi D. P.
-
----
-
 ## Daftar Isi
 
 - [3.1 Sinkronisasi Waktu](#31-sinkronisasi-waktu)
