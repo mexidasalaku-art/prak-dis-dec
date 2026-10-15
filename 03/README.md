@@ -148,7 +148,12 @@ print(f"VC0 is concurrent with VC2: {vc0.is_concurrent(vc2)}")
 **Tugas:**
 
 1. Jalankan program tersebut, amati keluarannya. Buat penjelasan dari keluaran tersebut: bandingkan dengan algoritma tersebut jika vector clocks dilaksanakan secara manual.
-2. Buat modul Python untuk class `VectorClock` tersebut dan buatlah contoh cara menggunakan modul tersebut.
+
+<img width="335" height="196" alt="01_Hasil_Output_clocks py" src="https://github.com/user-attachments/assets/805cc228-73f9-48ef-8460-56a1636a8b6d" />
+
+#### Pembahasan
+
+3. Buat modul Python untuk class `VectorClock` tersebut dan buatlah contoh cara menggunakan modul tersebut.
 
 ---
 
