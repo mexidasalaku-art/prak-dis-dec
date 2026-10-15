@@ -1,8 +1,12 @@
 # Praktikum Minggu MODUL 03 - Sinkronisasi pada Sistem Terdistribusi
-# Modul Praktikum: Sinkronisasi Waktu Komputer dengan NTP/SNTP
 
-
-
+| | |
+| --- | --- |
+| **Mata Kuliah** | Praktikum Sistem Terdistribusi dan Terdesentralisasi |
+| **Topik** | Sinkronisasi pada Sistem Terdistribusi |
+| **Nama** | Yesaya Mexi Dasalaku |
+| **NIM** | 255410029 |
+| **Kelas** | IF-1 |
 
 ---
 
