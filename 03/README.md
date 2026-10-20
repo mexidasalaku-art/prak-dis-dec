@@ -169,9 +169,9 @@ print(f"VC0 is concurrent with VC2: {vc0.is_concurrent(vc2)}")
 
    - main.py
      
-    <img width="286" height="375" alt="13_main py" src="https://github.com/user-attachments/assets/dc3804e1-0fc9-4715-b04d-87c862ebbf41" />
+     <img width="286" height="375" alt="13_main py" src="https://github.com/user-attachments/assets/dc3804e1-0fc9-4715-b04d-87c862ebbf41" />
 
-    #### Pembahasan
+     #### Pembahasan
 
    - output main.py
      
