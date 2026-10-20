@@ -135,7 +135,7 @@ print(vc2)
 # Process 1 sends a message to Process 2
 message_from_p1 = vc1.send_message()
 vc2.receive_message(message_from_p1)
-print(vc1)
+print(vc1) 
 print(vc2)
 
 # Check causality
