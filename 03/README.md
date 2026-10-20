@@ -185,38 +185,53 @@ print(f"VC0 is concurrent with VC2: {vc0.is_concurrent(vc2)}")
 
 Pada sistem terdistribusi, ketiadaan sinkronisasi bisa menghasilkan 2 masalah besar yaitu data race / race conditions dan deadlock. Pada program yang menggunakan model asynchronous maupun thread, pola pikir sekuensial tidak bisa digunakan karena penyelesaian satu task dengan task lainnya biasanya tidak bisa diprediksi. Berikut adalah contoh program multithreaded di Python (`multithreaded-example.py`).
 
-```python
-# Tempel isi multithreaded-example.py di sini
-```
+<img width="230" height="241" alt="15_multithreads-example py" src="https://github.com/user-attachments/assets/03bcbe7d-1903-4d54-801d-caeada128aaf" />
 
-**Tugas:**
+#### Pembahasan
 
-1. Jalankan program tersebut sampai Anda mendapatkan keluaran yang berbeda.
-2. Capture keluaran program tersebut dan jelaskan mengapa bisa berbeda.
+### Output
 
-### 3.3.1 Data Race / Race Conditions
+<img width="373" height="103" alt="16_output_multithreads-example py" src="https://github.com/user-attachments/assets/71d714f7-ccc6-43cd-b916-5a96a0af65bb" />
+
+#### Pembahasan
+
+### - Data Race / Race Conditions
 
 Berikut adalah contoh data race / race conditions di Python (`race-conditions-01.py`).
 
-```python
-# Tempel isi race-conditions-01.py di sini
-```
+<img width="259" height="168" alt="17_race-conditions-01 py" src="https://github.com/user-attachments/assets/ee37de55-2192-4514-a49e-dfc908850265" />
+
+#### Pembahasan
 
 **Tugas:**
 
-1. Jalankan program tersebut.
-2. Jelaskan menggunakan visualisasi (gambar dengan pensil/ballpoint kemudian difoto), mengapa terjadi data race / race conditions.
+### -Jalankan program tersebut.
+
+<img width="360" height="35" alt="18_output_race-conditions-01 py" src="https://github.com/user-attachments/assets/16186982-ff82-4bcc-8511-18dcd1128c96" />
+
+#### Pembahasan
+
+### -Jelaskan menggunakan visualisasi (gambar dengan pensil/ballpoint kemudian difoto), mengapa terjadi data race / race conditions.
 
 Berikut adalah contoh program untuk membuat supaya race conditions tersebut tidak terjadi (`race-conditions-02.py`):
 
-```python
-# Tempel isi race-conditions-02.py di sini
-```
+<img width="276" height="188" alt="20_race-conditions-02 py" src="https://github.com/user-attachments/assets/00a0e955-6086-47e7-9d00-e7c9115b3424" />
+
+#### Pembahasan
+
 
 **Tugas:**
 
-1. Jalankan program tersebut.
-2. Amati keluarannya. Jelaskan mengapa race-conditions tidak terjadi?
+### -Jalankan program tersebut.
+
+<img width="360" height="27" alt="21_output_race-conditions-02 py" src="https://github.com/user-attachments/assets/82092a14-8292-4e59-acc0-1eda38904598" />
+
+
+#### Pembahasan
+
+### -Amati keluarannya. Jelaskan mengapa race-conditions tidak terjadi?
+
+Keluarannya hanya satu baris, yaitu “Mengambil sejumlah Rp 80. Saldo: Rp 20”, artinya hanya satu thread yang berhasil menarik uang dan saldo tetap wajar. Race condition tidak terjadi karena with counter_lock: memastikan hanya satu thread yang boleh menjalankan blok pengecekan dan pengurangan saldo pada satu waktu. Thread pertama yang masuk mengecek saldo (100 ≥ 80), lalu mengurangi saldo menjadi 20, sementara thread kedua menunggu lock dilepas. Saat thread kedua akhirnya masuk, saldo sudah 20 sehingga pengecekan 20 >= 80 gagal dan penarikan dilewati. Berbeda dengan versi tanpa lock, di mana kedua thread bisa lolos pengecekan bersamaan dan saldo menjadi negatif.
 
 ### 3.3.2 Deadlock
 
