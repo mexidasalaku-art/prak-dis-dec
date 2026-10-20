@@ -33,7 +33,7 @@ Pada sistem terdistribusi, setiap komputer memiliki jam sendiri yang bisa melenc
 
 ## PRAKTIK 1 - PROSES PADA SATU NODE
 
-## 3.1 Sinkronisasi Waktu
+## 1 Sinkronisasi Waktu
 
 Ada 2 protokol yang biasanya digunakan untuk sinkronisasi waktu: NTP (Network Time Protocol) dan PTP (Precision Time Protocol). Tapi disini saya menggunakan windows
 
@@ -45,7 +45,7 @@ Ada 2 protokol yang biasanya digunakan untuk sinkronisasi waktu: NTP (Network Ti
 
 ---
 
-## 3.2 Vector Clock
+## 2 Vector Clock
 
 Vector clock digunakan untuk pengurutan event dalam suatu sistem terdistribusi. Berikut adalah contoh source code untuk vector clock (ada pada source code: `vclocks.py`). Source code diambil dari banyak sumber di Internet.
 
@@ -181,7 +181,7 @@ print(f"VC0 is concurrent with VC2: {vc0.is_concurrent(vc2)}")
 
 ---
 
-## 3.3 Problem Tanpa Sinkronisasi
+## 3 Problem Tanpa Sinkronisasi
 
 Pada sistem terdistribusi, ketiadaan sinkronisasi bisa menghasilkan 2 masalah besar yaitu data race / race conditions dan deadlock. Pada program yang menggunakan model asynchronous maupun thread, pola pikir sekuensial tidak bisa digunakan karena penyelesaian satu task dengan task lainnya biasanya tidak bisa diprediksi. Berikut adalah contoh program multithreaded di Python (`multithreaded-example.py`).
 
@@ -231,7 +231,7 @@ Berikut adalah contoh program untuk membuat supaya race conditions tersebut tida
 
 <p align="justify">Keluarannya hanya satu baris, yaitu “Mengambil sejumlah Rp 80. Saldo: Rp 20”, artinya hanya satu thread yang berhasil menarik uang dan saldo tetap wajar. Race condition tidak terjadi karena with counter_lock: memastikan hanya satu thread yang boleh menjalankan blok pengecekan dan pengurangan saldo pada satu waktu. Thread pertama yang masuk mengecek saldo (100 ≥ 80), lalu mengurangi saldo menjadi 20, sementara thread kedua menunggu lock dilepas. Saat thread kedua akhirnya masuk, saldo sudah 20 sehingga pengecekan 20 >= 80 gagal dan penarikan dilewati. Berbeda dengan versi tanpa lock, di mana kedua thread bisa lolos pengecekan bersamaan dan saldo menjadi negatif.</p>
 
-### 3.3.2 Deadlock
+### Deadlock
 
 Berikut adalah contoh kondisi deadlock di Python (`deadlock-01.py`).
 
@@ -257,7 +257,7 @@ Berikut adalah contoh program untuk membuat supaya deadlock tersebut tidak terja
 
 ---
 
-## 3.4 Algoritma Raft
+## 4 Algoritma Raft
 
 Algoritma Raft banyak digunakan pada sistem terdistribusi, antara lain digunakan untuk mencapai konsensus. Berikut adalah simulasi algoritma Raft menggunakan Python yang diambil dari <https://www.c-sharpcorner.com/article/simulate-distributed-consensus-with-the-raft-protocol-simplified-using-python/>.
 
