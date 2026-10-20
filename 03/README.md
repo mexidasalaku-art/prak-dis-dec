@@ -235,25 +235,35 @@ Berikut adalah contoh program untuk membuat supaya race conditions tersebut tida
 
 Berikut adalah contoh kondisi deadlock di Python (`deadlock-01.py`).
 
-```python
-# Tempel isi deadlock-01.py di sini
-```
+<img width="208" height="254" alt="22_deadlock-01 py" src="https://github.com/user-attachments/assets/84ac080c-565e-4a7e-bab8-c50889c722e0" />
 
-**Tugas:**
+#### Pembahasan
 
-1. Jalankan program tersebut.
-2. Jelaskan menggunakan visualisasi (gambar dengan pensil/ballpoint kemudian difoto), mengapa terjadi deadlock.
+### -Jalankan program tersebut.
+
+<img width="250" height="30" alt="23_output_deadlock-01 py" src="https://github.com/user-attachments/assets/69d3984d-3721-49c8-8111-972ed8b7e6cc" />
+
+#### Pembahasan
+
+### Jelaskan menggunakan visualisasi (gambar dengan pensil/ballpoint kemudian difoto), mengapa terjadi deadlock.
 
 Berikut adalah contoh program untuk membuat supaya deadlock tersebut tidak terjadi (`deadlock-02.py`):
 
-```python
-# Tempel isi deadlock-02.py di sini
-```
+<img width="218" height="374" alt="25_deadlock-02 py" src="https://github.com/user-attachments/assets/308b84a1-26b7-43c9-a233-99d6e39b7a30" />
+
+#### Pembahasan
 
 **Tugas:**
 
-1. Jalankan program tersebut.
-2. Amati keluarannya. Jelaskan mengapa deadlock tidak terjadi?
+### -Jalankan program tersebut.
+
+<img width="341" height="89" alt="26_Output_deadlock-02 py" src="https://github.com/user-attachments/assets/a915f7f5-3942-4e82-87aa-c5b95a47b1af" />
+
+#### Pembahasan
+
+### -Amati keluarannya. Jelaskan mengapa deadlock tidak terjadi?
+<p align="justify">Deadlock tidak terjadi karena setiap thread melepas lock pertamanya sebelum meminta lock kedua. Pada blok finally, Thread 1 menjalankan lock_a.release() dan Thread 2 menjalankan lock_b.release() sebelum keduanya memanggil acquire untuk lock berikutnya, sehingga tidak ada thread yang memegang satu lock sambil menunggu lock lain (tidak ada hold and wait maupun circular wait). Karena itu, Thread 2 bisa mendapat Lock A dan Thread 1 bisa mendapat Lock B, lalu program selesai dengan mencetak “Execution Finished”. Parameter timeout=5 juga berfungsi sebagai pengaman agar thread tidak menunggu selamanya, meskipun pada kasus ini tidak sempat terpakai.</p>
+   
 
 ---
 
