@@ -271,16 +271,45 @@ Berikut adalah contoh program untuk membuat supaya deadlock tersebut tidak terja
 
 Algoritma Raft banyak digunakan pada sistem terdistribusi, antara lain digunakan untuk mencapai konsensus. Berikut adalah simulasi algoritma Raft menggunakan Python yang diambil dari <https://www.c-sharpcorner.com/article/simulate-distributed-consensus-with-the-raft-protocol-simplified-using-python/>.
 
-File: `raft.py`
+Class raft.py
 
-```python
-# Tempel isi raft.py di sini
-```
+<img width="329" height="445" alt="27_raft py" src="https://github.com/user-attachments/assets/1ab3a9b2-ecad-47b1-860c-ab90bfaa5cf8" />
 
-**Tugas:**
+<img width="397" height="399" alt="28_raft py" src="https://github.com/user-attachments/assets/41e1b752-1b40-4e78-8384-68ffe4d1b4c4" />
 
-1. Jalankan program tersebut.
-2. Perhatikan keluaran program yang dijalankan tersebut. Dari keluaran program tersebut, jelaskan secara sederhana algoritma Raft untuk memilih koordinator (LEADER) menggunakan visualisasi (digambar dengan manual pensil/ballpoint dan kemudian difoto).
-3. Buatlah program tersebut menjadi modul Python dan kemudian buatlah contoh simulasinya menggunakan modul Python yang sudah Anda buat tersebut.
+
+#### Pembahasan
+
+
+### -Jalankan program tersebut.
+
+<img width="305" height="439" alt="29_Output_raft py" src="https://github.com/user-attachments/assets/2a049d92-d6f2-47fa-81ec-4dfb5317710f" />
+
+<img width="289" height="403" alt="30_Output_raft py" src="https://github.com/user-attachments/assets/7a7df193-93b5-4826-921d-777cb45da769" />
+
+#### Pembahasan
+
+
+### -Perhatikan keluaran program yang dijalankan tersebut. Dari keluaran program tersebut, jelaskan secara sederhana algoritma Raft untuk memilih koordinator (LEADER) menggunakan visualisasi (digambar dengan manual pensil/ballpoint dan kemudian difoto).
+
+#### Pembahasan
+
+### -Buatlah program tersebut menjadi modul Python dan kemudian buatlah contoh simulasinya menggunakan modul Python yang sudah Anda buat tersebut.
+
+Class main2.py
+
+<img width="267" height="449" alt="32_main2 py" src="https://github.com/user-attachments/assets/e505da5b-dec3-4332-94ae-84e49b73da65" />
+
+#### Pembahasan
+
+### -Output
+
+<img width="311" height="415" alt="33_output_main py" src="https://github.com/user-attachments/assets/41abcf56-25c7-4814-bfe4-ad12b009a652" />
+
+<img width="308" height="398" alt="34_output_main py" src="https://github.com/user-attachments/assets/7c5a101d-4138-40fe-a5e5-ba33e9ab5c1c" />
+
+#### Pembahasan
+
+  
 
 # KESIMPULAN
