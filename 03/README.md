@@ -229,9 +229,7 @@ Berikut adalah contoh program untuk membuat supaya race conditions tersebut tida
 
 #### Pembahasan
 
-### -Amati keluarannya. Jelaskan mengapa race-conditions tidak terjadi?
-
-Keluarannya hanya satu baris, yaitu “Mengambil sejumlah Rp 80. Saldo: Rp 20”, artinya hanya satu thread yang berhasil menarik uang dan saldo tetap wajar. Race condition tidak terjadi karena with counter_lock: memastikan hanya satu thread yang boleh menjalankan blok pengecekan dan pengurangan saldo pada satu waktu. Thread pertama yang masuk mengecek saldo (100 ≥ 80), lalu mengurangi saldo menjadi 20, sementara thread kedua menunggu lock dilepas. Saat thread kedua akhirnya masuk, saldo sudah 20 sehingga pengecekan 20 >= 80 gagal dan penarikan dilewati. Berbeda dengan versi tanpa lock, di mana kedua thread bisa lolos pengecekan bersamaan dan saldo menjadi negatif.
+<p align="justify">Keluarannya hanya satu baris, yaitu “Mengambil sejumlah Rp 80. Saldo: Rp 20”, artinya hanya satu thread yang berhasil menarik uang dan saldo tetap wajar. Race condition tidak terjadi karena with counter_lock: memastikan hanya satu thread yang boleh menjalankan blok pengecekan dan pengurangan saldo pada satu waktu. Thread pertama yang masuk mengecek saldo (100 ≥ 80), lalu mengurangi saldo menjadi 20, sementara thread kedua menunggu lock dilepas. Saat thread kedua akhirnya masuk, saldo sudah 20 sehingga pengecekan 20 >= 80 gagal dan penarikan dilewati. Berbeda dengan versi tanpa lock, di mana kedua thread bisa lolos pengecekan bersamaan dan saldo menjadi negatif.</p>
 
 ### 3.3.2 Deadlock
 
