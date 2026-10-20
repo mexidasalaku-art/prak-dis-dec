@@ -145,6 +145,7 @@ print(f"VC0 is concurrent with VC2: {vc0.is_concurrent(vc2)}")
 
 ```
 <img width="262" height="424" alt="09_Code_Program_clocks py" src="https://github.com/user-attachments/assets/5a957013-57a7-4fb5-82f5-6331629707bc" />
+
 <img width="267" height="354" alt="10_Code_Program_clocks py" src="https://github.com/user-attachments/assets/a449ed02-4e10-4444-a748-f575a4f4d04f" />
 
 #### Pembahasan
