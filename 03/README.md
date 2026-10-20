@@ -158,7 +158,26 @@ print(f"VC0 is concurrent with VC2: {vc0.is_concurrent(vc2)}")
 
 #### Pembahasan
 
-3. Buat modul Python untuk class `VectorClock` tersebut dan buatlah contoh cara menggunakan modul tersebut.
+<p align="justify">Keluaran program sesuai dengan perhitungan manual algoritma vector clock. Ketiga proses (P0, P1, P2) dimulai dari [0,0,0]; setiap kejadian lokal atau pengiriman pesan menaikkan elemen milik proses itu sendiri (P0 menjadi [1,0,0] lalu [2,0,0]), sedangkan saat menerima pesan, proses mengambil nilai maksimum tiap elemen antara vektornya dan vektor pesan lalu menaikkan elemen miliknya, sehingga P1 menjadi [2,1,0] lalu [2,2,0] setelah mengirim, dan P2 menjadi max([0,0,1],[2,2,0]) = [2,2,1] kemudian [2,2,2]. Hasil pembandingannya juga benar: VC0 happens before VC1 bernilai True karena semua elemen VC0 lebih kecil atau sama dengan VC1, sebaliknya VC1 happens before VC0 bernilai False, dan VC0 is concurrent with VC2 bernilai False karena P2 sudah menerima informasi dari P0 melalui P1 ([2,0,0] ≤ [2,2,2]), sehingga keduanya berhubungan sebab-akibat, bukan konkuren.</p>
+
+2. Buat modul Python untuk class `VectorClock` tersebut dan buatlah contoh cara menggunakan modul tersebut.
+   - vektor_clock.py
+     
+     <img width="264" height="403" alt="12_vector_clock py" src="https://github.com/user-attachments/assets/0a9ef844-976c-4662-8287-79146427ccf5" />
+     
+     #### pembahasan
+
+   - main.py
+     
+    <img width="286" height="375" alt="13_main py" src="https://github.com/user-attachments/assets/dc3804e1-0fc9-4715-b04d-87c862ebbf41" />
+
+    #### Pembahasan
+
+   - output main.py
+     
+       <img width="326" height="199" alt="14_output_main py" src="https://github.com/user-attachments/assets/a8a0fef3-6d65-4560-9589-16d18708b403" />
+
+     #### Pembahasan
 
 ---
 
