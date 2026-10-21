@@ -38,49 +38,48 @@ Pada sistem terdistribusi, setiap komputer memiliki jam sendiri yang bisa melenc
 Ada 2 protokol yang biasanya digunakan untuk sinkronisasi waktu: NTP (Network Time Protocol) dan PTP (Precision Time Protocol). Tapi disini saya menggunakan windows
 
 
-**Windows**
 
-#### 1. Install NetTime (<https://www.timesynctool.com/>). Gunakan software tersebut untuk sinkronisasi waktu ke suatu NTP server.
+### 1. Install NetTime (<https://www.timesynctool.com/>). Gunakan software tersebut untuk sinkronisasi waktu ke suatu NTP server.
 -Next untuk lanjut
 
 <img width="378" height="282" alt="01" src="https://github.com/user-attachments/assets/91ebfd0c-0a1c-49d5-94be-d8061de2d7d1" />
 
 #### Pembahasan
 
-- Lokasi instalasi
+-Lokasi instalasi
 
   <img width="379" height="279" alt="02" src="https://github.com/user-attachments/assets/a1f76449-ee72-4ffb-a63b-cf77ca67fb44" />
 
 #### Pembahasan
 
-- Nama folder
+-Nama folder
 
 <img width="379" height="284" alt="03" src="https://github.com/user-attachments/assets/1d965713-37b5-499e-942d-4049bcbe8375" />
 
 #### Pembahasan
 
 
-- Install as Service
+-Install as Service
 
 <img width="377" height="284" alt="04" src="https://github.com/user-attachments/assets/c9995cb5-4f0c-48a8-9a63-72d30ce415ac" />
 
 #### Pembahasan
 
   
-- Ringkasan instalasi
+-Ringkasan instalasi
 
 <img width="380" height="285" alt="05" src="https://github.com/user-attachments/assets/b0532d06-15d0-46ad-8051-287f2da439cb" />
 
 #### Pembahasan
   
-- Selesai Instal
+-Selesai Instal
 
 <img width="376" height="281" alt="06" src="https://github.com/user-attachments/assets/96b51a1e-cde0-4ca0-9f97-d4236ce3c5ed" />
 
 
 #### Pembahasan
 
-#### 2 Proses Sinkronisasi
+### 2 Proses Sinkronisasi
 
 
 
