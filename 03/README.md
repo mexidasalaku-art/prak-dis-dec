@@ -59,6 +59,7 @@ Ada 2 protokol yang biasanya digunakan untuk sinkronisasi waktu: NTP (Network Ti
 <img width="379" height="284" alt="03" src="https://github.com/user-attachments/assets/1d965713-37b5-499e-942d-4049bcbe8375" />
 
 #### Pembahasan
+<p align="justify">Halaman ringkasan sebelum instalasi dimulai: lokasi tujuan C:\Program Files (x86)\NetTime, folder Start Menu NetTime, dan tugas tambahan Install as Service. Klik Install untuk memulai, atau < Back untuk mengubah pengaturan.</p>
 
 
 -Install as Service
@@ -66,6 +67,7 @@ Ada 2 protokol yang biasanya digunakan untuk sinkronisasi waktu: NTP (Network Ti
 <img width="377" height="284" alt="04" src="https://github.com/user-attachments/assets/c9995cb5-4f0c-48a8-9a63-72d30ce415ac" />
 
 #### Pembahasan
+<p align="justify">Tahap tugas tambahan. Opsi “Install as Service (Recommended)” dicentang agar NetTime berjalan sebagai layanan di latar belakang dan menyinkronkan waktu otomatis tanpa harus dibuka manual.</p>
 
   
 -Ringkasan instalasi
@@ -73,6 +75,7 @@ Ada 2 protokol yang biasanya digunakan untuk sinkronisasi waktu: NTP (Network Ti
 <img width="380" height="285" alt="05" src="https://github.com/user-attachments/assets/b0532d06-15d0-46ad-8051-287f2da439cb" />
 
 #### Pembahasan
+<p align="justify">Tahap pemilihan folder Start Menu untuk shortcut program. Nama bawaannya NetTime dan bisa diganti lewat Browse.</p>
   
 -Selesai Instal
 
@@ -80,12 +83,14 @@ Ada 2 protokol yang biasanya digunakan untuk sinkronisasi waktu: NTP (Network Ti
 
 
 #### Pembahasan
+<p align="justify">Ini tahap terakhir: instalasi NetTime sudah selesai. Opsi “Start NetTime now” dicentang agar aplikasi langsung berjalan, dan tombol Finish menutup wizard.</p>
 
 ### 2 Proses Sinkronisasi
 
 <img width="385" height="277" alt="07_NetTime" src="https://github.com/user-attachments/assets/4b15cd6d-9301-4277-918e-c6bc716b8384" />
 
 #### Pembahasan
+<p align="justify">Gambar ini menampilkan jendela utama NetTime yang sudah berjalan sebagai Windows Service. Status “Time is synchronized” berarti jam komputer sudah sinkron dengan server waktu, dengan sinkronisasi terakhir pukul 19:30:29 (selisih -39 ms) dan percobaan berikutnya 11 jam 56 menit lagi. Dari daftar server, hanya 0.nettime.pool.ntp.org yang aktif (status Good, lag 46 ms), sedangkan tiga lainnya Not Used sebagai cadangan. Kolom Last Error kosong, artinya tidak ada kesalahan.</p>
 
 
 
