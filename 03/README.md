@@ -45,12 +45,14 @@ Ada 2 protokol yang biasanya digunakan untuk sinkronisasi waktu: NTP (Network Ti
 <img width="378" height="282" alt="01" src="https://github.com/user-attachments/assets/91ebfd0c-0a1c-49d5-94be-d8061de2d7d1" />
 
 #### Pembahasan
+<p align="justify">Gambar ini menampilkan halaman awal Setup Wizard untuk menginstal NetTime, aplikasi yang menyinkronkan jam komputer dengan server waktu internet. Wizard menyarankan agar semua aplikasi lain ditutup sebelum melanjutkan. Tombol Next > dipakai untuk lanjut ke tahap berikutnya, sedangkan Cancel untuk membatalkan instalasi.</p>
 
 -Lokasi instalasi
 
   <img width="379" height="279" alt="02" src="https://github.com/user-attachments/assets/a1f76449-ee72-4ffb-a63b-cf77ca67fb44" />
 
 #### Pembahasan
+<p align="justify">Gambar ini menampilkan tahap pemilihan lokasi instalasi NetTime. Lokasi bawaannya adalah C:\Program Files (x86)\NetTime dan dapat diganti lewat tombol Browse.... Instalasi membutuhkan ruang disk minimal 1,9 MB. Klik Next > untuk melanjutkan.</p>
 
 -Nama folder
 
