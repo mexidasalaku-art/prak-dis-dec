@@ -369,6 +369,8 @@ Class raft.py
 
 #### Pembahasan
 
+<p align="justify">Program ini mensimulasikan konsensus Raft yang disederhanakan dengan tiga peran node, yaitu FOLLOWER, CANDIDATE, dan LEADER. Kelas RaftNode menyimpan term, log, dan waktu heartbeat, serta memiliki election_timeout acak 1 sampai 2 detik. Metode start_election() menaikkan term lalu menjadikan node sebagai leader jika suara cukup (disederhanakan: semua node dianggap memberi suara), on_heartbeat() mengembalikan node menjadi follower, append_entry() menambah log khusus leader, dan tick() memicu pemilihan jika heartbeat terlewat. Fungsi simulate_raft() menjalankan 3 node selama 20 langkah, dengan leader mengirim heartbeat dan menambah perintah setiap 3 langkah.</p>
+
 
 ### -Jalankan program tersebut.
 
@@ -378,13 +380,16 @@ Class raft.py
 
 #### Pembahasan
 
+<p align="justify">Pada step 1-2 semua node FOLLOWER dengan term 0 dan log kosong. Pada step 3, Node 2 terpilih menjadi LEADER di term 1 (karena timeout-nya habis lebih dulu). Setelah itu Node 1 dan 3 ikut ke term 1 melalui heartbeat dan tetap FOLLOWER. Leader menambah perintah di step 4, 7, 10, 13, 16, dan 19 (kelipatan 3), sehingga log Node 2 bertambah sampai 6 entri. Perlu dicatat, log Node 1 dan 3 tetap 0 karena replikasi log ke follower tidak diimplementasikan (hanya disimulasikan lewat komentar di kode). Term tetap 1 dan tidak ada pemilihan ulang, artinya sistem stabil.</p>
+
 
 ### -Perhatikan keluaran program yang dijalankan tersebut. Dari keluaran program tersebut, jelaskan secara sederhana algoritma Raft untuk memilih koordinator (LEADER) menggunakan visualisasi (digambar dengan manual pensil/ballpoint dan kemudian difoto).
 
 <img width="720" height="1280" alt="31_LEADER" src="https://github.com/user-attachments/assets/5b8f4626-2d8c-45a2-b499-047a4d6f99de" />
 
-
 #### Pembahasan
+
+<p align="justify">Diagram menjelaskan simulasi dalam empat tahap: (1) kondisi awal step 1-2, semua node follower dan belum ada leader; (2) pemilihan leader step 3-5, node dengan suara terbanyak menjadi leader; (3) replikasi log step 4-5, leader mengirim entri ke follower; (4) operasi dan stabilitas step 6-20, leader tetap memimpin. Namun, ada ketidaksesuaian dengan output: pada diagram leader digambarkan Node 1, sedangkan pada output leader-nya adalah Node 2. Replikasi log pada tahap 3 juga tidak benar-benar terjadi di kode, karena log follower tetap 0.</p>
 
 ### -Buatlah program tersebut menjadi modul Python dan kemudian buatlah contoh simulasinya menggunakan modul Python yang sudah Anda buat tersebut.
 
@@ -394,6 +399,8 @@ Class main2.py
 
 #### Pembahasan
 
+<p align="justify">Ini versi modular yang mengimpor RaftNode dan State dari raft.py. Simulasinya sama (3 node, 20 langkah), tetapi ada beberapa perbedaan: leader dipilih dengan leaders[0] (bukan acak), leader menambah perintah setiap 5 langkah (step % 5 == 0, bukan 3), dan status yang dicetak menampilkan isi log (node.log), bukan hanya panjangnya. Selain itu, agar tidak mencetak ulang simulasi bawaan, file raft.py memang menjaga simulate_raft() di dalam if __name__ == "__main__".</p>
+
 ### -Output
 
 <img width="311" height="415" alt="33_output_main py" src="https://github.com/user-attachments/assets/41abcf56-25c7-4814-bfe4-ad12b009a652" />
@@ -402,6 +409,10 @@ Class main2.py
 
 #### Pembahasan
 
+<p align="justify">Pada step 1-2 semua node masih FOLLOWER dengan term 0. Di step 3, Node 2 terpilih menjadi LEADER di term 1, lalu Node 1 dan 3 ikut term 1 lewat heartbeat dan tetap FOLLOWER. Leader menambah perintah setiap kelipatan 5 langkah (command-5, command-10, command-15), sehingga log Node 2 berisi tiga entri, sedangkan log Node 1 dan 3 tetap kosong karena replikasi log tidak diimplementasikan. Term tetap 1 dan tidak ada pemilihan ulang, artinya sistem stabil.</p>
+
   
 
 # KESIMPULAN
+
+<p align="justify">Berdasarkan praktikum ini, dapat disimpulkan bahwa sistem terdistribusi dan terdesentralisasi menghadapi tantangan koordinasi karena tidak adanya jam global maupun kontrol terpusat. Vector clock terbukti mampu menentukan urutan kejadian antar proses (happens-before) dan mengidentifikasi kejadian yang konkuren tanpa bergantung pada jam global. Pada eksekusi konkuren, race condition terjadi ketika beberapa thread mengubah data bersama tanpa sinkronisasi (saldo menjadi Rp-60) dan dapat diatasi dengan threading.Lock(), sedangkan deadlock terjadi ketika dua thread saling menunggu lock yang dipegang lawannya dan dapat dicegah dengan timeout, pelepasan lock sebelum mengambil lock lain, atau urutan pengambilan lock yang konsisten. Terakhir, simulasi algoritma Raft menunjukkan bahwa node-node dapat mencapai konsensus dan memilih satu leader secara terdesentralisasi melalui election timeout acak dan heartbeat, sehingga sistem tetap stabil dengan satu leader yang mengoordinasikan perintah, meskipun replikasi log ke follower pada simulasi ini masih disederhanakan.</p>
