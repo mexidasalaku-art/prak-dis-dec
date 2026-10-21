@@ -257,6 +257,12 @@ Berikut adalah contoh data race / race conditions di Python (`race-conditions-01
 
 ### -Jelaskan menggunakan visualisasi (gambar dengan pensil/ballpoint kemudian difoto), mengapa terjadi data race / race conditions.
 
+<img width="1200" height="1600" alt="19_Visualisasi gambar" src="https://github.com/user-attachments/assets/0771b7a2-0f45-4afe-b0f7-2750a8a1bd55" />
+
+
+#### Pembahasan
+
+
 Berikut adalah contoh program untuk membuat supaya race conditions tersebut tidak terjadi (`race-conditions-02.py`):
 
 <img width="276" height="188" alt="20_race-conditions-02 py" src="https://github.com/user-attachments/assets/00a0e955-6086-47e7-9d00-e7c9115b3424" />
@@ -290,6 +296,11 @@ Berikut adalah contoh kondisi deadlock di Python (`deadlock-01.py`).
 #### Pembahasan
 
 ### Jelaskan menggunakan visualisasi (gambar dengan pensil/ballpoint kemudian difoto), mengapa terjadi deadlock.
+
+<img width="1200" height="1600" alt="24_deadlock" src="https://github.com/user-attachments/assets/1820d75d-8a1b-4912-a465-bf465732649c" />
+
+
+#### Pembahasan
 
 Berikut adalah contoh program untuk membuat supaya deadlock tersebut tidak terjadi (`deadlock-02.py`):
 
@@ -335,6 +346,9 @@ Class raft.py
 
 
 ### -Perhatikan keluaran program yang dijalankan tersebut. Dari keluaran program tersebut, jelaskan secara sederhana algoritma Raft untuk memilih koordinator (LEADER) menggunakan visualisasi (digambar dengan manual pensil/ballpoint dan kemudian difoto).
+
+<img width="720" height="1280" alt="31_LEADER" src="https://github.com/user-attachments/assets/5b8f4626-2d8c-45a2-b499-047a4d6f99de" />
+
 
 #### Pembahasan
 
