@@ -246,7 +246,7 @@ Berikut adalah contoh data race / race conditions di Python (`race-conditions-01
 <img width="259" height="168" alt="17_race-conditions-01 py" src="https://github.com/user-attachments/assets/ee37de55-2192-4514-a49e-dfc908850265" />
 
 #### Pembahasan
-
+ 
 **Tugas:**
 
 ### -Jalankan program tersebut.
