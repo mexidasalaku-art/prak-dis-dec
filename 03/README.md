@@ -264,6 +264,8 @@ Berikut adalah contoh data race / race conditions di Python (`race-conditions-01
 <img width="259" height="168" alt="17_race-conditions-01 py" src="https://github.com/user-attachments/assets/ee37de55-2192-4514-a49e-dfc908850265" />
 
 #### Pembahasan
+
+<p align="justify">Program ini memiliki variabel global balance = 100 dan fungsi withdraw(amount) yang mengecek balance >= amount, tidur 0,01 detik, lalu mengurangi saldo. Dua thread (t1 dan t2) sama-sama menarik Rp80 tanpa pengaman (lock), sehingga pengecekan dan pengurangan saldo tidak berjalan sebagai satu kesatuan.</p>
  
 **Tugas:**
 
@@ -273,12 +275,15 @@ Berikut adalah contoh data race / race conditions di Python (`race-conditions-01
 
 #### Pembahasan
 
+<p align="justify">Output menunjukkan saldo akhir Rp20, lalu Rp-60. Ini bukti race condition: kedua thread lolos pengecekan karena saldo masih 100 saat dicek, padahal seharusnya penarikan kedua ditolak.</p>
+
 ### -Jelaskan menggunakan visualisasi (gambar dengan pensil/ballpoint kemudian difoto), mengapa terjadi data race / race conditions.
 
 <img width="1200" height="1600" alt="19_Visualisasi gambar" src="https://github.com/user-attachments/assets/0771b7a2-0f45-4afe-b0f7-2750a8a1bd55" />
 
-
 #### Pembahasan
+
+<p align="justify">Diagram menggambarkan salah satu kemungkinan alur eksekusi. Thread 1 dan Thread 2 sama-sama membaca saldo 100 dan mengecek 100 >= 80 (TRUE), lalu menunggu. Thread 1 mengurangi saldo menjadi 20 dan menampilkan Rp20, kemudian Thread 2 tetap mengurangi dari nilai yang sudah berubah sehingga saldo menjadi -60.</p>
 
 
 Berikut adalah contoh program untuk membuat supaya race conditions tersebut tidak terjadi (`race-conditions-02.py`):
@@ -287,13 +292,14 @@ Berikut adalah contoh program untuk membuat supaya race conditions tersebut tida
 
 #### Pembahasan
 
+<p align="justify">Ini versi perbaikan dengan threading.Lock() bernama counter_lock. Blok with counter_lock: membungkus pengecekan, sleep, dan pengurangan saldo, sehingga hanya satu thread yang boleh masuk pada satu waktu.</p>
+
 
 **Tugas:**
 
 ### -Jalankan program tersebut.
 
 <img width="360" height="27" alt="21_output_race-conditions-02 py" src="https://github.com/user-attachments/assets/82092a14-8292-4e59-acc0-1eda38904598" />
-
 
 #### Pembahasan
 
@@ -307,11 +313,15 @@ Berikut adalah contoh kondisi deadlock di Python (`deadlock-01.py`).
 
 #### Pembahasan
 
+<p align="justify">Program ini membuat dua lock, lock_a dan lock_b. Thread 1 mengunci A lalu mencoba mengunci B, sedangkan Thread 2 mengunci B lalu mencoba mengunci A, dengan sleep(1) di antaranya untuk memperbesar peluang deadlock. Karena urutan pengambilan lock berlawanan, kedua thread akan saling menunggu lock yang dipegang lawannya dan program berhenti (hang) tanpa pernah selesai. Solusinya, semua thread harus mengambil lock dalam urutan yang sama (misalnya A lalu B).</p>
+
 ### -Jalankan program tersebut.
 
 <img width="250" height="30" alt="23_output_deadlock-01 py" src="https://github.com/user-attachments/assets/69d3984d-3721-49c8-8111-972ed8b7e6cc" />
 
 #### Pembahasan
+
+<p align="justify">Output hanya menampilkan dua baris: “Thread 1: Locked A, waiting for B...” dan “Thread 2: Locked B, waiting for A...”. Setelah itu program berhenti (hang) dan tidak pernah mencetak “Locked both”. Ini bukti deadlock: Thread 1 memegang A dan menunggu B, sedangkan Thread 2 memegang B dan menunggu A.</p>
 
 ### Jelaskan menggunakan visualisasi (gambar dengan pensil/ballpoint kemudian difoto), mengapa terjadi deadlock.
 
@@ -320,11 +330,15 @@ Berikut adalah contoh kondisi deadlock di Python (`deadlock-01.py`).
 
 #### Pembahasan
 
+<p align="justify">Diagram menjelaskan terjadinya deadlock dalam empat tahap. Kondisi awal: lock_A dan lock_B belum terkunci. Thread 1 mengunci lock_A lalu mencoba mengunci lock_B, tetapi lock_B sedang dipegang Thread 2. Thread 2 mengunci lock_B lalu mencoba mengunci lock_A, tetapi lock_A sedang dipegang Thread 1. Pada tahap akhir terbentuk lingkaran saling menunggu (circular wait): Thread 1 memegang A dan menunggu B, Thread 2 memegang B dan menunggu A, sehingga keduanya tidak bisa melanjutkan.</p>
+
 Berikut adalah contoh program untuk membuat supaya deadlock tersebut tidak terjadi (`deadlock-02.py`):
 
 <img width="218" height="374" alt="25_deadlock-02 py" src="https://github.com/user-attachments/assets/308b84a1-26b7-43c9-a233-99d6e39b7a30" />
 
 #### Pembahasan
+
+<p align="justify">Ini versi perbaikan dengan acquire(timeout=5) dan blok try/finally. Thread tidak menunggu lock selamanya, dan setiap lock yang dipegang dilepas dengan release(). Kuncinya, Thread 1 melepas lock A sebelum mencoba mengambil lock B (begitu juga Thread 2), sehingga tidak ada thread yang memegang satu lock sambil menunggu lock lain, dan lingkaran saling menunggu tidak terbentuk.</p>
 
 **Tugas:**
 
@@ -333,6 +347,8 @@ Berikut adalah contoh program untuk membuat supaya deadlock tersebut tidak terja
 <img width="341" height="89" alt="26_Output_deadlock-02 py" src="https://github.com/user-attachments/assets/a915f7f5-3942-4e82-87aa-c5b95a47b1af" />
 
 #### Pembahasan
+
+<p align="justify">Kedua thread berhasil mengambil lock pertamanya (Thread 1 lock A, Thread 2 lock B), lalu masing-masing menunggu lock berikutnya. Karena lock pertama sudah dilepas, Thread 2 berhasil mengambil lock A dan Thread 1 berhasil mengambil lock B, lalu program selesai dengan “Execution Finished”. Deadlock teratasi dan program tidak hang.</p>
 
 ### -Amati keluarannya. Jelaskan mengapa deadlock tidak terjadi?
 <p align="justify">Deadlock tidak terjadi karena setiap thread melepas lock pertamanya sebelum meminta lock kedua. Pada blok finally, Thread 1 menjalankan lock_a.release() dan Thread 2 menjalankan lock_b.release() sebelum keduanya memanggil acquire untuk lock berikutnya, sehingga tidak ada thread yang memegang satu lock sambil menunggu lock lain (tidak ada hold and wait maupun circular wait). Karena itu, Thread 2 bisa mendapat Lock A dan Thread 1 bisa mendapat Lock B, lalu program selesai dengan mencetak “Execution Finished”. Parameter timeout=5 juga berfungsi sebagai pengaman agar thread tidak menunggu selamanya, meskipun pada kasus ini tidak sempat terpakai.</p>
