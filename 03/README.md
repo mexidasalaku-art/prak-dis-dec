@@ -201,6 +201,8 @@ print(f"VC0 is concurrent with VC2: {vc0.is_concurrent(vc2)}")
 
 #### Pembahasan
 
+<p align="justify">File ini berisi kelas VectorClock beserta simulasi di dalamnya. Kelas ini memiliki atribut clocks (counter tiap proses) dan process_id, dengan metode increment() untuk menambah counter sendiri, send_message() untuk menambah counter lalu mengirim salinan vector clock, dan receive_message() untuk mengambil nilai maksimum tiap elemen lalu menambah counter sendiri. Metode happens_before() memeriksa hubungan sebab-akibat (semua elemen A ≤ B dan minimal satu elemen A < B), sedangkan is_concurrent() menyatakan dua kejadian konkuren jika tidak ada yang happens-before yang lain. Pada bagian simulasi, tiga proses dibuat lalu dijalankan: P0 melakukan event lokal, P0 mengirim pesan ke P1, P2 melakukan event lokal, P1 mengirim pesan ke P2, dan terakhir dicek hubungan kausalitasnya. </p>
+
 **Tugas:**
 
 1. Jalankan program tersebut, amati keluarannya. Buat penjelasan dari keluaran tersebut: bandingkan dengan algoritma tersebut jika vector clocks dilaksanakan secara manual.
@@ -217,6 +219,7 @@ print(f"VC0 is concurrent with VC2: {vc0.is_concurrent(vc2)}")
      <img width="264" height="403" alt="12_vector_clock py" src="https://github.com/user-attachments/assets/0a9ef844-976c-4662-8287-79146427ccf5" />
      
      #### pembahasan
+<p align="justify">Ini versi modular dari kelas VectorClock dengan komentar berbahasa Indonesia. Logikanya sama, tetapi happens_before() lebih ringkas karena hanya memakai any_lt (variabel all_le di versi sebelumnya tidak berpengaruh). Kelas ini dipisah ke file sendiri agar bisa diimpor.</p>
 
    - main.py
      
@@ -224,27 +227,35 @@ print(f"VC0 is concurrent with VC2: {vc0.is_concurrent(vc2)}")
 
      #### Pembahasan
 
+     <p align="justify">Program utama yang mengimpor VectorClock dari vector_clock dan menjalankan simulasi yang sama dengan Gambar 2. Bedanya, tiap tahap diberi judul seperti “=== Proses 0 mengirim pesan ke Proses 1 ===” agar output lebih mudah dibaca.</p>
+
    - output main.py
      
        <img width="326" height="199" alt="14_output_main py" src="https://github.com/user-attachments/assets/a8a0fef3-6d65-4560-9589-16d18708b403" />
 
      #### Pembahasan
 
+<p align="justify">Output program vector clock dari main.py. Semua clock mulai dari [0, 0, 0]. P0 melakukan event lokal menjadi [1, 0, 0], lalu mengirim pesan menjadi [2, 0, 0], sedangkan P1 menjadi [2, 1, 0] setelah menerima. P2 menjadi [0, 0, 1] setelah event lokal, lalu [2, 2, 2] setelah menerima pesan dari P1 (P1 juga naik menjadi [2, 2, 0] saat mengirim). Hasil kausalitas: VC0 happens before VC1 = True, VC1 happens before VC0 = False, dan VC0 concurrent dengan VC2 = False karena VC0 [2,0,0] terjadi sebelum VC2 [2,2,2].</p>
+
 ---
 
 ## 3 Problem Tanpa Sinkronisasi
 
-Pada sistem terdistribusi, ketiadaan sinkronisasi bisa menghasilkan 2 masalah besar yaitu data race / race conditions dan deadlock. Pada program yang menggunakan model asynchronous maupun thread, pola pikir sekuensial tidak bisa digunakan karena penyelesaian satu task dengan task lainnya biasanya tidak bisa diprediksi. Berikut adalah contoh program multithreaded di Python (`multithreaded-example.py`).
+<p align="justify">Pada sistem terdistribusi, ketiadaan sinkronisasi bisa menghasilkan 2 masalah besar yaitu data race / race conditions dan deadlock. Pada program yang menggunakan model asynchronous maupun thread, pola pikir sekuensial tidak bisa digunakan karena penyelesaian satu task dengan task lainnya biasanya tidak bisa diprediksi. Berikut adalah contoh program multithreaded di Python (`multithreaded-example.py`).</p>
 
 <img width="230" height="241" alt="15_multithreads-example py" src="https://github.com/user-attachments/assets/03bcbe7d-1903-4d54-801d-caeada128aaf" />
 
 #### Pembahasan
+
+<p align="justify">Program ini membuat lima thread (A sampai E) menggunakan modul threading, yang masing-masing menjalankan fungsi task() dengan time.sleep(5) untuk mensimulasikan operasi I/O-bound. Semua thread dijalankan dengan start(), lalu join() memastikan program utama menunggu semuanya selesai sebelum mencetak “All tasks completed.”</p>
 
 ### Output
 
 <img width="373" height="103" alt="16_output_multithreads-example py" src="https://github.com/user-attachments/assets/71d714f7-ccc6-43cd-b916-5a96a0af65bb" />
 
 #### Pembahasan
+
+<p align="justify">Kelima task langsung mulai hampir bersamaan, lalu selesai setelah 5 detik. Karena berjalan paralel (konkuren), total waktunya sekitar 5 detik, bukan 25 detik jika dijalankan berurutan. Urutan selesai tidak selalu sama dengan urutan mulai (di sini A, B, E, C, D), karena penjadwalan thread ditentukan oleh sistem operasi.</p>
 
 ### - Data Race / Race Conditions
 
