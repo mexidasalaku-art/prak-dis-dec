@@ -81,8 +81,9 @@ Ada 2 protokol yang biasanya digunakan untuk sinkronisasi waktu: NTP (Network Ti
 
 ### 2 Proses Sinkronisasi
 
+<img width="385" height="277" alt="07_NetTime" src="https://github.com/user-attachments/assets/4b15cd6d-9301-4277-918e-c6bc716b8384" />
 
-
+#### Pembahasan
 
 
 
