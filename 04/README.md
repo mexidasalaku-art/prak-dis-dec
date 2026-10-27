@@ -85,6 +85,10 @@
 #### Pembahasan
 
 ### Jalankan program menggunakan Docker
+```python
+docker --version
+docker compose version
+```
 #### Periksa Docker
 #### Jalankan primary dan replica
 #### Periksa container
