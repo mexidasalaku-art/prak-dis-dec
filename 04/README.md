@@ -92,32 +92,56 @@ docker --version
 docker compose version
 ```
 
+<img width="544" height="75" alt="11_Periksa_Docker" src="https://github.com/user-attachments/assets/6b326031-51a5-450e-80da-e4a34c69ac78" />
+
+#### Pembahasan
+
+
 #### Jalankan primary dan replica
 ```python
 docker compose up -d
 ```
+
+<img width="536" height="58" alt="12_Primary_dan_Replika" src="https://github.com/user-attachments/assets/721301bc-31d3-4ac2-984c-90868e278b20" />
+
+#### Pembahasan
 
 #### Periksa container
 ```python
 docker ps
 ```
 
+<img width="696" height="74" alt="13_Periksa_container" src="https://github.com/user-attachments/assets/9981bd55-cf06-4c65-bd7a-8b85a45c67dd" />
+
+#### Pembahasan
+
 #### Periksa log jika terjadi masalah
 ```python
 docker compose logs postgres_primary
 ```
 
+<img width="694" height="419" alt="14_Mengecek_Masalah" src="https://github.com/user-attachments/assets/1a525db7-3e37-457b-bd1c-23adb55cdbb3" />
+
+#### Pembahasan
+
 ```python
 docker compose logs postgres_replica
 ```
+
+<img width="694" height="269" alt="15__Mengecek_Masalah" src="https://github.com/user-attachments/assets/975c01c2-2063-4974-a18d-0f32d48b326f" />
+<img width="700" height="212" alt="16_Mengecek_Masalah" src="https://github.com/user-attachments/assets/219ee9fa-a3ba-4f6b-bcdf-3c63bcf4dbb0" />
+
+
+#### Pembahasan
 
 #### - Jalankan kode dibawah jika ingin menghentikan container
 ```python
 docker compose down
 ```
 
+<img width="545" height="67" alt="17_Menghentikan_container" src="https://github.com/user-attachments/assets/299f38b8-9e31-440e-92c6-83b59aebf62f" />
 
-  
+#### Pembahasan
 
 
 
