@@ -180,7 +180,7 @@ print(vc0)
 print(vc1)
 
 # Process 2 performs a local event
-vc2.increment()
+vc2.increment() 
 print(vc2)
 
 # Process 1 sends a message to Process 2
