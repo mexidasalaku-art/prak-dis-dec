@@ -10,644 +10,399 @@
 
 ---
 
-## Daftar Isi
-
-1. [Tujuan Praktikum](#1-tujuan-praktikum)
-2. [Ringkasan Konsep](#2-ringkasan-konsep)
-3. [Struktur Repositori](#3-struktur-repositori)
-4. [Bagian A: Persiapan Docker](#4-bagian-a-persiapan-docker)
-5. [Bagian B: Streaming Replication PostgreSQL 18](#5-bagian-b-streaming-replication-postgresql-18-primary-replica)
-6. [Bagian C: Replikasi Master-Master Apache Ignite 3](#6-bagian-c-replikasi-master-master-apache-ignite-3)
-7. [Perbandingan Dua Model Replikasi](#7-perbandingan-dua-model-replikasi)
-8. [Kesimpulan](#8-kesimpulan)
-9. [Catatan dan Pemecahan Masalah](#9-catatan-dan-pemecahan-masalah)
-10. [Referensi](#10-referensi)
+##  TUJUAN PRAKTIKUM
 
 ---
 
-##  Tujuan Praktikum
-
-##  Dasar Teori
----
-
-## 2. Ringkasan Konsep
-
-### 2.1 Konsistensi dan Replikasi
-
-Menyimpan data di satu mesin berarti seluruh layanan bergantung pada satu titik gagal. **Replikasi** menjaga salinan data di beberapa node sehingga:
-
-- layanan tetap hidup saat satu node bermasalah,
-- pembacaan bisa dibagi ke beberapa node,
-- data bisa diletakkan lebih dekat ke pengguna.
-
-Konsekuensinya, setiap salinan harus diperbarui dan muncul pertanyaan: *kapan sebuah salinan boleh dianggap sama dengan yang lain?* Itulah inti **konsistensi**.
-
-| Model | Jaminan | Biaya |
-|---|---|---|
-| **Konsistensi kuat** | Setiap pembacaan melihat tulisan terakhir yang selesai | Tulis harus menunggu koordinasi antar node (lambat) |
-| **Konsistensi eventual** | Salinan boleh tertinggal sesaat, tetapi akhirnya konvergen | Pembaca bisa melihat data lama |
-| **Kausal / read-your-writes** | Sebagian jaminan yang paling dibutuhkan aplikasi | Menengah |
-
-**Teorema CAP:** saat terjadi pemisahan jaringan, sistem harus memilih antara tetap *konsisten* atau tetap *tersedia*. Dalam praktik, pilihan ini dibuat per operasi dan per kebutuhan, bukan sekali untuk seluruh sistem.
-
-### 2.2 Primary-Replica dan Streaming Replication
-
-Pada model **primary-replica**, satu node (primary) menerima semua tulisan, sedangkan replica menerima perubahan darinya dan biasanya melayani pembacaan. Tidak ada konflik tulis karena hanya ada satu penulis, dan replica menjadi calon pengganti saat primary gagal.
-
-| | Sinkron | Asinkron |
-|---|---|---|
-| Commit | Menunggu konfirmasi replica | Langsung commit, kirim di belakang |
-| Risiko kehilangan data saat failover | Bisa nol | Ada jendela kecil data belum sampai |
-| Latensi tulis | Naik | Tetap cepat |
-| Ketergantungan primary pada replica | Ya | Tidak |
-
-**Streaming replication** berarti perubahan dialirkan terus-menerus begitu terjadi (bukan snapshot berkala). PostgreSQL melakukannya dengan mengalirkan WAL dari proses *walsender* di primary ke *walreceiver* di replica.
-
-### 2.3 WAL, LSN, dan Replication Slot
-
-- **WAL (Write-Ahead Log):** catatan berurutan setiap perubahan; perubahan ditulis ke WAL **sebelum** halaman data diperbarui. Awalnya untuk pemulihan crash, tetapi aliran WAL yang sama bisa diputar ulang di replica sehingga hasilnya identik dengan primary.
-- **LSN (Log Sequence Number):** penanda posisi di WAL. Selisih posisi kirim, tulis, flush, dan replay disebut **lag replikasi**.
-- **Replication slot:** penanda di sisi server yang menjamin WAL ditahan sampai replica mengonfirmasi. Risikonya: jika replica mati lama, WAL menumpuk dan bisa menghabiskan disk.
-- **`hot_standby_feedback`:** memberi tahu primary tentang query yang sedang berjalan di replica agar baris yang masih dibutuhkan tidak dibersihkan terlalu cepat.
-
-### 2.4 High Availability, Failover, dan Split-Brain
-
-- **RTO** = lama downtime yang dapat diterima; **RPO** = jumlah data yang boleh hilang.
-- **Failover** = memindahkan peran primary ke replica. Bisa manual (`pg_promote()`) atau otomatis dengan alat seperti Patroni / repmgr berbasis quorum.
-- **Split-brain** = dua node sama-sama menganggap dirinya primary dan menerima tulisan, sehingga data bercabang. Pencegahannya adalah **fencing** (memastikan node lama benar-benar tidak bisa menulis).
-
-> [!WARNING]
-> Pada praktikum ini pencegahan split-brain dilakukan **manual**: primary lama dihentikan dan tidak dihidupkan lagi sebagai primary. Ini yang membedakan replikasi sederhana dari sistem HA yang siap produksi.
-
-### 2.5 Apache Ignite 3 dan Master-Master
-
-Apache Ignite 3 menyimpan data di memori dan disk. Data dipecah menjadi partisi berdasarkan *affinity key* lalu ditempatkan di node sesuai **zone**. Zone juga menentukan *replication factor*. Semua node terlihat setara: setiap node dapat menerima baca/tulis dan meneruskan permintaan ke node pemilik partisi.
-
-Metadata cluster (daftar node, definisi zone) dikelola oleh *cluster management group* dengan **consensus**, sehingga butuh mayoritas node dan jumlah node ganjil. Pada dataset Chinook, tabel besar didistribusikan, sedangkan tabel referensi kecil (`MEDIATYPE`, `GENRE`) digandakan penuh ke semua node.
-
-### 2.6 Docker sebagai Lingkungan Praktikum
-
-- **Image** bersifat immutable, sehingga setiap container baru dimulai dari kondisi yang sama dan hasil praktikum dapat diulang.
-- **Docker Compose** mendefinisikan beberapa container dalam satu YAML; service saling memanggil dengan nama service sebagai hostname (contoh: `postgres_primary`).
-- **`healthcheck`** membuat status container bermakna (`healthy`), sedangkan **`depends_on`** hanya mengatur urutan start, **bukan** kesiapan layanan. Itulah sebabnya perintah backup replica dibungkus loop `until`.
+##  DASAR TEORI
 
 ---
 
-## 3. Struktur Repositori
 
-```text
-.
-├── README.md
-├── assets/                       # tangkapan layar (gambar-4.1.png, dst.)
-├── streaming-replication/        # Bagian B: PostgreSQL
-│   ├── 00_init.sql
-│   ├── docker-compose.yaml
-│   └── env.sh
-└── src--ApacheIgnite/            # Bagian C: Apache Ignite
-    ├── sql/
-    │   ├── schema.sql
-    │   ├── current_catalog.sql
-    │   ├── media_and_genre.sql
-    │   ├── ee_and_cust.sql
-    │   ├── tracks.sql
-    │   └── invoices.sql
-    ├── docker-compose.yaml
-    └── env.sh
-```
+#  PEMBAHASAN PRAKTIKUM
 
----
+## PRAKTIK 1
 
-## 4. Bagian A: Persiapan Docker
+## 1 Sinkronisasi Waktu
 
-### 4.1 Instalasi Docker Desktop (Windows)
+Ada 2 protokol yang biasanya digunakan untuk sinkronisasi waktu: NTP (Network Time Protocol) dan PTP (Precision Time Protocol). Tapi disini saya menggunakan windows
 
-| Langkah | Keterangan |
-|---|---|
-| Konfigurasi | Pilih **Per-user installation**: tidak butuh hak administrator dan otomatis memakai backend **WSL 2** (wajib untuk container Linux). Biarkan *Add shortcut to desktop* tercentang. |
-| Ekstraksi | Jangan tutup installer sebelum progress bar penuh; komponen yang tertinggal sering membuat Docker gagal start. |
-| Selesai | Pesan *Installation succeeded* hanya berarti berkas terpasang. Buka Docker Desktop dan tunggu status **Engine running**. |
 
-![Konfigurasi instalasi](assets/gambar-4.1.png)
-![Ekstraksi berkas](assets/gambar-4.2.png)
-![Instalasi berhasil](assets/gambar-4.3.png)
 
-> [!TIP]
-> Jika perintah `docker` mengembalikan error koneksi ke pipe, cukup tunggu engine selesai boot; tidak perlu menginstal ulang.
+### 1. Install NetTime (<https://www.timesynctool.com/>). Gunakan software tersebut untuk sinkronisasi waktu ke suatu NTP server.
+-Next untuk lanjut
 
-### 4.2 Verifikasi Versi
+<img width="378" height="282" alt="01" src="https://github.com/user-attachments/assets/91ebfd0c-0a1c-49d5-94be-d8061de2d7d1" />
 
-```bash
-docker --version          # Docker version 29.9.2, build a82e528
-docker compose version    # Docker Compose version v5.6.1
-```
+#### Pembahasan
+<p align="justify">Gambar ini menampilkan halaman awal Setup Wizard untuk menginstal NetTime, aplikasi yang menyinkronkan jam komputer dengan server waktu internet. Wizard menyarankan agar semua aplikasi lain ditutup sebelum melanjutkan. Tombol Next > dipakai untuk lanjut ke tahap berikutnya, sedangkan Cancel untuk membatalkan instalasi.</p>
 
-![docker --version](assets/gambar-4.4.png)
-![docker compose version](assets/gambar-4.5.png)
+-Lokasi instalasi
 
-Compose terpasang sebagai **plugin** (`docker compose`, dengan spasi), bukan `docker-compose` versi lama. Alias di `env.sh` memakai bentuk berspasi.
+  <img width="379" height="279" alt="02" src="https://github.com/user-attachments/assets/a1f76449-ee72-4ffb-a63b-cf77ca67fb44" />
 
-### 4.3 Memeriksa Engine
+#### Pembahasan
+<p align="justify">Gambar ini menampilkan tahap pemilihan lokasi instalasi NetTime. Lokasi bawaannya adalah C:\Program Files (x86)\NetTime dan dapat diganti lewat tombol Browse.... Instalasi membutuhkan ruang disk minimal 1,9 MB. Klik Next > untuk melanjutkan.</p>
 
-```bash
-docker info
-```
+-Nama folder
 
-Ringkasan bagian **Server** pada mesin praktikum:
+<img width="379" height="284" alt="03" src="https://github.com/user-attachments/assets/1d965713-37b5-499e-942d-4049bcbe8375" />
 
-| Item | Nilai |
-|---|---|
-| Server Version | 29.9.2 |
-| Containers | 0 |
-| Storage Driver | overlayfs |
-| Cgroup Version | 2 |
-| Kernel | 6.18.33.2-microsoft-standard-WSL2 |
-| CPU / Memori | 12 CPU / 7,606 GiB |
+#### Pembahasan
+<p align="justify">Halaman ringkasan sebelum instalasi dimulai: lokasi tujuan C:\Program Files (x86)\NetTime, folder Start Menu NetTime, dan tugas tambahan Install as Service. Klik Install untuk memulai, atau < Back untuk mengubah pengaturan.</p>
 
-> [!IMPORTANT]
-> Memori sekitar 7,6 GiB cukup untuk dua container PostgreSQL kecil, tetapi bisa menjadi kendala jika tiga node Ignite masing-masing meminta 4 GB. Jika bagian Server kosong/error, engine belum hidup.
+
+-Install as Service
+
+<img width="377" height="284" alt="04" src="https://github.com/user-attachments/assets/c9995cb5-4f0c-48a8-9a63-72d30ce415ac" />
+
+#### Pembahasan
+<p align="justify">Tahap tugas tambahan. Opsi “Install as Service (Recommended)” dicentang agar NetTime berjalan sebagai layanan di latar belakang dan menyinkronkan waktu otomatis tanpa harus dibuka manual.</p>
+
+  
+-Ringkasan instalasi
+
+<img width="380" height="285" alt="05" src="https://github.com/user-attachments/assets/b0532d06-15d0-46ad-8051-287f2da439cb" />
+
+#### Pembahasan
+<p align="justify">Tahap pemilihan folder Start Menu untuk shortcut program. Nama bawaannya NetTime dan bisa diganti lewat Browse.</p>
+  
+-Selesai Instal
+
+<img width="376" height="281" alt="06" src="https://github.com/user-attachments/assets/96b51a1e-cde0-4ca0-9f97-d4236ce3c5ed" />
+
+
+#### Pembahasan
+<p align="justify">Ini tahap terakhir: instalasi NetTime sudah selesai. Opsi “Start NetTime now” dicentang agar aplikasi langsung berjalan, dan tombol Finish menutup wizard.</p>
+
+### 2 Proses Sinkronisasi
+
+<img width="385" height="277" alt="07_NetTime" src="https://github.com/user-attachments/assets/4b15cd6d-9301-4277-918e-c6bc716b8384" />
+
+#### Pembahasan
+<p align="justify">Gambar ini menampilkan jendela utama NetTime yang sudah berjalan sebagai Windows Service. Status “Time is synchronized” berarti jam komputer sudah sinkron dengan server waktu, dengan sinkronisasi terakhir pukul 19:30:29 (selisih -39 ms) dan percobaan berikutnya 11 jam 56 menit lagi. Dari daftar server, hanya 0.nettime.pool.ntp.org yang aktif (status Good, lag 46 ms), sedangkan tiga lainnya Not Used sebagai cadangan. Kolom Last Error kosong, artinya tidak ada kesalahan.</p>
+
+
 
 ---
 
-## 5. Bagian B: Streaming Replication PostgreSQL 18 (Primary-Replica)
+## 2 Vector Clock
 
-### 5.1 Berkas yang Dibutuhkan
+Vector clock digunakan untuk pengurutan event dalam suatu sistem terdistribusi. Berikut adalah contoh source code untuk vector clock (ada pada source code: `vclocks.py`). Source code diambil dari banyak sumber di Internet.
 
-![Struktur direktori](assets/gambar-4.6.png)
+```python
+# Code program vclocks.py
+class VectorClock:
+    def __init__(self, num_processes, process_id):
+        self.clocks = [0] * num_processes
+        self.process_id = process_id
 
-| Berkas | Peran | Kapan dibaca |
-|---|---|---|
-| `00_init.sql` | Membuat user replikasi dan slot | Sekali, saat volume data primary pertama dibuat |
-| `docker-compose.yaml` | Mendefinisikan primary dan replica | Setiap `docker compose` dijalankan |
-| `env.sh` | Alias perintah singkat | Hanya di sesi shell yang memuatnya |
+    def increment(self):
+        """Increments the local clock for the current process."""
+        self.clocks[self.process_id] += 1
 
-> [!NOTE]
-> Nama folder menjadi nama project Compose, sehingga container bernama `streaming-replication-postgres_primary-1` dan `streaming-replication-postgres_replica-1`.
+    def send_message(self):
+        """Prepares the vector clock for sending with a message."""
+        self.increment()
+        return list(self.clocks)
 
-#### `00_init.sql`
+    def receive_message(self, received_clocks):
+        """Updates the vector clock upon receiving a message."""
+        for i in range(len(self.clocks)):
+            self.clocks[i] = max(
+                self.clocks[i], received_clocks[i]
+            )
+        self.increment()
 
-![Isi 00_init.sql](assets/gambar-4.7.png)
+    def __str__(self):
+        return f"P{self.process_id}: {self.clocks}"
 
-Dua baris saja, tetapi inilah yang membuat replikasi bisa jalan:
+    def happens_before(self, other_vector_clock):
+        """
+        Determines if this vector clock happens before another.
+        A happens before B if all elements in A are less than
+        or equal to corresponding elements in B, and at least
+        one element in A is strictly less than B.
+        """
+        if self.clocks == other_vector_clock.clocks:
+            return False
 
-1. Membuat user **`replicator`** dengan hak `REPLICATION` (khusus untuk mengambil stream WAL, bukan untuk aplikasi).
-2. Membuat **physical replication slot** `replication_slot` agar primary tidak membuang WAL yang belum dibaca replica, sehingga replica yang sempat mati bisa menyusul tanpa `pg_basebackup` dari nol.
+        all_le = True
+        any_lt = False
 
-> [!WARNING]
-> File di `/docker-entrypoint-initdb.d` hanya dijalankan saat volume data pertama dibuat. Mengubah isinya kemudian tidak berefek sebelum data lama dihapus.
+        for i in range(len(self.clocks)):
+            if self.clocks[i] > other_vector_clock.clocks[i]:
+                return False
 
-#### `docker-compose.yaml`
+            if self.clocks[i] < other_vector_clock.clocks[i]:
+                any_lt = True
 
-![Isi docker-compose.yaml](assets/gambar-4.8.png)
+        return all_le and any_lt
 
-Konfigurasi bersama dipakai lewat *anchor* `x-postgres-common` (image `postgres:18.3-alpine3.23`, user `postgres`, `restart: always`, healthcheck `pg_isready`).
+    def is_concurrent(self, other_vector_clock):
+        """
+        Determines if two vector clocks are concurrent.
+        Two events are concurrent if neither happens before the other.
+        """
+        return not (
+            self.happens_before(other_vector_clock)
+            or other_vector_clock.happens_before(self)
+        )
 
-**Service primary** (port 5432, user `zuser`, database `zdb`) dengan parameter penting:
 
-| Parameter | Alasan |
-|---|---|
-| `wal_level=replica` | WAL memuat informasi yang dibutuhkan standby |
-| `hot_standby=on` | Replica dapat di-query |
-| `max_wal_senders`, `max_replication_slots` | Menyediakan cukup koneksi dan slot replikasi |
-| `hot_standby_feedback=on` | Query panjang di replica tidak membuat baris yang dibutuhkan terhapus di primary |
+# Simulate a system with 3 processes
+vc0 = VectorClock(num_processes=3, process_id=0)
+vc1 = VectorClock(num_processes=3, process_id=1)
+vc2 = VectorClock(num_processes=3, process_id=2)
 
-**Service replica** tidak menjalankan `initdb`. Ia menunggu `pg_basebackup` berhasil (loop `until`) dengan flag:
+print(vc0)
+print(vc1)
+print(vc2)
 
-- `-X stream` : ikut mengalirkan WAL selama backup,
-- `-R` : otomatis menulis `standby.signal` dan `primary_conninfo`, sehingga replica tidak perlu dikonfigurasi manual.
+# Process 0 performs a local event
+vc0.increment()
+print(vc0)
 
-#### `env.sh`
+# Process 0 sends a message to Process 1
+message_from_p0 = vc0.send_message()
+vc1.receive_message(message_from_p0)
+print(vc0)
+print(vc1)
 
-![Isi env.sh](assets/gambar-4.9.png)
+# Process 2 performs a local event
+vc2.increment()
+print(vc2)
 
-| Alias | Perintah |
-|---|---|
-| `dcu` | `docker compose up -d` |
-| `dcd` | `docker compose down` |
-| `dps` | `docker ps` |
-| `dep` / `der` | `docker exec` ke primary / replica |
-| `dlp` / `dlr` | `docker logs` primary / replica |
+# Process 1 sends a message to Process 2
+message_from_p1 = vc1.send_message()
+vc2.receive_message(message_from_p1)
+print(vc1) 
+print(vc2)
 
-> [!NOTE]
-> Nama container di dalam alias ditulis lengkap dan mengikuti nama folder. Jika folder diganti nama, alias harus disesuaikan. Versi ini tidak memakai `sudo` karena Docker Desktop di Windows sudah berjalan dengan hak akses memadai.
+# Check causality
+print(f"VC0 happens before VC1: {vc0.happens_before(vc1)}")
+print(f"VC1 happens before VC0: {vc1.happens_before(vc0)}")
+print(f"VC0 is concurrent with VC2: {vc0.is_concurrent(vc2)}")
 
-### 5.2 Menjalankan Cluster
-
-```bash
-cd 04/streaming-replication
-ls -la              # pastikan 3 berkas ada dan tidak kosong
-source env.sh       # memuat alias ke shell aktif
-docker compose up -d   # atau: dcu
 ```
+<img width="262" height="424" alt="09_Code_Program_clocks py" src="https://github.com/user-attachments/assets/5a957013-57a7-4fb5-82f5-6331629707bc" />
 
-![ls -la](assets/gambar-4.10.png)
-![source env.sh](assets/gambar-4.11.png)
-![docker compose up -d](assets/gambar-4.12.png)
-![Menjalankan ulang dengan dcu](assets/gambar-4.13.png)
+<img width="267" height="354" alt="10_Code_Program_clocks py" src="https://github.com/user-attachments/assets/a449ed02-4e10-4444-a748-f575a4f4d04f" />
 
-**Hasil:** image `postgres:18.3-alpine3.23` diunduh (~33 detik), network `streaming-replication_default` dibuat, lalu kedua container dijalankan. Menjalankan `dcu` kedua kali hanya menampilkan `Running`: Compose bersifat **idempoten**.
+#### Pembahasan
 
-> [!TIP]
-> `source env.sh` harus diulang di setiap terminal baru dan dijalankan dari folder yang benar. Menjalankan `./env.sh` tidak akan memuat alias ke shell aktif.
+<p align="justify">File ini berisi kelas VectorClock beserta simulasi di dalamnya. Kelas ini memiliki atribut clocks (counter tiap proses) dan process_id, dengan metode increment() untuk menambah counter sendiri, send_message() untuk menambah counter lalu mengirim salinan vector clock, dan receive_message() untuk mengambil nilai maksimum tiap elemen lalu menambah counter sendiri. Metode happens_before() memeriksa hubungan sebab-akibat (semua elemen A ≤ B dan minimal satu elemen A < B), sedangkan is_concurrent() menyatakan dua kejadian konkuren jika tidak ada yang happens-before yang lain. Pada bagian simulasi, tiga proses dibuat lalu dijalankan: P0 melakukan event lokal, P0 mengirim pesan ke P1, P2 melakukan event lokal, P1 mengirim pesan ke P2, dan terakhir dicek hubungan kausalitasnya. </p>
 
-### 5.3 Memeriksa Status Container
+**Tugas:**
 
-```bash
-dps     # kedua container harus Up ... (healthy)
-dlr     # log replica
-```
+1. Jalankan program tersebut, amati keluarannya. Buat penjelasan dari keluaran tersebut: bandingkan dengan algoritma tersebut jika vector clocks dilaksanakan secara manual.
 
-![Status healthy](assets/gambar-4.14.png)
-![Log replica](assets/gambar-4.15.png)
+<img width="335" height="196" alt="01_Hasil_Output_clocks py" src="https://github.com/user-attachments/assets/ad8d6371-a694-4598-ad90-213e52e16655" />
 
-Alternatif tanpa alias: `docker logs streaming-replication-postgres_replica-1`.
+#### Pembahasan
 
-**Membaca log replica** (satu log menceritakan seluruh siklus):
+<p align="justify">Keluaran program sesuai dengan perhitungan manual algoritma vector clock. Ketiga proses (P0, P1, P2) dimulai dari [0,0,0]; setiap kejadian lokal atau pengiriman pesan menaikkan elemen milik proses itu sendiri (P0 menjadi [1,0,0] lalu [2,0,0]), sedangkan saat menerima pesan, proses mengambil nilai maksimum tiap elemen antara vektornya dan vektor pesan lalu menaikkan elemen miliknya, sehingga P1 menjadi [2,1,0] lalu [2,2,0] setelah mengirim, dan P2 menjadi max([0,0,1],[2,2,0]) = [2,2,1] kemudian [2,2,2]. Hasil pembandingannya juga benar: VC0 happens before VC1 bernilai True karena semua elemen VC0 lebih kecil atau sama dengan VC1, sebaliknya VC1 happens before VC0 bernilai False, dan VC0 is concurrent with VC2 bernilai False karena P2 sudah menerima informasi dari P0 melalui P1 ([2,0,0] ≤ [2,2,2]), sehingga keduanya berhubungan sebab-akibat, bukan konkuren.</p>
 
-| Cuplikan log | Arti |
-|---|---|
-| `pg_basebackup: error: ... Connection refused` lalu `Retrying in 5 seconds ...` | Replica start lebih dulu daripada primary siap; `depends_on` tidak menunggu kesiapan layanan. Bukan kegagalan permanen. |
-| `Backup done, starting replica...` | `pg_basebackup` akhirnya berhasil |
-| `entering standby mode` → `consistent recovery state reached` → `ready to accept read-only connections` | Replica menyala sebagai standby yang dapat dibaca |
-| `started streaming WAL from primary at 0/3000000 on timeline 1` | **Tanda replikasi sudah berjalan** |
-| `replication terminated by primary server` → `waiting for WAL to become available` | Primary dimatikan (tahap HA); replica menunggu dan mencoba menyambung kembali |
+2. Buat modul Python untuk class `VectorClock` tersebut dan buatlah contoh cara menggunakan modul tersebut.
+   - vektor_clock.py
+     
+     <img width="264" height="403" alt="12_vector_clock py" src="https://github.com/user-attachments/assets/0a9ef844-976c-4662-8287-79146427ccf5" />
+     
+     #### pembahasan
+<p align="justify">Ini versi modular dari kelas VectorClock dengan komentar berbahasa Indonesia. Logikanya sama, tetapi happens_before() lebih ringkas karena hanya memakai any_lt (variabel all_le di versi sebelumnya tidak berpengaruh). Kelas ini dipisah ke file sendiri agar bisa diimpor.</p>
 
-### 5.4 Verifikasi Lewat Tabel Diagnostik
+   - main.py
+     
+     <img width="286" height="375" alt="13_main py" src="https://github.com/user-attachments/assets/dc3804e1-0fc9-4715-b04d-87c862ebbf41" />
 
-Masuk ke primary lalu buka `psql`:
+     #### Pembahasan
 
-```bash
-dep
-psql -U zuser -d zdb
-```
+     <p align="justify">Program utama yang mengimpor VectorClock dari vector_clock dan menjalankan simulasi yang sama dengan Gambar 2. Bedanya, tiap tahap diberi judul seperti “=== Proses 0 mengirim pesan ke Proses 1 ===” agar output lebih mudah dibaca.</p>
 
-```sql
-\x
-SELECT * FROM pg_stat_replication;
-SELECT * FROM pg_replication_slots;
-```
+   - output main.py
+     
+       <img width="326" height="199" alt="14_output_main py" src="https://github.com/user-attachments/assets/a8a0fef3-6d65-4560-9589-16d18708b403" />
 
-![pg_stat_replication](assets/gambar-4.16.png)
-![pg_replication_slots](assets/gambar-4.17.png)
+     #### Pembahasan
 
-| Kolom | Nilai | Makna |
-|---|---|---|
-| `state` | `streaming` | Aliran WAL aktif |
-| `application_name` | `walreceiver` | Koneksi dari replica |
-| `client_addr` | `172.18.0.3` | Alamat replica |
-| `sent_lsn` = `write_lsn` = `flush_lsn` = `replay_lsn` | `0/304F638` | **Tidak ada lag**: semua sudah dikirim, ditulis, di-flush, dan diputar ulang |
-| `sync_state` | `async` | Replikasi **asinkron** |
-| Slot `replication_slot` | `physical`, `active = t` | Slot terpakai |
-| `wal_status` | `reserved` | WAL masih ditahan |
-
-Di replica:
-
-```bash
-der
-psql -U zuser -d zdb
-```
-
-```sql
-SELECT pg_is_in_recovery();   -- t
-```
-
-![pg_is_in_recovery](assets/gambar-4.18.png)
-
-Nilai `t` berarti node ini standby yang sedang memutar ulang WAL: **dapat dibaca, tetapi menolak tulisan**.
-
-### 5.5 Uji Replikasi Data
-
-**Langkah 1: baseline (sebelum ada tabel).** `\dt` di primary dan replica sama-sama menghasilkan `Did not find any tables.` Ini berfungsi sebagai kontrol percobaan: satu-satunya sumber perubahan nanti adalah perintah di primary.
-
-![Primary sebelum tabel](assets/gambar-4.19.png)
-![Replica sebelum tabel](assets/gambar-4.20.png)
-
-**Langkah 2: tulis data di primary.**
-
-```sql
-CREATE TABLE testrep (first INT, second VARCHAR(15));
-SELECT * FROM testrep;
-INSERT INTO testrep VALUES (21, 'Test pertama');
-INSERT INTO testrep VALUES (23, 'Test ke dua');
-SELECT * FROM testrep;
-```
-
-![Manipulasi data di primary](assets/gambar-4.21.png)
-
-> [!NOTE]
-> Tanpa `BEGIN`/`COMMIT`, tiap perintah berjalan dalam transaksi implisit dan langsung di-commit. Ini penting: WAL hanya memuat transaksi yang sudah commit, sehingga transaksi menggantung tidak akan pernah sampai ke replica.
-
-**Langkah 3: baca di replica.**
-
-```sql
-\dt
-SELECT * FROM testrep;
-```
-
-![Data muncul di replica](assets/gambar-4.22.png)
-
-`\dt` pertama masih kosong, tetapi `\dt` beberapa saat kemudian sudah menampilkan `testrep` dengan dua baris yang sama persis. Jeda sepersekian detik ini adalah **demonstrasi nyata konsistensi eventual** pada replikasi asinkron. Tidak ada satu pun perintah tulis dijalankan di replica; semuanya berasal dari replay WAL.
-
-### 5.6 Skenario High Availability: Failover Manual
-
-**Langkah 1: matikan primary.**
-
-```bash
-docker-compose stop postgres_primary
-```
-
-![Primary dihentikan](assets/gambar-4.23.png)
-
-Replica tidak ikut mati, tetapi koneksi streaming terputus. Replica masih melayani pembacaan data yang ia miliki, namun **tidak ada node yang menerima tulisan**.
-
-**Langkah 2: promosikan replica.**
-
-```sql
-SELECT pg_is_in_recovery();   -- t
-SELECT pg_promote();          -- t (perintah diterima)
-SELECT pg_is_in_recovery();   -- f (sudah menjadi primary)
-```
-
-![pg_promote](assets/gambar-4.24.png)
-
-Perubahan `t` → `f` berarti PostgreSQL berhenti memutar ulang WAL, menghapus penanda standby, dan membuka akses read-write.
-
-> [!CAUTION]
-> **Konsekuensi failover manual asinkron:**
-> 1. Transaksi terakhir di primary yang belum sempat sampai ke replica **bisa hilang**.
-> 2. Jika primary lama dihidupkan lagi dan masih menganggap dirinya primary, terjadi **split-brain** (data bercabang). Penanganannya butuh `pg_rewind` atau pembangunan ulang replica, bukan sekadar menyalakan container.
-
-### 5.7 Membersihkan Lingkungan
-
-```bash
-dcd    # docker compose down
-dps    # kosong
-```
-
-![docker compose down](assets/gambar-4.25.png)
-
-Tiga resource dihapus: container replica, container primary, dan network `streaming-replication_default`.
-
-| Perintah | Efek |
-|---|---|
-| `docker compose stop` | Menghentikan container, masih bisa di-`start` lagi |
-| `docker compose down` | Menghapus container **dan** network |
-
-Karena tidak ada *named volume*, data PostgreSQL ikut hilang; `up` berikutnya menjalankan `initdb` dan `pg_basebackup` dari awal. Tambahkan volume eksplisit jika data harus bertahan.
+<p align="justify">Output program vector clock dari main.py. Semua clock mulai dari [0, 0, 0]. P0 melakukan event lokal menjadi [1, 0, 0], lalu mengirim pesan menjadi [2, 0, 0], sedangkan P1 menjadi [2, 1, 0] setelah menerima. P2 menjadi [0, 0, 1] setelah event lokal, lalu [2, 2, 2] setelah menerima pesan dari P1 (P1 juga naik menjadi [2, 2, 0] saat mengirim). Hasil kausalitas: VC0 happens before VC1 = True, VC1 happens before VC0 = False, dan VC0 concurrent dengan VC2 = False karena VC0 [2,0,0] terjadi sebelum VC2 [2,2,2].</p>
 
 ---
 
-## 6. Bagian C: Replikasi Master-Master Apache Ignite 3
+## 3 Problem Tanpa Sinkronisasi
 
-### 6.1 Berkas yang Dibutuhkan
+<p align="justify">Pada sistem terdistribusi, ketiadaan sinkronisasi bisa menghasilkan 2 masalah besar yaitu data race / race conditions dan deadlock. Pada program yang menggunakan model asynchronous maupun thread, pola pikir sekuensial tidak bisa digunakan karena penyelesaian satu task dengan task lainnya biasanya tidak bisa diprediksi. Berikut adalah contoh program multithreaded di Python (`multithreaded-example.py`).</p>
 
-![Struktur direktori Ignite](assets/gambar-4.26.png)
+<img width="230" height="241" alt="15_multithreads-example py" src="https://github.com/user-attachments/assets/03bcbe7d-1903-4d54-801d-caeada128aaf" />
 
-Berkas SQL berasal dari paket `sql.zip` pada dokumentasi quick start Apache Ignite 3 (dataset **Chinook**), diekstrak ke folder `sql/`. Seluruh `docker-compose.yaml` dan SQL bersumber dari <https://ignite.apache.org/docs/ignite3/latest/quick-start/explore-sql>.
+#### Pembahasan
 
-| Berkas SQL | Fungsi |
-|---|---|
-| `schema.sql` | Membuat tabel (DDL) |
-| `current_catalog.sql`, `tracks.sql`, `media_and_genre.sql`, `ee_and_cust.sql`, `invoices.sql` | Mengisi data |
+<p align="justify">Program ini membuat lima thread (A sampai E) menggunakan modul threading, yang masing-masing menjalankan fungsi task() dengan time.sleep(5) untuk mensimulasikan operasi I/O-bound. Semua thread dijalankan dengan start(), lalu join() memastikan program utama menunggu semuanya selesai sebelum mencetak “All tasks completed.”</p>
 
-#### `env.sh` untuk Ignite
+### Output
 
-![env.sh Ignite](assets/gambar-4.27.png)
+<img width="373" height="103" alt="16_output_multithreads-example py" src="https://github.com/user-attachments/assets/71d714f7-ccc6-43cd-b916-5a96a0af65bb" />
 
-Selain alias seperti pada Bagian B, ada dua alias CLI:
+#### Pembahasan
 
-| Alias | Fungsi |
-|---|---|
-| `dclm` | Menjalankan CLI dengan folder `sql` di-**mount** ke `/opt/ignite/sql` |
-| `dcli` | Menjalankan CLI tanpa mount |
+<p align="justify">Kelima task langsung mulai hampir bersamaan, lalu selesai setelah 5 detik. Karena berjalan paralel (konkuren), total waktunya sekitar 5 detik, bukan 25 detik jika dijalankan berurutan. Urutan selesai tidak selalu sama dengan urutan mulai (di sini A, B, E, C, D), karena penjadwalan thread ditentukan oleh sistem operasi.</p>
 
-Keduanya memakai `--network=host` agar CLI dapat menjangkau `http://localhost:10300`. Pada `dclm` terdapat `MSYS_NO_PATHCONV=1` (khas **Git Bash di Windows**) agar path `./sql:/opt/ignite/sql` tidak diterjemahkan ulang menjadi path Windows sehingga mount gagal.
+### - Data Race / Race Conditions
 
-### 6.2 Menjalankan Cluster
+Berikut adalah contoh data race / race conditions di Python (`race-conditions-01.py`).
 
-```bash
-source env.sh
-dcu
-dps
-```
+<img width="259" height="168" alt="17_race-conditions-01 py" src="https://github.com/user-attachments/assets/ee37de55-2192-4514-a49e-dfc908850265" />
 
-![Menjalankan Compose](assets/gambar-4.28.png)
-![Status tiga node](assets/gambar-4.29.png)
+#### Pembahasan
 
-- Image `apacheignite/ignite:3.1.0` diunduh (~56 detik), network `ignite3_default` dibuat, tiga container jalan: `ignite3-node1-1`, `ignite3-node2-1`, `ignite3-node3-1`.
-- Nama `ignite3` berasal dari `name: ignite3` di dalam file compose (bukan nama folder).
-- Ketiganya memakai anchor `x-ignite-def`; yang berbeda hanya `--node-name` dan port.
-- `nodeFinder.netClusterNodes` menyebut ketiga node pada port **3344** agar saling menemukan.
-- Tidak ada `healthcheck`, sehingga status hanya `Up` (tanpa `healthy`).
+<p align="justify">Program ini memiliki variabel global balance = 100 dan fungsi withdraw(amount) yang mengecek balance >= amount, tidur 0,01 detik, lalu mengurangi saldo. Dua thread (t1 dan t2) sama-sama menarik Rp80 tanpa pengaman (lock), sehingga pengecekan dan pengurangan saldo tidak berjalan sebagai satu kesatuan.</p>
+ 
+**Tugas:**
 
-| Node | REST API / CLI | Port aplikasi |
-|---|---|---|
-| node1 | 10300 | 10800 |
-| node2 | 10301 | 10801 |
-| node3 | 10302 | 10802 |
+### -Jalankan program tersebut.
 
-**Memeriksa IP internal node:**
+<img width="360" height="35" alt="18_output_race-conditions-01 py" src="https://github.com/user-attachments/assets/16186982-ff82-4bcc-8511-18dcd1128c96" />
 
-```bash
-docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ignite3-node1-1
-```
+#### Pembahasan
 
-![IP internal node](assets/gambar-4.30.png)
+<p align="justify">Output menunjukkan saldo akhir Rp20, lalu Rp-60. Ini bukti race condition: kedua thread lolos pengecekan karena saldo masih 100 saat dicek, padahal seharusnya penarikan kedua ditolak.</p>
 
-| Node | IP |
-|---|---|
-| node1 | 172.18.0.3 |
-| node2 | 172.18.0.2 |
-| node3 | 172.18.0.4 |
+### -Jelaskan menggunakan visualisasi (gambar dengan pensil/ballpoint kemudian difoto), mengapa terjadi data race / race conditions.
 
-> [!WARNING]
-> IP container bisa berubah saat network dibuat ulang. Gunakan nama service (`node1`, `node2`) dan jangan di-*hardcode* di aplikasi.
+<img width="1200" height="1600" alt="19_Visualisasi gambar" src="https://github.com/user-attachments/assets/0771b7a2-0f45-4afe-b0f7-2750a8a1bd55" />
 
-### 6.3 Inisialisasi Cluster
+#### Pembahasan
 
-```bash
-dcli
-# atau:
-docker run --rm -it --network=host -e LANG=C.UTF-8 -e LC_ALL=C.UTF-8 apacheignite/ignite:3.1.0 cli
-```
+<p align="justify">Diagram menggambarkan salah satu kemungkinan alur eksekusi. Thread 1 dan Thread 2 sama-sama membaca saldo 100 dan mengecek 100 >= 80 (TRUE), lalu menunggu. Thread 1 mengurangi saldo menjadi 20 dan menampilkan Rp20, kemudian Thread 2 tetap mengurangi dari nilai yang sudah berubah sehingga saldo menjadi -60.</p>
 
-Jawab `Y` saat ditanya koneksi ke node default `http://localhost:10300`; prompt berubah menjadi `[node1]`.
 
-![CLI terhubung](assets/gambar-4.31.png)
+Berikut adalah contoh program untuk membuat supaya race conditions tersebut tidak terjadi (`race-conditions-02.py`):
 
-```text
-cluster init --name=ignite3 --metastorage-group=node1,node2,node3
-```
+<img width="276" height="188" alt="20_race-conditions-02 py" src="https://github.com/user-attachments/assets/00a0e955-6086-47e7-9d00-e7c9115b3424" />
 
-![Inisialisasi cluster](assets/gambar-4.32.png)
+#### Pembahasan
 
-Ketiga node dipilih sebagai *metastorage group* karena metadata dikelola dengan **consensus**; jumlah ganjil membuat pemilihan pemimpin tetap bisa berjalan jika satu node bermasalah. Perintah ini hanya boleh dijalankan **sekali** (`Cluster was initialized successfully`).
+<p align="justify">Ini versi perbaikan dengan threading.Lock() bernama counter_lock. Blok with counter_lock: membungkus pengecekan, sleep, dan pengurangan saldo, sehingga hanya satu thread yang boleh masuk pada satu waktu.</p>
 
-```text
-cluster status
-```
 
-![Status cluster](assets/gambar-4.33.png)
+**Tugas:**
 
-```text
-[name: ignite3, nodes: 3, status: active, cmgNodes: [node1, node2, node3], msNodes: [node1, node2, node3]]
-```
+### -Jalankan program tersebut.
 
-`status: active` dan `nodes: 3` membuktikan ketiga container benar-benar satu cluster, bukan sekadar tiga proses yang kebetulan hidup.
+<img width="360" height="27" alt="21_output_race-conditions-02 py" src="https://github.com/user-attachments/assets/82092a14-8292-4e59-acc0-1eda38904598" />
 
-Masuk ulang ke CLI tidak memerlukan inisialisasi lagi (metadata dibaca dari metastorage):
+#### Pembahasan
 
-![Masuk ulang CLI](assets/gambar-4.34.png)
+<p align="justify">Keluarannya hanya satu baris, yaitu “Mengambil sejumlah Rp 80. Saldo: Rp 20”, artinya hanya satu thread yang berhasil menarik uang dan saldo tetap wajar. Race condition tidak terjadi karena with counter_lock: memastikan hanya satu thread yang boleh menjalankan blok pengecekan dan pengurangan saldo pada satu waktu. Thread pertama yang masuk mengecek saldo (100 ≥ 80), lalu mengurangi saldo menjadi 20, sementara thread kedua menunggu lock dilepas. Saat thread kedua akhirnya masuk, saldo sudah 20 sehingga pengecekan 20 >= 80 gagal dan penarikan dilewati. Berbeda dengan versi tanpa lock, di mana kedua thread bisa lolos pengecekan bersamaan dan saldo menjadi negatif.</p>
 
-> [!NOTE]
-> Karena tidak ada volume permanen, metadata hanya bertahan selama container hidup. Setelah `down`, cluster harus diinisialisasi lagi.
+### Deadlock
 
-### 6.4 Memuat Skema dan Data
+Berikut adalah contoh kondisi deadlock di Python (`deadlock-01.py`).
 
-```text
-sql --file=/opt/ignite/sql/schema.sql
-```
+<img width="208" height="254" alt="22_deadlock-01 py" src="https://github.com/user-attachments/assets/84ac080c-565e-4a7e-bab8-c50889c722e0" />
 
-![Eksekusi schema.sql](assets/gambar-4.35.png)
+#### Pembahasan
 
-Output `Updated 0 rows.` berulang itu **wajar** karena isinya DDL (`CREATE TABLE`). Yang perlu dipastikan hanyalah tidak ada pesan error.
+<p align="justify">Program ini membuat dua lock, lock_a dan lock_b. Thread 1 mengunci A lalu mencoba mengunci B, sedangkan Thread 2 mengunci B lalu mencoba mengunci A, dengan sleep(1) di antaranya untuk memperbesar peluang deadlock. Karena urutan pengambilan lock berlawanan, kedua thread akan saling menunggu lock yang dipegang lawannya dan program berhenti (hang) tanpa pernah selesai. Solusinya, semua thread harus mengambil lock dalam urutan yang sama (misalnya A lalu B).</p>
 
-Masuk ke mode SQL dan cek tabel:
+### -Jalankan program tersebut.
 
-```text
-sql
-SELECT * FROM system.tables WHERE schema = 'PUBLIC';
-```
+<img width="250" height="30" alt="23_output_deadlock-01 py" src="https://github.com/user-attachments/assets/69d3984d-3721-49c8-8111-972ed8b7e6cc" />
 
-![Daftar tabel PUBLIC](assets/gambar-4.36.png)
-![Eksekusi berkas data](assets/gambar-4.37.png)
+#### Pembahasan
 
-Hasilnya 11 tabel: `ALBUM`, `PLAYLISTTRACK`, `TRACK`, `CUSTOMER`, `MEDIATYPE`, `PLAYLIST`, `ARTIST`, `INVOICELINE`, `EMPLOYEE`, `GENRE`, `INVOICE`.
+<p align="justify">Output hanya menampilkan dua baris: “Thread 1: Locked A, waiting for B...” dan “Thread 2: Locked B, waiting for A...”. Setelah itu program berhenti (hang) dan tidak pernah mencetak “Locked both”. Ini bukti deadlock: Thread 1 memegang A dan menunggu B, sedangkan Thread 2 memegang B dan menunggu A.</p>
 
-| Zone | Tabel | Perilaku |
-|---|---|---|
-| `CHINOOK` | Sebagian besar tabel | Data **didistribusikan** per partisi ke node tertentu |
-| `CHINOOKREPLICATED` | `MEDIATYPE`, `GENRE` | Seluruh isi tabel **digandakan ke semua node** (data referensi kecil dan sering di-join) |
+### Jelaskan menggunakan visualisasi (gambar dengan pensil/ballpoint kemudian difoto), mengapa terjadi deadlock.
 
-Jumlah baris yang dilaporkan saat memuat data:
+<img width="1200" height="1600" alt="24_deadlock" src="https://github.com/user-attachments/assets/1820d75d-8a1b-4912-a465-bf465732649c" />
 
-| Berkas | Baris diubah |
-|---|---|
-| `current_catalog.sql` | 275, 347 |
-| `media_and_genre.sql` | 25, 5 |
-| `tracks.sql` | 1000, 1000, 1000, 503 |
-| `ee_and_cust.sql` | 8, 59 |
-| `invoices.sql` | 412, 240, 18, 715, dan beberapa blok 1000 |
 
-### 6.5 Verifikasi Propagasi ke Node Lain
+#### Pembahasan
 
-Membaca dari node yang sama tempat data ditulis tidak membuktikan replikasi, maka koneksi dipindah ke node lain:
+<p align="justify">Diagram menjelaskan terjadinya deadlock dalam empat tahap. Kondisi awal: lock_A dan lock_B belum terkunci. Thread 1 mengunci lock_A lalu mencoba mengunci lock_B, tetapi lock_B sedang dipegang Thread 2. Thread 2 mengunci lock_B lalu mencoba mengunci lock_A, tetapi lock_A sedang dipegang Thread 1. Pada tahap akhir terbentuk lingkaran saling menunggu (circular wait): Thread 1 memegang A dan menunggu B, Thread 2 memegang B dan menunggu A, sehingga keduanya tidak bisa melanjutkan.</p>
 
-```text
-connect http://localhost:10301
-```
+Berikut adalah contoh program untuk membuat supaya deadlock tersebut tidak terjadi (`deadlock-02.py`):
 
-![Pindah ke node2](assets/gambar-4.38.png)
+<img width="218" height="374" alt="25_deadlock-02 py" src="https://github.com/user-attachments/assets/308b84a1-26b7-43c9-a233-99d6e39b7a30" />
 
-Jawab `Y`; prompt berubah menjadi `[node2]`. Lalu:
+#### Pembahasan
 
-```sql
-SELECT * FROM system.tables WHERE schema = 'PUBLIC';
-```
+<p align="justify">Ini versi perbaikan dengan acquire(timeout=5) dan blok try/finally. Thread tidak menunggu lock selamanya, dan setiap lock yang dipegang dilepas dengan release(). Kuncinya, Thread 1 melepas lock A sebelum mencoba mengambil lock B (begitu juga Thread 2), sehingga tidak ada thread yang memegang satu lock sambil menunggu lock lain, dan lingkaran saling menunggu tidak terbentuk.</p>
 
-![Tabel di node2](assets/gambar-4.39.png)
+**Tugas:**
 
-Daftar tabel, `ZONE_NAME`, dan `TABLE_ID` **identik** dengan node1: definisi skema dikelola cluster lewat consensus, jadi lapisan skema sudah konsisten di ketiga node.
+### -Jalankan program tersebut.
 
-**Query analitik** (dijalankan di node2, lalu node3):
+<img width="341" height="89" alt="26_Output_deadlock-02 py" src="https://github.com/user-attachments/assets/a915f7f5-3942-4e82-87aa-c5b95a47b1af" />
 
-```sql
-SELECT
-    CAST(EXTRACT(YEAR FROM i.InvoiceDate) AS VARCHAR) || '-' ||
-    CASE
-        WHEN EXTRACT(MONTH FROM i.InvoiceDate) < 10
-        THEN '0' || CAST(EXTRACT(MONTH FROM i.InvoiceDate) AS VARCHAR)
-        ELSE CAST(EXTRACT(MONTH FROM i.InvoiceDate) AS VARCHAR)
-    END AS YearMonth,
-    COUNT(DISTINCT i.InvoiceId) AS InvoiceCount,
-    COUNT(DISTINCT i.CustomerId) AS CustomerCount,
-    SUM(i.Total) AS MonthlyRevenue,
-    AVG(i.Total) AS AverageOrderValue
-FROM
-    Invoice i
-GROUP BY
-    EXTRACT(YEAR FROM i.InvoiceDate), EXTRACT(MONTH FROM i.InvoiceDate)
-ORDER BY
-    YearMonth DESC;
-```
+#### Pembahasan
 
-![Analitik node2 (1)](assets/gambar-4.40.png)
-![Analitik node2 (2)](assets/gambar-4.41.png)
+<p align="justify">Kedua thread berhasil mengambil lock pertamanya (Thread 1 lock A, Thread 2 lock B), lalu masing-masing menunggu lock berikutnya. Karena lock pertama sudah dilepas, Thread 2 berhasil mengambil lock A dan Thread 1 berhasil mengambil lock B, lalu program selesai dengan “Execution Finished”. Deadlock teratasi dan program tidak hang.</p>
 
-Hasil mencakup **2020-01 s.d. 2024-12** dengan 6-7 invoice per bulan. Nilai `MonthlyRevenue` yang sering 37,62 dan `AverageOrderValue` ≈ 5,37 adalah karakter data contoh (kecil dan berulang); beberapa bulan seperti 2023-05 dan 2022-06 berbeda karena komposisi invoice-nya berbeda.
-
-Pengecekan di node3 (`http://localhost:10302`):
-
-![Analitik node3 (1)](assets/gambar-4.42.png)
-![Analitik node3 (2)](assets/gambar-4.43.png)
-
-Hasil node3 **sama persis** dengan node2 hingga digit desimal. Kesamaan ini bukan karena satu primary menyalin ke node lain, melainkan karena Ignite mendistribusikan dan mereplikasi data di tingkat partisi sendiri. Semua node melayani pembacaan dan dapat menerima penulisan, itulah arti master-master.
-
-### 6.6 Menghentikan Cluster
-
-```bash
-dcd
-```
-
-![docker compose down Ignite](assets/gambar-4.44.png)
-
-Empat resource dihapus: tiga container node dan network `ignite3_default`. Tanpa volume permanen, seluruh data dan metadata ikut hilang; pada praktikum berikutnya `cluster init` dan seluruh SQL harus dijalankan ulang. Ini pilihan desain agar lingkungan praktikum bersih setiap kali dijalankan.
+### -Amati keluarannya. Jelaskan mengapa deadlock tidak terjadi?
+<p align="justify">Deadlock tidak terjadi karena setiap thread melepas lock pertamanya sebelum meminta lock kedua. Pada blok finally, Thread 1 menjalankan lock_a.release() dan Thread 2 menjalankan lock_b.release() sebelum keduanya memanggil acquire untuk lock berikutnya, sehingga tidak ada thread yang memegang satu lock sambil menunggu lock lain (tidak ada hold and wait maupun circular wait). Karena itu, Thread 2 bisa mendapat Lock A dan Thread 1 bisa mendapat Lock B, lalu program selesai dengan mencetak “Execution Finished”. Parameter timeout=5 juga berfungsi sebagai pengaman agar thread tidak menunggu selamanya, meskipun pada kasus ini tidak sempat terpakai.</p>
+   
 
 ---
 
-## 7. Perbandingan Dua Model Replikasi
+## 4 Algoritma Raft
 
-| Aspek | PostgreSQL (primary-replica) | Apache Ignite 3 (master-master) |
-|---|---|---|
-| Titik tulis | Satu (primary) | Setiap node |
-| Peran replica | Read-only (`pg_is_in_recovery() = t`) | Tidak ada; semua node setara |
-| Mekanisme sinkronisasi | Aliran WAL (asinkron pada praktikum ini) | Partisi + replication factor, metadata via consensus |
-| Konflik tulis | Tidak ada (satu penulis) | Perlu penanganan konflik/konsistensi lebih rumit |
-| Saat satu node mati | Promosi **manual** (`pg_promote()`), risiko kehilangan data dan split-brain | Node lain tetap melayani, tanpa promosi |
-| Kompleksitas | Rendah, mudah dipahami | Lebih tinggi |
-| Cocok untuk | Beban baca besar, tulis terpusat | Ketersediaan tulis tinggi |
+Algoritma Raft banyak digunakan pada sistem terdistribusi, antara lain digunakan untuk mencapai konsensus. Berikut adalah simulasi algoritma Raft menggunakan Python yang diambil dari <https://www.c-sharpcorner.com/article/simulate-distributed-consensus-with-the-raft-protocol-simplified-using-python/>.
 
----
+Class raft.py
 
-## 8. Kesimpulan
+<img width="329" height="445" alt="27_raft py" src="https://github.com/user-attachments/assets/1ab3a9b2-ecad-47b1-860c-ab90bfaa5cf8" />
 
-1. **PostgreSQL:** streaming replication berhasil menyinkronkan primary ke replica lewat WAL. Replica terbukti read-only, otomatis mengikuti perubahan, dan dapat dipromosikan saat primary dimatikan. Namun promosinya manual, replikasinya asinkron, dan tidak ada pencegahan split-brain, sehingga sistem ini baru menyediakan *bahan* untuk High Availability, belum HA yang sesungguhnya.
-2. **Apache Ignite:** ketiga node setara, semuanya dapat membaca dan menulis, dan perubahan di satu node terlihat di node lain tanpa promosi.
-3. **Pilihan model** tidak ditentukan oleh mana yang lebih modern, melainkan oleh kebutuhan aplikasi: toleransi kehilangan data, kebutuhan penulisan, dan kesiapan tim merawat kompleksitasnya.
+<img width="397" height="399" alt="28_raft py" src="https://github.com/user-attachments/assets/41e1b752-1b40-4e78-8384-68ffe4d1b4c4" />
 
----
 
-## 9. Catatan dan Pemecahan Masalah
+#### Pembahasan
 
-| Gejala | Penyebab | Solusi |
-|---|---|---|
-| Error koneksi ke pipe Docker | Engine belum selesai boot | Tunggu status *Engine running* |
-| `pg_basebackup ... Connection refused` di log replica | Primary belum siap | Normal; loop `until` akan mencoba ulang |
-| Alias tidak dikenali | `env.sh` tidak di-`source` atau terminal baru | Jalankan `source env.sh` dari folder yang benar |
-| Alias gagal menemukan container | Nama folder diubah | Sesuaikan nama container di `env.sh` |
-| Perubahan `00_init.sql` tidak berefek | Init hanya jalan saat volume baru | Hapus data lama (`docker compose down`) lalu `up` lagi |
-| Mount `sql` gagal di Git Bash | Konversi path Windows | Gunakan `MSYS_NO_PATHCONV=1` (sudah ada di `dclm`) |
-| `cluster init` ditolak | Cluster sudah terbentuk | Cukup `cluster status`; init hanya sekali |
-| Data hilang setelah `down` | Tidak ada named volume | Tambahkan volume jika data harus bertahan |
+<p align="justify">Program ini mensimulasikan konsensus Raft yang disederhanakan dengan tiga peran node, yaitu FOLLOWER, CANDIDATE, dan LEADER. Kelas RaftNode menyimpan term, log, dan waktu heartbeat, serta memiliki election_timeout acak 1 sampai 2 detik. Metode start_election() menaikkan term lalu menjadikan node sebagai leader jika suara cukup (disederhanakan: semua node dianggap memberi suara), on_heartbeat() mengembalikan node menjadi follower, append_entry() menambah log khusus leader, dan tick() memicu pemilihan jika heartbeat terlewat. Fungsi simulate_raft() menjalankan 3 node selama 20 langkah, dengan leader mengirim heartbeat dan menambah perintah setiap 3 langkah.</p>
 
----
 
-## 10. Referensi
+### -Jalankan program tersebut.
 
-1. PostgreSQL Global Development Group. (2025). *PostgreSQL 18 Documentation: High Availability, Load Balancing, and Replication.* <https://www.postgresql.org/docs/18/high-availability.html>
-2. PostgreSQL Global Development Group. (2025). *PostgreSQL 18 Documentation: Write-Ahead Logging (WAL) dan pg_basebackup.* <https://www.postgresql.org/docs/18/wal.html>
-3. Apache Software Foundation. (2025). *Apache Ignite 3 Documentation: Quick Start dan Explore SQL.* <https://ignite.apache.org/docs/ignite3/latest/quick-start/explore-sql>
-4. Eremeykin. *How to Setup Single Primary PostgreSQL Replication with Docker Compose.* Medium. <https://medium.com/@eremeykin/how-to-setup-single-primary-postgresql-replication-with-docker-compose-98c48f233bbf>
-5. Docker Inc. (2025). *Docker Documentation: Install Docker Engine dan Docker Compose.* <https://docs.docker.com/>
-6. Özsu, M. T., & Valduriez, P. (2020). *Principles of Distributed Database Systems* (4th ed.). Springer.
-7. Tanenbaum, A. S., & van Steen, M. (2023). *Distributed Systems* (4th ed.). Maarten van Steen.
-8. Kleppmann, M. (2017). *Designing Data-Intensive Applications.* O'Reilly Media.
+<img width="305" height="439" alt="29_Output_raft py" src="https://github.com/user-attachments/assets/2a049d92-d6f2-47fa-81ec-4dfb5317710f" />
+
+<img width="289" height="403" alt="30_Output_raft py" src="https://github.com/user-attachments/assets/7a7df193-93b5-4826-921d-777cb45da769" />
+
+#### Pembahasan
+
+<p align="justify">Pada step 1-2 semua node FOLLOWER dengan term 0 dan log kosong. Pada step 3, Node 2 terpilih menjadi LEADER di term 1 (karena timeout-nya habis lebih dulu). Setelah itu Node 1 dan 3 ikut ke term 1 melalui heartbeat dan tetap FOLLOWER. Leader menambah perintah di step 4, 7, 10, 13, 16, dan 19 (kelipatan 3), sehingga log Node 2 bertambah sampai 6 entri. Perlu dicatat, log Node 1 dan 3 tetap 0 karena replikasi log ke follower tidak diimplementasikan (hanya disimulasikan lewat komentar di kode). Term tetap 1 dan tidak ada pemilihan ulang, artinya sistem stabil.</p>
+
+
+### -Perhatikan keluaran program yang dijalankan tersebut. Dari keluaran program tersebut, jelaskan secara sederhana algoritma Raft untuk memilih koordinator (LEADER) menggunakan visualisasi (digambar dengan manual pensil/ballpoint dan kemudian difoto).
+
+<img width="720" height="1280" alt="31_LEADER" src="https://github.com/user-attachments/assets/5b8f4626-2d8c-45a2-b499-047a4d6f99de" />
+
+#### Pembahasan
+
+<p align="justify">Diagram menjelaskan simulasi dalam empat tahap: (1) kondisi awal step 1-2, semua node follower dan belum ada leader; (2) pemilihan leader step 3-5, node dengan suara terbanyak menjadi leader; (3) replikasi log step 4-5, leader mengirim entri ke follower; (4) operasi dan stabilitas step 6-20, leader tetap memimpin. Namun, ada ketidaksesuaian dengan output: pada diagram leader digambarkan Node 1, sedangkan pada output leader-nya adalah Node 2. Replikasi log pada tahap 3 juga tidak benar-benar terjadi di kode, karena log follower tetap 0.</p>
+
+### -Buatlah program tersebut menjadi modul Python dan kemudian buatlah contoh simulasinya menggunakan modul Python yang sudah Anda buat tersebut.
+
+Class main2.py
+
+<img width="267" height="449" alt="32_main2 py" src="https://github.com/user-attachments/assets/e505da5b-dec3-4332-94ae-84e49b73da65" />
+
+#### Pembahasan
+
+<p align="justify">Ini versi modular yang mengimpor RaftNode dan State dari raft.py. Simulasinya sama (3 node, 20 langkah), tetapi ada beberapa perbedaan: leader dipilih dengan leaders[0] (bukan acak), leader menambah perintah setiap 5 langkah (step % 5 == 0, bukan 3), dan status yang dicetak menampilkan isi log (node.log), bukan hanya panjangnya. Selain itu, agar tidak mencetak ulang simulasi bawaan, file raft.py memang menjaga simulate_raft() di dalam if __name__ == "__main__".</p>
+
+### -Output
+
+<img width="311" height="415" alt="33_output_main py" src="https://github.com/user-attachments/assets/41abcf56-25c7-4814-bfe4-ad12b009a652" />
+
+<img width="308" height="398" alt="34_output_main py" src="https://github.com/user-attachments/assets/7c5a101d-4138-40fe-a5e5-ba33e9ab5c1c" />
+
+#### Pembahasan
+
+<p align="justify">Pada step 1-2 semua node masih FOLLOWER dengan term 0. Di step 3, Node 2 terpilih menjadi LEADER di term 1, lalu Node 1 dan 3 ikut term 1 lewat heartbeat dan tetap FOLLOWER. Leader menambah perintah setiap kelipatan 5 langkah (command-5, command-10, command-15), sehingga log Node 2 berisi tiga entri, sedangkan log Node 1 dan 3 tetap kosong karena replikasi log tidak diimplementasikan. Term tetap 1 dan tidak ada pemilihan ulang, artinya sistem stabil.</p>
+
+  
+
+# KESIMPULAN
+
+<p align="justify">Berdasarkan praktikum ini, dapat disimpulkan bahwa sistem terdistribusi dan terdesentralisasi menghadapi tantangan koordinasi karena tidak adanya jam global maupun kontrol terpusat. Vector clock terbukti mampu menentukan urutan kejadian antar proses (happens-before) dan mengidentifikasi kejadian yang konkuren tanpa bergantung pada jam global. Pada eksekusi konkuren, race condition terjadi ketika beberapa thread mengubah data bersama tanpa sinkronisasi (saldo menjadi Rp-60) dan dapat diatasi dengan threading.Lock(), sedangkan deadlock terjadi ketika dua thread saling menunggu lock yang dipegang lawannya dan dapat dicegah dengan timeout, pelepasan lock sebelum mengambil lock lain, atau urutan pengambilan lock yang konsisten. Terakhir, simulasi algoritma Raft menunjukkan bahwa node-node dapat mencapai konsensus dan memilih satu leader secara terdesentralisasi melalui election timeout acak dan heartbeat, sehingga sistem tetap stabil dengan satu leader yang mengoordinasikan perintah, meskipun replikasi log ke follower pada simulasi ini masih disederhanakan.</p>
