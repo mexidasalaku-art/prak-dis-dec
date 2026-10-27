@@ -90,9 +90,33 @@ docker --version
 docker compose version
 ```
 #### Periksa Docker
+```python
+docker compose up -d
+```
 #### Jalankan primary dan replica
+```python
+```
 #### Periksa container
+```python
+docker ps
+```
 #### Periksa log jika terjadi masalah
+```python
+docker compose logs postgres_primary
+```
+
+```python
+docker compose logs postgres_replica
+```
+#### - Jalankan kode dibawah jika ingin menghentikan container
+```python
+docker compose down
+```
+
+
+  
+
+
 
   
 
