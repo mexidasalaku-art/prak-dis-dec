@@ -3,7 +3,7 @@
 | | |
 | --- | --- |
 | **Mata Kuliah** | Praktikum Sistem Terdistribusi dan Terdesentralisasi |
-| **Topik** | Sinkronisasi pada Sistem Terdistribusi |
+| **Topik** | Sinkronisasi pada Sistem Terdistribusi | 
 | **Nama** | Yesaya Mexi Dasalaku |
 | **NIM** | 255410029 | 
 | **Kelas** | IF-1 |
