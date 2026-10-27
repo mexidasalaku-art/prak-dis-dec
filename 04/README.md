@@ -60,6 +60,36 @@
 #### Pembahasan
 
 ### Struktur Direktori dan FIle
+
+<img width="218" height="92" alt="07" src="https://github.com/user-attachments/assets/6705cff0-522f-485f-a9c8-58871c50c0fe" />
+
+#### Pembahasan
+
+
+#### - 00_init.sql
+
+<img width="511" height="73" alt="08" src="https://github.com/user-attachments/assets/f5ef0a01-1a43-4486-a585-0d2bafb82daa" />
+
+#### Pembahasan
+
+#### - docker-compose.yaml
+
+<img width="422" height="398" alt="09" src="https://github.com/user-attachments/assets/37a592bf-39e9-4726-9b61-36cfd1149b69" />
+
+#### Pembahasan
+
+#### - env.sh
+
+<img width="419" height="122" alt="10" src="https://github.com/user-attachments/assets/a5416c74-3505-46d0-a406-f8adb1ccebb3" />
+
+#### Pembahasan
+
+### Jalankan program menggunakan Docker
+#### Periksa Docker
+#### Jalankan primary dan replica
+#### Periksa container
+#### Periksa log jika terjadi masalah
+
   
 
 # KESIMPULAN
