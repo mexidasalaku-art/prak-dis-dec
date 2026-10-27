@@ -143,6 +143,22 @@ docker compose down
 
 #### Pembahasan
 
+### Pengujian Replikasi
+
+<img width="959" height="415" alt="18" src="https://github.com/user-attachments/assets/84c6e1bd-1e4d-4c83-a73f-8e17649a4283" />
+
+<img width="401" height="362" alt="19" src="https://github.com/user-attachments/assets/a4170f29-2951-4aa1-9964-b2daafb96441" />
+
+#### Pembahasan
+
+- Untuk melihat status pada server replica
+
+<img width="463" height="218" alt="20" src="https://github.com/user-attachments/assets/e6fa772c-b933-4bdd-a7a6-a291e25a5fff" />
+
+#### Pembahasan
+
+
+
 
 
   
