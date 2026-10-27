@@ -21,7 +21,7 @@
 
 #  PEMBAHASAN
 ### 4.1 Streaming Replication Menggunakan PostgreSQL
-#### Install Docker
+### Install Docker
 - Langkah-langkah Instal Docker 
 
 <img width="402" height="290" alt="01" src="https://github.com/user-attachments/assets/4405358d-e059-4042-8329-da70aacbdf25" />
@@ -38,7 +38,7 @@
 #### Pembahasan
 
 ---
-#### Pemeriksaan Versi dan Lingkungan
+### Pemeriksaan Versi dan Lingkungan
 - versi Docker & Compose
 #### Docker Version
 
@@ -58,6 +58,8 @@
 
 
 #### Pembahasan
+
+### Struktur Direktori dan FIle
   
 
 # KESIMPULAN
