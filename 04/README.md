@@ -159,8 +159,16 @@ docker compose down
 
 ### 4.2 Replikasi Master-Master Menggunakan Apache Ignite 3
 
+#### Struktur Direktori dan File
+
+<img width="131" height="191" alt="28_Direktori_dan_file" src="https://github.com/user-attachments/assets/e53b62ad-06e1-4c25-88a1-7a55e31765b4" />
+
+#### Pembahasan
+
+
 
 
   
 
 # KESIMPULAN
+# REFERENSI
