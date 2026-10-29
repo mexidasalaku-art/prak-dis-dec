@@ -222,6 +222,8 @@ docker compose down
 
 #### Pembahasan
 
+<p align="justify">Query pg_stat_replication yang dijalankan di primary menampilkan satu koneksi replikasi dari user replicator dengan application_name walreceiver dan alamat 172.18.0.3, yaitu container replica. Kolom state bernilai streaming, dan nilai sent_lsn, write_lsn, flush_lsn, serta replay_lsn semuanya sama (0/5000168), artinya replica sudah menerima dan memutar ulang seluruh WAL tanpa ketertinggalan. Kolom sync_state bernilai async, sehingga replikasinya bersifat asinkron. Query pg_replication_slots menunjukkan slot replication_slot bertipe physical dalam keadaan aktif (active = t) dengan active_pid 1680, sama dengan pid pada pg_stat_replication, sehingga slot tersebut sedang dipakai oleh replica. Nilai wal_status reserved menandakan WAL yang dibutuhkan replica masih ditahan oleh primary. Dengan demikian, kedua hasil ini membuktikan streaming replication berjalan sehat.</p>
+
 - Untuk melihat status pada server replica
 
 <img width="463" height="218" alt="20" src="https://github.com/user-attachments/assets/e6fa772c-b933-4bdd-a7a6-a291e25a5fff" />
