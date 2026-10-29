@@ -105,11 +105,9 @@
 docker info
 ```
 
-<img width="269" height="347" alt="06_Docker_Info" src="https://github.com/user-attachments/assets/970b761c-f2c0-4bbc-a6d9-f479aec25f32" />
-
 #### Pembahasan
 
-<p align="justify">Bagian Client menampilkan versi Docker 29.9.2 beserta daftar plugin yang terpasang, termasuk Compose v5.6.1 dan perintah Docker Desktop v4.97.0. Namun bagian Server menampilkan pesan error “Docker Desktop is unable to start”, yang berarti Docker Engine belum berjalan. Penyebabnya biasanya Docker Desktop belum dibuka atau belum selesai start, WSL 2 belum aktif atau perlu diperbarui, atau virtualisasi belum diaktifkan di BIOS. Selama error ini ada, container belum bisa dijalankan.</p>
+<p align="justify">Perintah docker info dipakai untuk menampilkan informasi sistem Docker, yang terdiri dari bagian Client dan bagian Server (Docker Engine). Pada gambar, bagian Client tampil dengan baik: Docker versi 29.9.2 dengan context desktop-linux, mode debug nonaktif, serta daftar plugin terpasang, di antaranya Docker Compose v5.6.1, Buildx v0.38.1, dan Docker Desktop commands v4.97.0. Hal ini menunjukkan bahwa instalasi Docker Desktop sudah lengkap dan sisi client siap digunakan.</p>
 
 ---
 
