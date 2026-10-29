@@ -87,11 +87,15 @@
 
 #### Pembahasan
 
+<p align="justify">Perintah docker --version menampilkan Docker versi 29.9.2 (build a82e528). Ini membuktikan bahwa Docker CLI sudah terpasang dan dapat dikenali dari Command Prompt.</p>
+
 #### Docker Compose Version
 
 <img width="258" height="40" alt="05" src="https://github.com/user-attachments/assets/6e7f19c9-02e5-49bc-bb2c-87b4c9a118a1" />
 
 #### Pembahasan
+
+<p align="justify">Perintah docker compose version menampilkan Docker Compose v5.6.1. Hasil ini menunjukkan bahwa Compose sudah tersedia sebagai plugin Docker, sehingga berkas docker-compose.yaml pada proyek dapat dijalankan.</p>
 
 #### Docker info
 
@@ -99,6 +103,8 @@
 
 
 #### Pembahasan
+
+<p align="justify">Bagian Client menampilkan versi Docker 29.9.2 beserta daftar plugin yang terpasang, termasuk Compose v5.6.1 dan perintah Docker Desktop v4.97.0. Namun bagian Server menampilkan pesan error “Docker Desktop is unable to start”, yang berarti Docker Engine belum berjalan. Penyebabnya biasanya Docker Desktop belum dibuka atau belum selesai start, WSL 2 belum aktif atau perlu diperbarui, atau virtualisasi belum diaktifkan di BIOS. Selama error ini ada, container belum bisa dijalankan.</p>
 
 ### Struktur Direktori dan FIle
 
