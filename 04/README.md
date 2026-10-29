@@ -230,11 +230,15 @@ docker compose down
 
 #### Pembahasan
 
+<p align="justify">Fungsi der dibuat di PowerShell untuk masuk ke psql di container replica, karena alias di env.sh tidak berjalan di Windows. Query SELECT pg_is_in_recovery(); mengembalikan t (true), yang berarti node ini berada dalam mode recovery atau standby, sehingga benar berperan sebagai replica.</p>
+
 -Primary
 
 <img width="452" height="113" alt="21_Primary" src="https://github.com/user-attachments/assets/825b140b-60cb-4db5-8d69-f15fdc891017" />
 
 #### Pembahasan
+
+<p align="justify">Alias dep dijalankan di PowerShell untuk masuk ke psql di container primary (psql (18.3), basis data zdb). Perintah \dt kemudian menampilkan pesan Did not find any tables, yang berarti basis data zdb di primary masih kosong dan belum memiliki tabel apa pun. Kondisi awal ini penting sebagai pembanding sebelum pengujian dimulai, karena tabel yang nanti dibuat di primary dapat dipastikan muncul di replica melalui replikasi, bukan karena sudah ada sebelumnya. Sesi psql lalu ditutup dengan perintah \q.</p>
 
 -Replica
 
@@ -242,15 +246,21 @@ docker compose down
 
 #### Pembahasan
 
+<p align="justify">Fungsi der didefinisikan di PowerShell untuk menjalankan docker exec ke container replica dan membuka psql dengan user zuser pada basis data zdb. Setelah der dipanggil, perintah \dt menampilkan pesan Did not find any tables, yang berarti basis data di replica masih kosong dan belum memiliki tabel. Kondisi ini sama dengan primary pada tahap awal, sehingga primary dan replica sama-sama kosong sebelum ada perubahan data. Hasil ini menjadi pembanding penting: bila nanti tabel yang dibuat di primary muncul di replica, berarti data tersebut benar-benar berasal dari proses replikasi.</p>
+
 #### Memanipulasi Data Primary
 
 <img width="456" height="298" alt="23_data_Primary" src="https://github.com/user-attachments/assets/2bd5a7ea-d910-4282-9846-d18a77358ff2" />
 
 #### Pembahasan
 
+<p align="justify">Setelah masuk ke psql di container primary lewat alias dep, dibuat tabel testrep dengan dua kolom, yaitu first bertipe INT dan second bertipe VARCHAR(15), yang dikonfirmasi oleh keluaran CREATE TABLE. Dua baris data kemudian dimasukkan dengan perintah INSERT, yaitu (21, ‘Test pertama’) dan (23, ‘Test ke dua’), masing-masing ditandai INSERT 0 1 yang berarti satu baris berhasil ditambahkan. Prompt zdb-# pada baris kedua setiap INSERT hanyalah prompt lanjutan karena perintahnya ditulis dalam dua baris. Hasil SELECT * FROM testrep; menampilkan kedua baris tersebut (2 rows), sehingga data berhasil tersimpan di primary. Perubahan inilah yang nantinya diverifikasi di replica untuk membuktikan streaming replication bekerja.</p>
+
 <img width="539" height="317" alt="24_data_Replica" src="https://github.com/user-attachments/assets/7b71427b-0547-40a2-9e55-0269e15861bc" />
 
 #### Pembahasan
+
+<p align="justify">
 
 ### High-Availability
 #### Primary server mati
