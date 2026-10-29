@@ -60,14 +60,23 @@
 
 #### Pembahasan
 
+<p align="justify">Pada tahap awal, installer Docker Desktop meminta pengguna menentukan mode instalasi. Opsi yang dipilih adalah Per-user installation dengan backend WSL 2, yaitu opsi yang direkomendasikan karena hanya memasang Docker untuk pengguna saat ini dan tidak memerlukan hak administrator. Opsi All-users installation tidak dipilih, padahal opsi itu diperlukan bila ingin memakai Windows Containers atau backend Hyper-V. Opsi Add shortcut to desktop juga dicentang agar Docker mudah dibuka dari desktop, lalu konfigurasi dilanjutkan dengan menekan tombol OK.</p>
 
+- Proses Unpacking Files
+  
 <img width="527" height="364" alt="02" src="https://github.com/user-attachments/assets/27fd860d-5c9d-455b-9fe5-1c747adb7f8c" />
 
 #### Pembahasan
 
+<p align="justify">Setelah konfigurasi disetujui, installer Docker Desktop versi 4.97.0 mulai mengekstrak berkas-berkas program ke dalam sistem. Status “Unpacking files...” dan progress bar hijau yang baru terisi sedikit menunjukkan bahwa proses instalasi baru berjalan di tahap awal. Pada tahap ini pengguna hanya perlu menunggu sampai seluruh berkas selesai diekstrak.</p>
+
+- Instalasi Berhasil
+
 <img width="531" height="362" alt="03" src="https://github.com/user-attachments/assets/8f29d8d0-75e8-414c-b127-1d5160daa9fa" />
 
 #### Pembahasan
+
+<p align="justify">Tahap terakhir menampilkan pesan “Installation succeeded” dengan progress bar yang sudah penuh, yang berarti Docker Desktop 4.97.0 berhasil terpasang tanpa kendala. Pengguna cukup menekan tombol Close untuk menutup installer. Setelah itu Docker Desktop dapat dijalankan dan digunakan sebagai lingkungan praktikum, termasuk untuk menjalankan Docker Compose pada konfigurasi PostgreSQL dan Apache Ignite.</p>
 
 ---
 ### Pemeriksaan Versi dan Lingkungan
