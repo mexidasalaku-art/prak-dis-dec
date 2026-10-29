@@ -180,10 +180,24 @@ docker compose down
 #### Pembahasan
 
 ### High-Availability
+#### Primary server mati
 
+<img width="475" height="79" alt="25_Primary_Server_Stop" src="https://github.com/user-attachments/assets/8ba76c6b-fecb-4a1b-907b-628583345120" />
 
+#### Pembahasan
+<p align="justify">Perintah docker compose stop postgres_primary berhasil dijalankan, ditandai dengan status container streaming-replication-postgres_primary-1 yang berubah menjadi Stopped dalam waktu 0,9 detik. Dalam skenario praktikum streaming replication PostgreSQL, langkah ini mensimulasikan kegagalan (failover) pada node primary, sehingga server utama tidak lagi dapat melayani koneksi maupun menerima operasi tulis. Setelah primary mati, node replica (standby) tetap berjalan dan masih dapat melayani query baca, tetapi tidak bisa menerima penulisan karena masih berstatus read-only dan tidak lagi menerima aliran WAL dari primary. Langkah berikutnya yang umum dilakukan adalah mempromosikan replica menjadi primary baru, misalnya dengan pg_ctl promote atau SELECT pg_promote();, lalu memverifikasi bahwa node tersebut sudah keluar dari mode recovery (SELECT pg_is_in_recovery(); bernilai false) dan dapat menerima operasi tulis.</p>
 
+Setelah memastikan bahwa server primary berada dalam kondisi mati (down), langkah selanjutnya adalah mengangkat replica menjadi primary baru dengan menjalankan fungsi pg_promote():
 
+<img width="457" height="293" alt="26_Pg_Promote" src="https://github.com/user-attachments/assets/a87b70c3-983a-4fd6-ab00-74ddebfd88e6" />
+
+#### Pembahasan
+
+#### mematikan semua primary dan replika
+
+<img width="466" height="166" alt="27_Docker_Compose_Down" src="https://github.com/user-attachments/assets/d254b4fb-13fa-45dc-87dc-c0fd8e78949f" />
+
+#### Pembahasan
 
 
 ### 4.2 Replikasi Master-Master Menggunakan Apache Ignite 3
