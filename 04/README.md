@@ -226,6 +226,8 @@ Setelah proses pull image selesai dan docker compose up berhasil dijalankan, sta
 
 #### Pembahasan
 
+Setiap container yang berjalan di dalam network Docker memiliki IP internal. Untuk mengecek IP dari masing-masing node:
+
 ```python
 docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ignite3-node1-1
 docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ignite3-node2-1
@@ -236,8 +238,31 @@ docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ign
 
 #### Pembahasan
 
+#### Inisialisasi Cluster
 
-  
+```python
+docker run --rm -it --network=host -e LANG=C.UTF-8 -e LC_ALL=C.UTF-8 apacheignite/ignite:3.1.0 cli
+```
+
+<img width="692" height="221" alt="33_apache_ignite_CLI" src="https://github.com/user-attachments/assets/3dcddd97-3b99-42e5-9910-3aee0625e26d" />
+
+#### Pembahasan
+
+Selanjutnya, cluster diinisialisasi dengan menjalankan perintah berikut, kemudian status cluster diperiksa menggunakan perintah:
+
+```python
+cluster init --name=ignite3 --metastorage-group=node1,node2,node3
+```
+
+```python
+cluster init --name=ignite3 --metastorage-group=node1,node2,node3
+```
+
+<img width="434" height="49" alt="34_inisialisasi_cluster_dan_status_cluster" src="https://github.com/user-attachments/assets/91cddc97-7caa-4e1a-9f45-640de2f95e89" />
+
+#### Pembahasan
+
+<p align="justify">cluster Apache Ignite 3 diinisialisasi melalui CLI dengan perintah cluster init --name=ignite3 --metastorage-group=node1,node2,node3, dan sistem merespons dengan pesan Cluster was initialized successfully. Parameter --name memberi nama cluster (ignite3), sedangkan --metastorage-group menentukan node-node yang menyimpan metadata cluster, yaitu node1, node2, dan node3. Setelah itu, perintah cluster status menampilkan bahwa cluster bernama ignite3 memiliki 3 node dengan status active. Daftar cmgNodes (Cluster Management Group) dan msNodes (Metastorage) sama-sama berisi node1, node2, dan node3, yang berarti ketiga node berpartisipasi dalam pengelolaan cluster sekaligus penyimpanan metadata, sehingga cluster siap digunakan dan memiliki redundansi jika salah satu node mengalami gangguan.</p>
 
 # KESIMPULAN
 # REFERENSI
