@@ -126,17 +126,23 @@ docker info
 
 #### Pembahasan
 
+<p align="justify">Skrip ini berisi dua perintah yang dijalankan otomatis saat primary pertama kali dibuat. Perintah pertama membuat user replicator dengan atribut REPLICATION dan password terenkripsi, yaitu akun khusus yang dipakai replica untuk menarik data dari primary. Perintah kedua memanggil pg_create_physical_replication_slot('replication_slot') untuk membuat physical replication slot, sehingga primary menahan WAL sampai replica selesai menerimanya.</p>
+
 #### - docker-compose.yaml
 
 <img width="422" height="398" alt="09" src="https://github.com/user-attachments/assets/37a592bf-39e9-4726-9b61-36cfd1149b69" />
 
 #### Pembahasan
 
+<p align="justify">Berkas ini mendefinisikan dua service dari image yang sama, postgres:18.3-alpine3.23, dengan pengaturan bersama (user, restart, dan healthcheck pg_isready) yang dipakai ulang lewat anchor YAML. Service postgres_primary dibuka di port 5432, memakai autentikasi scram-sha-256 serta aturan khusus agar user replicator boleh melakukan koneksi replikasi, dan dijalankan dengan parameter wal_level=replica, hot_standby=on, max_wal_senders=10, max_replication_slots=10, dan hot_standby_feedback=on. Skrip 00_init.sql dipasang ke folder docker-entrypoint-initdb.d agar dieksekusi saat inisialisasi. Service postgres_replica dibuka di port 5433 dan menjalankan pg_basebackup dengan opsi -R (membuat konfigurasi replica otomatis), --slot=replication_slot, dan -X stream, dalam loop until yang mengulang setiap 5 detik sampai primary siap. Setelah backup selesai, izin folder data diatur ke 0700 lalu PostgreSQL dijalankan sebagai replica, dengan depends_on yang memastikan primary dimulai lebih dulu.</p>
+
 #### - env.sh
 
 <img width="419" height="122" alt="10" src="https://github.com/user-attachments/assets/a5416c74-3505-46d0-a406-f8adb1ccebb3" />
 
 #### Pembahasan
+
+<p align="justify">Berkas ini berisi alias perintah pendek agar pengetikan lebih cepat. dcu dan dcd menjalankan serta menghentikan seluruh container, dps menampilkan daftar container, der dan dep membuka shell di container replica dan primary, sedangkan dlr dan dlp menampilkan log masing-masing. Perlu diingat bahwa alias ini memakai sudo dan sintaks bash, sehingga cocok untuk Linux atau WSL. Pada PowerShell Windows, seperti terminal di Gambar 1, alias tersebut tidak bisa dipakai langsung, dan kamu cukup mengetik perintah lengkapnya, misalnya docker compose up -d.</p>
 
 ### Jalankan program menggunakan Docker
 
@@ -150,6 +156,7 @@ docker compose version
 
 #### Pembahasan
 
+<p align="justify">Pada terminal VS Code yang sudah berada di folder streaming-replication, perintah docker --version menampilkan Docker versi 29.9.2 (build a82e528) dan docker compose version menampilkan Docker Compose v5.6.1. Hasil ini menunjukkan bahwa Docker dan Compose sudah dapat dipanggil langsung dari terminal proyek, sehingga lingkungan siap dipakai untuk menjalankan konfigurasi replikasi.</p>
 
 #### Jalankan primary dan replica
 ```python
