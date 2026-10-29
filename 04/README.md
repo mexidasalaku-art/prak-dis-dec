@@ -423,4 +423,16 @@ Docker compose down
 
 
 # KESIMPULAN
+
+<p align="justify">Kedua praktikum ini menunjukkan bahwa replikasi bukanlah satu teknik tunggal, melainkan kumpulan keputusan desain yang masing-masing membawa konsekuensi. Pada PostgreSQL, streaming replication berhasil menjaga replica tetap sama dengan primary melalui aliran WAL: replica hanya bisa dibaca, mengikuti setiap perubahan secara otomatis, dan dapat dinaikkan menjadi primary ketika primary dihentikan. Meski begitu, kenaikan peran tersebut dilakukan secara manual, replikasinya bersifat asinkron, dan belum ada mekanisme yang mencegah split-brain, sehingga konfigurasi ini baru menyiapkan fondasi untuk High Availability dan belum bisa disebut High Availability yang utuh. Apache Ignite memperlihatkan pendekatan yang berbeda, yaitu tiga node yang kedudukannya sama, masing-masing bisa menerima baca dan tulis, dan perubahan di satu node langsung tampak di node lainnya tanpa proses promosi. Jika dibandingkan, primary-replica lebih sederhana dan mudah dipahami tetapi tetap bertumpu pada satu titik penulisan, sedangkan master-master lebih tahan ketika salah satu node gagal namun menuntut konfigurasi dan koordinasi yang lebih rumit. Karena itu, pemilihan modelnya tidak bergantung pada mana yang lebih baru, melainkan pada kebutuhan aplikasi: seberapa besar kehilangan data yang masih bisa diterima, seberapa berat beban tulisnya, dan seberapa siap tim mengelola kerumitannya.</p>
+
+---
 # REFERENSI
+
+- PostgreSQL Global Development Group, "High Availability, Load Balancing, and Replication," *PostgreSQL 18 Documentation*, 2025. [Daring]. Tersedia: https://www.postgresql.org/docs/18/high-availability.html
+- PostgreSQL Global Development Group, "Write-Ahead Logging (WAL)," *PostgreSQL 18 Documentation*, 2025. [Daring]. Tersedia: https://www.postgresql.org/docs/18/wal.html
+- PostgreSQL Global Development Group, "pg_basebackup," *PostgreSQL 18 Documentation*, 2025. [Daring]. Tersedia: https://www.postgresql.org/docs/18/app-pgbasebackup.html
+- Eremeykin, "How to Setup Single Primary PostgreSQL Replication with Docker Compose," *Medium*. [Daring]. Tersedia: https://medium.com/@eremeykin/how-to-setup-single-primary-postgresql-replication-with-docker-compose 98c48f233bbf
+- Docker Inc., "Install Docker Engine dan Docker Compose," *Docker Documentation*, 2025. [Daring]. Tersedia: https://docs.docker.com/
+- A. S. Tanenbaum dan M. van Steen, *Distributed Systems*, edisi ke-4. Maarten van Steen, 2023.
+- M. Kleppmann, *Designing Data-Intensive Applications*. O'Reilly Media, 2017.
