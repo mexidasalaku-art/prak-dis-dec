@@ -12,6 +12,14 @@
 
 #  TUJUAN PRAKTIKUM
 
+- Memahami konsep konsistensi dan replikasi data dalam sistem terdistribusi.
+- Membedakan replikasi sinkron dan asinkron, serta model primary-replica dan master-master.
+- Membangun streaming replication PostgreSQL 18 dengan satu primary dan satu replica memakai Docker Compose.
+- Mengkaji fungsi WAL, physical replication slot, dan pg_basebackup -R dalam proses sinkronisasi data.
+- Memeriksa status replikasi lewat tabel diagnostik, lalu menguji perubahan data pada kedua node.
+- Mensimulasikan High Availability dengan mempromosikan replica menjadi primary.
+- Menyiapkan cluster master-master Apache Ignite 3 dan membuktikan bahwa tiap node dapat membaca sekaligus menulis data.
+  
 ---
 
 #  DASAR TEORI
