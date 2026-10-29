@@ -10,11 +10,35 @@
 
 ---
 
-##  TUJUAN PRAKTIKUM
+#  TUJUAN PRAKTIKUM
 
 ---
 
-##  DASAR TEORI
+#  DASAR TEORI
+
+### Replikasi dan Konsistensi
+
+<p align="justify">Menyimpan data di satu mesin berarti satu kerusakan bisa mematikan seluruh layanan. Replikasi menyimpan salinan data di beberapa node agar layanan tetap hidup saat satu node gagal, beban baca terbagi, dan data bisa ditaruh dekat pengguna. Konsekuensinya, semua salinan harus selaras, dan di sinilah model konsistensi berperan. Konsistensi kuat menjamin pembacaan selalu melihat tulisan terakhir, tetapi operasi tulis harus menunggu koordinasi antar node. Konsistensi eventual membolehkan salinan tertinggal sebentar asalkan akhirnya seragam, sehingga lebih cepat namun bisa menampilkan data lama. Menurut teorema CAP, saat jaringan terpisah sistem harus memilih antara tetap konsisten atau tetap tersedia.</p>
+
+### Primary-Replica dan Streaming Replication
+
+<p align="justify">Pada model ini hanya primary yang menerima tulisan, sedangkan replica menyalin perubahan dan melayani pembacaan. Karena penulisnya tunggal, tidak ada konflik tulis, dan replica bisa menggantikan primary bila gagal. Pada replikasi sinkron, primary menunggu konfirmasi replica sebelum commit sehingga data tidak hilang, tetapi tulis lebih lambat. Pada replikasi asinkron, primary langsung commit dan mengirim perubahan belakangan, sehingga lebih cepat namun transaksi terakhir bisa belum sampai ke replica. Streaming replication berarti perubahan dialirkan terus-menerus, bukan dikirim sebagai snapshot berkala.</p>
+
+### WAL, LSN, dan Replication Slot
+
+<p align="justify">Di PostgreSQL, setiap perubahan dicatat lebih dulu ke Write-Ahead Log (WAL) sebelum data diperbarui. WAL semula untuk pemulihan setelah crash, lalu dipakai juga untuk replikasi: WAL sender di primary mengalirkan WAL, WAL receiver di replica menerimanya dan memutar ulang hingga datanya identik. Posisi di dalam WAL ditandai dengan LSN, dan selisih posisi kirim dengan posisi replay disebut lag replikasi. Replication slot menahan WAL di primary sampai replica mengonfirmasi penerimaan, tetapi jika replica mati lama, WAL dapat menumpuk dan memenuhi disk.</p>
+
+### High Availability dan Failover
+
+<p align="justify">Replikasi hanya menyediakan data cadangan, sedangkan pemulihan layanan dilakukan lewat failover, yaitu memindahkan peran primary ke replica. Failover bisa manual dengan pg_promote() atau otomatis dengan alat seperti Patroni dan repmgr. Risiko terbesarnya adalah split-brain, yaitu dua node sama-sama merasa sebagai primary sehingga datanya bercabang. Sistem produksi mencegahnya dengan fencing, sedangkan pada praktikum ini primary lama cukup dihentikan dan tidak dinyalakan lagi sebagai primary.</p>
+
+### Apache Ignite 3 dan Master-Master
+
+<p align="justify">Ignite 3 menyimpan data di memori dan disk, dibagi menjadi partisi yang ditempatkan di node sesuai zona. Zona juga menentukan replication factor, yaitu jumlah salinan data. Semua node setara karena masing-masing bisa membaca dan menulis, dan permintaan untuk partisi milik node lain diteruskan otomatis. Metadata cluster dikelola dengan consensus sehingga perubahan harus disetujui mayoritas node, itulah sebabnya jumlah node dibuat ganjil. Model ini memberi ketersediaan tulis lebih baik, tetapi penanganan konfliknya lebih rumit.</p>
+
+### Docker dan Docker Compose
+
+<p align="justify">Docker mengemas aplikasi dan dependensinya menjadi image yang dijalankan sebagai container terisolasi, lebih ringan daripada mesin virtual karena berbagi kernel dengan host. Image bersifat immutable sehingga hasil praktikum bisa diulang. Docker Compose mendefinisikan banyak container dalam satu berkas YAML, dengan jaringan bersama sehingga service saling memanggil lewat nama, serta volume untuk menyimpan data. Perlu diingat bahwa depends_on hanya menunggu container dimulai, bukan layanannya siap, sehingga dibutuhkan loop until sebagai mekanisme tunggu.</p>
 
 ---
 
