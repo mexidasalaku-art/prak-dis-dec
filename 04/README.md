@@ -260,7 +260,7 @@ docker compose down
 
 #### Pembahasan
 
-<p align="justify">
+<p align="justify">Alias der dijalankan untuk masuk ke psql di container replica. Perintah \dt kini menampilkan tabel testrep di skema public milik zuser (1 row), padahal sebelumnya replica masih kosong, sehingga tabel tersebut berasal dari primary. Query SELECT * FROM testrep; mengembalikan dua baris, yaitu (21, ‘Test pertama’) dan (23, ‘Test ke dua’), yang sama persis dengan data di primary. Hal ini membuktikan bahwa perubahan di primary otomatis tersalin ke replica melalui streaming replication. Pesan syntax error at or near "docker" muncul karena perintah docker exec ... terketik di dalam prompt psql, bukan di PowerShell, sehingga dibaca sebagai SQL. Itu hanya kesalahan pengetikan dan tidak berkaitan dengan replikasi, dan setelah query diketik ulang hasilnya tampil dengan benar.</p>
 
 ### High-Availability
 #### Primary server mati
