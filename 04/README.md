@@ -99,12 +99,19 @@
 
 #### Docker info
 
-<img width="269" height="347" alt="06" src="https://github.com/user-attachments/assets/54ecff99-f590-43c0-974a-c2d923deeacc" />
+#### Cek info Docker
 
+```python
+docker info
+```
+
+<img width="269" height="347" alt="06_Docker_Info" src="https://github.com/user-attachments/assets/970b761c-f2c0-4bbc-a6d9-f479aec25f32" />
 
 #### Pembahasan
 
 <p align="justify">Bagian Client menampilkan versi Docker 29.9.2 beserta daftar plugin yang terpasang, termasuk Compose v5.6.1 dan perintah Docker Desktop v4.97.0. Namun bagian Server menampilkan pesan error “Docker Desktop is unable to start”, yang berarti Docker Engine belum berjalan. Penyebabnya biasanya Docker Desktop belum dibuka atau belum selesai start, WSL 2 belum aktif atau perlu diperbarui, atau virtualisasi belum diaktifkan di BIOS. Selama error ini ada, container belum bisa dijalankan.</p>
+
+---
 
 ### Struktur Direktori dan FIle
 
