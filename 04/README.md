@@ -167,6 +167,8 @@ docker compose up -d
 
 #### Pembahasan
 
+<p align="justify">Perintah docker compose up -d menjalankan seluruh service pada docker-compose.yaml di latar belakang. Hasilnya up 2/2, dan kedua container, streaming-replication-postgres_primary-1 dan streaming-replication-postgres_replica-1, berstatus Running. Ini menunjukkan Docker Engine kini sudah aktif dan konfigurasi Compose berhasil dijalankan.</p>
+
 #### Periksa container
 ```python
 docker ps
@@ -176,6 +178,8 @@ docker ps
 
 #### Pembahasan
 
+<p align="justify">Perintah docker ps menampilkan dua container dari image postgres:18.3-alpine3.23 yang sudah berjalan sekitar lima menit dengan status healthy, artinya healthcheck pg_isready berhasil. Primary dipetakan ke port 5432 dan replica ke port 5433 pada host, sehingga keduanya dapat diakses secara terpisah.</p>
+
 #### Periksa log jika terjadi masalah
 ```python
 docker compose logs postgres_primary
@@ -184,6 +188,8 @@ docker compose logs postgres_primary
 <img width="694" height="419" alt="14_Mengecek_Masalah" src="https://github.com/user-attachments/assets/1a525db7-3e37-457b-bd1c-23adb55cdbb3" />
 
 #### Pembahasan
+
+<p align="justify">Perintah docker compose logs postgres_primary menampilkan catatan proses saat container primary pertama kali dibuat. Log memperlihatkan klaster basis data diinisialisasi dengan encoding UTF8 dan data page checksums aktif, lalu server sementara dinyalakan untuk membuat basis data. Docker kemudian menjalankan 00_init.sql: keluaran CREATE ROLE menandakan user replicator berhasil dibuat, dan pg_create_physical_replication_slot mengembalikan slot replication_slot sebanyak satu baris, artinya physical replication slot sudah terbentuk. Peringatan no usable system locales dan autentikasi trust untuk koneksi lokal merupakan pesan bawaan pada image Alpine dan tidak menghambat replikasi. Dengan demikian, primary sudah memiliki akun dan slot yang dibutuhkan replica untuk melakukan pg_basebackup.</p>
 
 ```python
 docker compose logs postgres_replica
@@ -195,6 +201,8 @@ docker compose logs postgres_replica
 
 #### Pembahasan
 
+<p align="justify">Log replica dan primary menunjukkan proses sinkronisasi berjalan sesuai urutan. Pada awalnya replica mendapat error Connection refused saat menjalankan pg_basebackup, karena primary masih menjalankan inisialisasi dan belum menerima koneksi jaringan. Loop until mengulang percobaan setiap 5 detik sampai backup berhasil, sementara primary menyelesaikan inisialisasi, menjalankan ulang PostgreSQL 18.3 secara normal, dan menampilkan database system is ready to accept connections. Setelah backup selesai, replica masuk ke standby mode, mencapai consistent recovery state, lalu mulai streaming WAL from primary pada timeline 1 dan siap menerima koneksi read-only. Dengan demikian, streaming replication antara primary dan replica sudah berjalan, dan error di awal hanyalah akibat wajar dari urutan penyalaan container.</p>
+
 #### - Jalankan kode dibawah jika ingin menghentikan container
 ```python
 docker compose down
@@ -203,6 +211,8 @@ docker compose down
 <img width="545" height="67" alt="17_Menghentikan_container" src="https://github.com/user-attachments/assets/299f38b8-9e31-440e-92c6-83b59aebf62f" />
 
 #### Pembahasan
+
+<p align="justify">Perintah ini menghentikan dan menghapus kedua container, postgres_replica-1 dan postgres_primary-1, beserta jaringan streaming-replication_default (3/3 Removed). Langkah ini dilakukan untuk membersihkan lingkungan setelah pengujian selesai.</p>
 
 ### Pengujian Replikasi
 
