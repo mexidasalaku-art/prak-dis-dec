@@ -274,6 +274,120 @@ cluster init --name=ignite3 --metastorage-group=node1,node2,node3
 
 <p align="justify">CLI Apache Ignite 3 dijalankan kembali dengan perintah Docker yang sama seperti sebelumnya, lalu terhubung ke node default http://localhost:10300 setelah dijawab Y. Berbeda dengan percobaan pertama, kali ini tidak muncul pesan bahwa cluster belum diinisialisasi, yang menandakan cluster sudah terinisialisasi dan siap digunakan. Dengan demikian, perintah cluster init tidak perlu dijalankan lagi, dan pengguna dapat langsung melanjutkan ke operasi berikutnya melalui prompt [node1]>.</p>
 
+### Eksekusi Perintah SQL
+#### Memuat dan Mengeksekusi File Skema SQL
+
+```python
+sql --file=/opt/ignite/sql/schema.sql
+```
+
+<img width="647" height="350" alt="36_Berkas_schema sql" src="https://github.com/user-attachments/assets/fc40da04-036a-4601-99ca-3315aeecc02b" />
+
+#### Pembahasan
+
+<p align="justify">CLI Apache Ignite 3 dijalankan dengan perintah Docker yang berbeda, yaitu menggunakan --network=ignite3_default agar container CLI berada di jaringan yang sama dengan ketiga node, serta --mount (bind) untuk memasang folder sql dari host ke /opt/ignite/downloads dalam mode readonly sehingga file SQL dapat diakses dari dalam container. Karena tidak lagi memakai jaringan host, koneksi ke node default http://localhost:10300 gagal dan muncul pesan Node unavailable. Hal ini diatasi dengan menghubungkan CLI secara manual menggunakan nama service Docker melalui perintah connect http://node1:10300, yang berhasil. Setelah itu, perintah sql --file=/opt/ignite/downloads/schema.sql dijalankan untuk mengeksekusi skrip skema, dan setiap pernyataan menampilkan Updated 0 rows. Pesan tersebut normal untuk perintah DDL seperti CREATE TABLE karena tidak ada baris data yang diubah, sehingga menandakan skema berhasil dibuat.</p>
+
+---
+Masukkan Kode berikut:
+
+```python
+sql
+```
+Lalu Kode berikut
+
+```python
+SELECT * FROM system.tables WHERE schema = 'PUBLIC';
+```
+
+<img width="599" height="179" alt="37_Schema_table_node1" src="https://github.com/user-attachments/assets/b534ec44-2e06-4f28-af1c-570b96db4172" />
+
+#### Pembahasan
+
+<p align="justify">perintah SELECT * FROM system.tables WHERE schema = 'PUBLIC'; dijalankan melalui sql-cli untuk menampilkan daftar tabel pada schema PUBLIC, dan hasilnya memperlihatkan 11 tabel dari dataset Chinook, yaitu ALBUM, PLAYLISTTRACK, TRACK, CUSTOMER, MEDIATYPE, PLAYLIST, ARTIST, INVOICELINE, EMPLOYEE, GENRE, dan INVOICE. Kolom ZONE_NAME menunjukkan bahwa sebagian besar tabel berada pada zona CHINOOK (zone ID 20), sedangkan tabel MEDIATYPE dan GENRE berada pada zona CHINOOKREPLICATED (zone ID 21), yang menandakan keduanya merupakan tabel referensi berukuran kecil yang direplikasi ke seluruh node. Kolom TABLE_COLOCATION_COLUMNS memperlihatkan strategi colocation, misalnya tabel TRACK dikelompokkan berdasarkan ALBUMID, ALBUM berdasarkan ARTISTID, dan INVOICE berdasarkan CUSTOMERID, sehingga data yang saling berelasi disimpan pada node yang sama untuk mengurangi transfer data antar-node saat operasi join. Dengan demikian, hasil ini mengonfirmasi bahwa skema dari schema.sql telah berhasil dibuat beserta pengaturan zona dan colocation-nya.</p>
+
+<img width="218" height="281" alt="38_berkas_SQL" src="https://github.com/user-attachments/assets/5f7a84ed-4e83-42c6-8c9f-ce427ed25d27" />
+
+#### Pembahasan
+
+<p align="justify">CLI yang awalnya terhubung ke http://node1:10300 dipindahkan ke node kedua dengan perintah connect http://node2:10300. Sistem meminta konfirmasi karena CLI sudah terhubung ke node1, lalu dijawab Y dan koneksi ke node2 berhasil. Langkah ini dipakai untuk memeriksa apakah perubahan di node1 sudah terpropagasi ke node lain.</p>
+
+---
+
+### Verifikasi Propagasi Data
+
+<p align="justify">Untuk memastikan bahwa perubahan yang dilakukan pada http://localhost:10300 telah dipropagasi ke node-node lainnya, dapat dilakukan pengecekan dengan menghubungkan CLI ke node yang berbeda. Berikut adalah koneksi ke node kedua di http://localhost:10301:</p>
+
+```python
+connect http://localhost:10301
+```
+
+<img width="363" height="25" alt="39_koneksi_CLI" src="https://github.com/user-attachments/assets/113d7786-da73-4000-8ebb-64784fc05cbb" />
+
+#### Pembahasan
+
+<p align="justify">Beberapa file SQL dijalankan berurutan untuk mengisi data dataset Chinook, yaitu current_catalog.sql, media_and_genre.sql, tracks.sql, ee_and_cust.sql, dan invoices.sql. Eksekusi tracks.sql pertama kali gagal dengan pesan File not found karena path /opt/ignite/sql/ salah, lalu berhasil setelah diganti ke /opt/ignite/downloads/ sesuai lokasi mount. Pesan Updated N rows menunjukkan jumlah baris yang berhasil dimasukkan, dan data dimasukkan dalam beberapa batch (misalnya 1000, 1000, 1000, 503 baris) sehingga seluruh tabel kini terisi.</p>
+
+---
+
+Cek Table
+
+```python
+SELECT * FROM system.tables WHERE schema = 'PUBLIC';
+```
+
+<img width="710" height="396" alt="40_table_node2" src="https://github.com/user-attachments/assets/24a8ac1f-06da-4c86-af35-95aacd858dec" />
+
+#### Pembahasan
+
+<p align="justify">setelah berpindah ke [node2], perintah SELECT * FROM system.tables WHERE schema = 'PUBLIC'; dijalankan kembali dan menampilkan hasil yang identik dengan yang sebelumnya terlihat di node1, yaitu 11 tabel Chinook (ALBUM, PLAYLISTTRACK, TRACK, CUSTOMER, MEDIATYPE, PLAYLIST, ARTIST, INVOICELINE, EMPLOYEE, GENRE, dan INVOICE) lengkap dengan zona, ID, dan kolom colocation yang sama. Tabel MEDIATYPE dan GENRE tetap berada pada zona CHINOOKREPLICATED, sedangkan sisanya pada zona CHINOOK. Hal ini membuktikan bahwa skema yang dibuat melalui node1 telah terpropagasi ke node2, karena metadata cluster dikelola bersama oleh seluruh node dalam metastorage group, sehingga perubahan di satu node langsung dapat dilihat dari node lain.</p>
+
+---
+
+query analytics:
+
+```python
+SELECT
+    CAST(EXTRACT(YEAR FROM i.InvoiceDate) AS VARCHAR) || '-' ||
+    CASE
+        WHEN EXTRACT(MONTH FROM i.InvoiceDate) < 10
+        THEN '0' || CAST(EXTRACT(MONTH FROM i.InvoiceDate) AS VARCHAR)
+        ELSE CAST(EXTRACT(MONTH FROM i.InvoiceDate) AS VARCHAR)
+    END AS YearMonth,
+    COUNT(DISTINCT i.InvoiceId) AS InvoiceCount,
+    COUNT(DISTINCT i.CustomerId) AS CustomerCount,
+    SUM(i.Total) AS MonthlyRevenue,
+    AVG(i.Total) AS AverageOrderValue
+FROM
+    Invoice i
+GROUP BY
+    EXTRACT(YEAR FROM i.InvoiceDate), EXTRACT(MONTH FROM i.InvoiceDate)
+ORDER BY
+    YearMonth DESC;
+```
+
+<img width="257" height="425" alt="41_query_analitik_node2" src="https://github.com/user-attachments/assets/eb8ac6d5-735f-4dfe-a915-426cc5c1543b" />
+
+<img width="217" height="426" alt="42_query_analitik_node2" src="https://github.com/user-attachments/assets/f9582a1b-d1a6-4f78-90f5-24220e259083" />
+
+#### Pembahasan
+
+<p align="justify">dijalankan query agregasi pada tabel Invoice yang mengelompokkan data berdasarkan tahun dan bulan dari InvoiceDate, lalu mengurutkannya dari yang terbaru (ORDER BY YearMonth DESC). Kolom YearMonth dibentuk dengan menggabungkan hasil EXTRACT(YEAR ...) dan EXTRACT(MONTH ...) melalui CASE, di mana bulan di bawah 10 diberi awalan '0' agar formatnya seragam (misalnya 2024-09). Untuk setiap bulan, query menghitung InvoiceCount (jumlah invoice), CustomerCount (jumlah pelanggan unik), MonthlyRevenue (total pendapatan), dan AverageOrderValue (rata-rata nilai pesanan). Hasilnya mencakup periode Januari 2020 hingga Desember 2024, dengan sebagian besar bulan memiliki 7 invoice dari 7 pelanggan dan pendapatan sekitar 37,62. Beberapa bulan menyimpang, misalnya 2024-12 (38,62), 2024-11 (49,62), 2023-09 (46,71), dan 2022-06 (50,62) yang lebih tinggi, serta 2022-11 (23,76) yang paling rendah. Karena jumlah invoice sama dengan jumlah pelanggan unik di setiap bulan, tiap pelanggan rata-rata hanya melakukan satu transaksi per bulan.</p>
+
+---
+
+#### Menghentikan semua node
+Matikan Node:
+
+```python
+Docker compose down
+```
+
+<img width="401" height="74" alt="43_Menghentikan_semua_node" src="https://github.com/user-attachments/assets/a63ea1d9-e990-4fb4-b58e-93e44d9cc908" />
+
+#### Pembahasan
+
+<p align="justify">perintah docker compose down dijalankan di folder proyek Apache Ignite untuk menghentikan dan menghapus seluruh resource yang dibuat oleh docker compose up. Ketiga container, yaitu ignite3-node1-1, ignite3-node3-1, dan ignite3-node2-1, berhasil dihapus (Removed). Namun, network ignite3_default menampilkan peringatan Resource is still in use sehingga belum bisa dihapus. Hal ini kemungkinan terjadi karena masih ada container lain yang terhubung ke network tersebut, misalnya container CLI yang dijalankan dengan --network=ignite3_default dan belum ditutup. Masalah ini dapat diatasi dengan keluar dari sesi CLI terlebih dahulu (container CLI otomatis terhapus berkat opsi --rm), lalu menjalankan docker compose down kembali agar network ikut dibersihkan.</p>
+
 
 
 # KESIMPULAN
