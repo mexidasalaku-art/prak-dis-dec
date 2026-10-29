@@ -157,6 +157,35 @@ docker compose down
 
 #### Pembahasan
 
+-Primary
+
+<img width="452" height="113" alt="21_Primary" src="https://github.com/user-attachments/assets/825b140b-60cb-4db5-8d69-f15fdc891017" />
+
+#### Pembahasan
+
+-Replica
+
+<img width="451" height="140" alt="22_Replica" src="https://github.com/user-attachments/assets/6f3411d3-2717-4aed-b970-80282a141a5a" />
+
+#### Pembahasan
+
+#### Memanipulasi Data Primary
+
+<img width="456" height="298" alt="23_data_Primary" src="https://github.com/user-attachments/assets/2bd5a7ea-d910-4282-9846-d18a77358ff2" />
+
+#### Pembahasan
+
+<img width="539" height="317" alt="24_data_Replica" src="https://github.com/user-attachments/assets/7b71427b-0547-40a2-9e55-0269e15861bc" />
+
+#### Pembahasan
+
+### High-Availability
+
+
+
+
+
+
 ### 4.2 Replikasi Master-Master Menggunakan Apache Ignite 3
 
 #### Struktur Direktori dan File
