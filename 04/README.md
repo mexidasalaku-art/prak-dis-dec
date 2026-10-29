@@ -226,7 +226,15 @@ Setelah proses pull image selesai dan docker compose up berhasil dijalankan, sta
 
 #### Pembahasan
 
+```python
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ignite3-node1-1
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ignite3-node2-1
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ignite3-node3-1
+```
 
+<img width="689" height="90" alt="32_alamat_IP_node" src="https://github.com/user-attachments/assets/20535869-2b35-4c93-a876-0c06d7b25997" />
+
+#### Pembahasan
 
 
   
