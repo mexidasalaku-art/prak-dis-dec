@@ -248,6 +248,8 @@ docker run --rm -it --network=host -e LANG=C.UTF-8 -e LC_ALL=C.UTF-8 apacheignit
 
 #### Pembahasan
 
+<p align="justify">CLI Apache Ignite 3 dijalankan lewat Docker dengan perintah docker run --rm -it --network=host ... apacheignite/ignite:3.1.0 cli, di mana --rm menghapus container otomatis setelah selesai dan --network=host memungkinkan akses ke node melalui localhost. CLI kemudian terhubung ke node default http://localhost:10300, namun muncul pemberitahuan bahwa cluster belum diinisialisasi, sehingga perlu menjalankan perintah cluster init terlebih dahulu.</p>
+
 Selanjutnya, cluster diinisialisasi dengan menjalankan perintah berikut, kemudian status cluster diperiksa menggunakan perintah:
 
 ```python
@@ -263,6 +265,16 @@ cluster init --name=ignite3 --metastorage-group=node1,node2,node3
 #### Pembahasan
 
 <p align="justify">cluster Apache Ignite 3 diinisialisasi melalui CLI dengan perintah cluster init --name=ignite3 --metastorage-group=node1,node2,node3, dan sistem merespons dengan pesan Cluster was initialized successfully. Parameter --name memberi nama cluster (ignite3), sedangkan --metastorage-group menentukan node-node yang menyimpan metadata cluster, yaitu node1, node2, dan node3. Setelah itu, perintah cluster status menampilkan bahwa cluster bernama ignite3 memiliki 3 node dengan status active. Daftar cmgNodes (Cluster Management Group) dan msNodes (Metastorage) sama-sama berisi node1, node2, dan node3, yang berarti ketiga node berpartisipasi dalam pengelolaan cluster sekaligus penyimpanan metadata, sehingga cluster siap digunakan dan memiliki redundansi jika salah satu node mengalami gangguan.</p>
+
+<p align="justify">apabila ingin masuk kembali ke CLI menggunakan perintah yang sama, proses inisialisasi cluster tidak perlu dilakukan lagi karena cluster sudah diinisialisasi sebelumnya.</p>
+
+<img width="691" height="221" alt="35_CLI" src="https://github.com/user-attachments/assets/ddb87c3f-5604-4b95-85a4-c79e17cec0b1" />
+
+#### Pembahasan
+
+<p align="justify">CLI Apache Ignite 3 dijalankan kembali dengan perintah Docker yang sama seperti sebelumnya, lalu terhubung ke node default http://localhost:10300 setelah dijawab Y. Berbeda dengan percobaan pertama, kali ini tidak muncul pesan bahwa cluster belum diinisialisasi, yang menandakan cluster sudah terinisialisasi dan siap digunakan. Dengan demikian, perintah cluster init tidak perlu dijalankan lagi, dan pengguna dapat langsung melanjutkan ke operasi berikutnya melalui prompt [node1]>.</p>
+
+
 
 # KESIMPULAN
 # REFERENSI
