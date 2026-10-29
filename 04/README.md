@@ -208,6 +208,24 @@ Setelah memastikan bahwa server primary berada dalam kondisi mati (down), langka
 
 #### Pembahasan
 
+<p align="justify">Selanjutnya, dibuat sebuah file bernama env.sh yang berfungsi sebagai shortcut (pintasan) dan berisi perintah-perintah berikut:</p>
+
+<img width="620" height="78" alt="29_env sh" src="https://github.com/user-attachments/assets/04e078f6-706d-4d16-9ec0-4a3ddb5c8d5d" />
+
+#### Pembahasan
+
+####  Docker Compose
+
+<img width="518" height="78" alt="30_tiga_node" src="https://github.com/user-attachments/assets/357829c8-b157-4895-ae8c-e2b6b381249d" />
+
+#### Pembahasan
+
+Setelah proses pull image selesai dan docker compose up berhasil dijalankan, status container akan ditampilkan sebagai berikut:
+
+<img width="692" height="86" alt="31_Status_node" src="https://github.com/user-attachments/assets/63e661cd-c8c5-4ed6-a15b-78095a67b72b" />
+
+#### Pembahasan
+
 
 
 
