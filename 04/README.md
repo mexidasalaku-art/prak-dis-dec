@@ -106,6 +106,8 @@
 
 #### Pembahasan
 
+<p align="justify">Panel Explorer menampilkan folder streaming-replication yang berisi tiga berkas: 00_init.sql, docker-compose.yaml, dan env.sh. Berkas docker-compose.yaml mendefinisikan container primary dan replica, 00_init.sql berisi skrip SQL inisialisasi basis data, dan env.sh menyimpan variabel lingkungan yang dipakai saat konfigurasi. Struktur ini menjadi dasar proyek replikasi PostgreSQL pada praktikum.</p>
+
 
 #### - 00_init.sql
 
