@@ -276,12 +276,17 @@ Setelah memastikan bahwa server primary berada dalam kondisi mati (down), langka
 
 #### Pembahasan
 
+<p align="justify">Setelah masuk ke psql di container replica, query SELECT pg_is_in_recovery(); pertama mengembalikan t, yang berarti node masih berada dalam mode standby. Fungsi SELECT pg_promote(); kemudian dijalankan dan mengembalikan t, yang menandakan promosi berhasil. Query pg_is_in_recovery() yang kedua kini mengembalikan f (false), sehingga node tersebut sudah keluar dari mode recovery dan berperan sebagai primary yang dapat menerima operasi tulis. Ini adalah simulasi failover manual pada skenario High Availability. Perlu dicatat bahwa pada screenshot ini tidak terlihat primary lama dihentikan, padahal pada praktik yang benar primary lama harus dimatikan lebih dulu agar tidak terjadi split-brain.</p>
+
 #### mematikan semua primary dan replika
 
 <img width="466" height="166" alt="27_Docker_Compose_Down" src="https://github.com/user-attachments/assets/d254b4fb-13fa-45dc-87dc-c0fd8e78949f" />
 
 #### Pembahasan
 
+<p align="justify">Setelah berpindah ke folder streaming-replication dengan cd, perintah docker compose down menghentikan dan menghapus container postgres_replica-1 dan postgres_primary-1 beserta jaringan streaming-replication_default (3/3 Removed). Perintah docker ps sesudahnya menampilkan daftar kosong, yang membuktikan tidak ada container yang masih berjalan. Langkah ini membersihkan lingkungan setelah pengujian selesai.</p>
+
+---
 
 ### 4.2 Replikasi Master-Master Menggunakan Apache Ignite 3
 
@@ -291,11 +296,15 @@ Setelah memastikan bahwa server primary berada dalam kondisi mati (down), langka
 
 #### Pembahasan
 
+<p align="justify">Panel Explorer menampilkan folder src--ApacheIgnite yang berisi subfolder sql dengan enam skrip SQL, yaitu current_catalog.sql, ee_and_cust.sql, invoices.sql, media_and_genre.sql, schema.sql, dan tracks.sql. Skrip-skrip ini merupakan bagian dari dataset Chinook yang dipecah per kelompok tabel, misalnya media_and_genre.sql untuk tabel referensi kecil seperti MEDIATYPE dan GENRE. Di luar folder sql terdapat docker-compose.yaml yang mendefinisikan cluster Ignite, env.sh dan env.ps1 yang berisi alias perintah untuk Linux atau WSL dan PowerShell, serta sql.zip yang kemungkinan merupakan arsip dari folder sql.</p>
+
 <p align="justify">Selanjutnya, dibuat sebuah file bernama env.sh yang berfungsi sebagai shortcut (pintasan) dan berisi perintah-perintah berikut:</p>
 
 <img width="620" height="78" alt="29_env sh" src="https://github.com/user-attachments/assets/04e078f6-706d-4d16-9ec0-4a3ddb5c8d5d" />
 
 #### Pembahasan
+
+<p align="justify">Berkas ini berisi alias perintah untuk mempercepat pengetikan. dcu dan dcd menjalankan serta menghentikan cluster lewat docker-compose up -d dan docker-compose down, sedangkan dps menampilkan daftar container. Alias dcli menjalankan Ignite CLI sebagai container sementara dari image apacheignite/ignite:3.1.0 dengan opsi --rm (container otomatis dihapus setelah selesai), -it (mode interaktif), dan --network=host (memakai jaringan host sehingga CLI dapat terhubung ke node pada localhost). Variabel LANG dan LC_ALL diatur ke C.UTF-8 agar tampilan karakter benar. Alias dclm sama dengan dcli, tetapi ditambah opsi -v ./sql:/opt/ignite/sql yang memasang folder sql ke dalam container sehingga skrip SQL dapat dijalankan dari dalam CLI. Seperti pada praktik PostgreSQL, alias ini memakai sudo dan sintaks bash, jadi cocok untuk Linux atau WSL, sedangkan pada Windows PowerShell dipakai env.ps1.</p>
 
 ####  Docker Compose
 
@@ -303,11 +312,15 @@ Setelah memastikan bahwa server primary berada dalam kondisi mati (down), langka
 
 #### Pembahasan
 
+<p align="justify">Perintah ini dijalankan dari folder src--ApacheIgnite dan menghasilkan up 12/12. Docker lebih dulu mengunduh (Pulled) image apacheignite/ignite:3.1.0 yang memakan waktu sekitar 71 detik, lalu membuat jaringan ignite3_default, kemudian menjalankan tiga container, yaitu ignite3-node1-1, ignite3-node2-1, dan ignite3-node3-1, masing-masing dalam waktu sekitar 2 detik. Ketiganya berasal dari satu image yang sama dan berada pada jaringan yang sama, sehingga siap dibentuk menjadi satu cluster.</p>
+
 Setelah proses pull image selesai dan docker compose up berhasil dijalankan, status container akan ditampilkan sebagai berikut:
 
 <img width="692" height="86" alt="31_Status_node" src="https://github.com/user-attachments/assets/63e661cd-c8c5-4ed6-a15b-78095a67b72b" />
 
 #### Pembahasan
+
+<p align="justify">Perintah ini menampilkan ketiga container (node1, node2, dan node3) dari image apacheignite/ignite:3.1.0 dengan status Up 3 minutes, sehingga semuanya berjalan stabil. Setiap node dipetakan ke port host yang berbeda agar tidak bentrok: node1 di 10300 dan 10800, node2 di 10301 dan 10801, serta node3 di 10302 dan 10802, sementara port di dalam container tetap sama (10300 dan 10800). Port 10300 dipakai untuk komunikasi dan manajemen node, sedangkan port 10800 untuk koneksi klien. Hasil ini menegaskan bahwa tiga node Ignite sudah aktif, tetapi cluster baru terbentuk setelah proses inisialisasi dijalankan pada tahap berikutnya.</p>
 
 Setiap container yang berjalan di dalam network Docker memiliki IP internal. Untuk mengecek IP dari masing-masing node:
 
@@ -320,6 +333,8 @@ docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ign
 <img width="689" height="90" alt="32_alamat_IP_node" src="https://github.com/user-attachments/assets/20535869-2b35-4c93-a876-0c06d7b25997" />
 
 #### Pembahasan
+
+<p align="justify">Perintah docker inspect dengan filter format dijalankan untuk masing-masing container guna menampilkan alamat IP-nya di jaringan ignite3_default. Hasilnya, ignite3-node1-1 berada di 172.18.0.3, ignite3-node2-1 di 172.18.0.4, dan ignite3-node3-1 di 172.18.0.2. Ketiga node berada pada subnet yang sama sehingga dapat saling berkomunikasi, dan urutan IP-nya tidak sama dengan urutan nomor node karena Docker memberikan alamat berdasarkan urutan container selesai dibuat.</p>
 
 #### Inisialisasi Cluster
 
