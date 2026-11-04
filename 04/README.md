@@ -2,7 +2,7 @@
 
 | | |
 | --- | --- |
-| **Mata Kuliah** | Praktikum Sistem Terdistribusi dan Terdesentralisasi |
+| **Mata Kuliah** | Praktikum Sistem Terdistribusi dan Terdesentralisasi | 
 | **Topik** | Konsistensi dan Replikasi pada Sistem Terdistribusi |
 | **Nama** | Yesaya Mexi Dasalaku |
 | **NIM** | 255410029 | 
