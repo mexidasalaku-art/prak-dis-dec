@@ -1,4 +1,4 @@
-# Praktikum Minggu MODUL 0 - Fault Tolerance
+# Praktikum Minggu MODUL 05 - Fault Tolerance
 
 | | |
 | --- | --- |
