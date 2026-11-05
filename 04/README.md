@@ -24,7 +24,7 @@
 
 #  DASAR TEORI
 
-### Replikasi dan Konsistensi
+### Replikasi dan Konsistensi 
 
 <p align="justify">Menyimpan data di satu mesin berarti satu kerusakan bisa mematikan seluruh layanan. Replikasi menyimpan salinan data di beberapa node agar layanan tetap hidup saat satu node gagal, beban baca terbagi, dan data bisa ditaruh dekat pengguna. Konsekuensinya, semua salinan harus selaras, dan di sinilah model konsistensi berperan. Konsistensi kuat menjamin pembacaan selalu melihat tulisan terakhir, tetapi operasi tulis harus menunggu koordinasi antar node. Konsistensi eventual membolehkan salinan tertinggal sebentar asalkan akhirnya seragam, sehingga lebih cepat namun bisa menampilkan data lama. Menurut teorema CAP, saat jaringan terpisah sistem harus memilih antara tetap konsisten atau tetap tersedia.</p>
 
