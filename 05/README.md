@@ -21,9 +21,44 @@
 
 #  PEMBAHASAN
 
+### Cek Veri Docker
 
-**Gambar 1 – Build dan menjalankan container dengan scaling.** 
-<p align="justify">Perintah `docker compose up --build -d --scale bs_app=2` membangun image dari `Dockerfile` lalu menjalankan seluruh layanan di latar belakang (`-d`). Proses build menarik image dasar `nginx:latest` dan `python:3.13.1-slim`, lalu mengekstrak setiap layer. Pada tahap `server_builder`, sistem memasang paket pendukung lewat `apt-get`, yang memakan waktu paling lama (sekitar 120 detik). Opsi `--scale bs_app=2` membuat dua replika layanan aplikasi sekaligus. Dua replika inilah yang nantinya menerima pembagian beban dari Nginx.</p>
+<img width="400" height="106" alt="01_cek-versi-docker" src="https://github.com/user-attachments/assets/1f0e9654-5f8c-48ab-ba2e-1e2d6c92e938" />
+
+#### Pembahasan
+
+<p align="justify">Pada tahap ini dilakukan pengecekan instalasi Docker dan Docker Compose sebelum membangun sistem. Perintah docker --version menampilkan Docker versi 29.9.2, sedangkan docker compose version menampilkan Docker Compose v5.6.1. Keluaran versi tanpa pesan galat menandakan bahwa keduanya sudah terpasang dengan benar dan siap dipakai untuk membangun image serta menjalankan beberapa container, seperti Nginx dan aplikasi BlackSheep, pada tahap berikutnya.</p>
+
+### Folder Kerja
+
+<img width="425" height="146" alt="02" src="https://github.com/user-attachments/assets/a1f610fe-2e22-4cef-a97b-782383d716d2" />
+
+#### Pembahasan
+
+<p align="justify">Pada tahap ini dibuat folder kerja untuk proyek. Perintah mkdir workspace-05 menampilkan pesan bahwa folder tersebut sudah ada, sehingga tidak dibuat ulang. Perintah cd workspace-05 berhasil memindahkan posisi ke dalam folder itu. Saat cd workspace-05 dijalankan lagi, muncul pesan “The system cannot find the path specified” karena tidak ada folder bernama workspace-05 di dalam workspace-05. Perintah cd tanpa argumen lalu menampilkan direktori aktif, yaitu C:\Users\HP\workspace-05, yang memastikan posisi kerja sudah benar untuk langkah berikutnya.</p>
+
+
+### Daftar Versi python
+
+<img width="951" height="445" alt="03_daftar-versi-python" src="https://github.com/user-attachments/assets/21f5267d-eb6e-4e89-badc-f9c3e1e07fcf" />
+
+#### Pembahasan
+Perintah uv python list dijalankan untuk melihat daftar versi Python yang tersedia dan yang sudah terpasang di komputer. Versi dengan lokasi python.exe berwarna biru sudah terpasang, yaitu CPython 3.15.0, 3.14.8, 3.14.4, dan 3.13.0 (di Laragon). Versi bertanda <download available> belum terpasang tetapi bisa diunduh uv, misalnya CPython 3.12 sampai 3.8, PyPy, dan GraalPy. Daftar ini membantu memilih versi yang tepat untuk proyek sebelum membuat virtual environment. Pada tugas ini dipilih CPython 3.14.4.
+
+###
+###
+###
+###
+###
+###
+###
+###
+###
+###
+###
+###
+###
+###
 
 **Gambar 2 – Struktur proyek.** 
 <p align="justify">Perintah `Get-ChildItem -Force` menampilkan isi folder `blacksheep_lb`, termasuk file tersembunyi. Struktur MVC yang dibuat BlackSheep terdiri dari folder `app` (controller, view, dan konfigurasi aplikasi), `domain` (logika bisnis), dan `tests` (pengujian). File pentingnya adalah `dev.py` sebagai titik masuk server pengembangan, `Dockerfile` untuk membangun image container, `requirements.txt` untuk daftar dependensi, serta `settings.toml` dan `settings.dev.toml` untuk konfigurasi aplikasi. File `.gitignore`, `.dockerignore`, dan `.flake8` dipakai untuk pengelolaan repositori, efisiensi build Docker, dan gaya penulisan kode.</p>
