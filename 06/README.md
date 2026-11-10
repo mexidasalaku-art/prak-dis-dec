@@ -16,7 +16,7 @@
 #  DASAR TEORI
 ---
 
-#  PEMBAHASAN PRAKTIK
+#  PEMBAHASAN
 ## Persyaratan software
 
 ```python
@@ -61,7 +61,7 @@ wget https://archive.apache.org/dist/hadoop/common/hadoop-3.5.0/hadoop-3.5.0.tar
 
 <p align="justify">Pada tahap ini dilakukan konfigurasi awal Apache Hadoop versi 3.5.0 pada Ubuntu melalui terminal. Proses dimulai dengan membuat symbolic link bernama hadoop, kemudian membuat direktori penyimpanan konfigurasi environment dan mengatur variabel HADOOP_HOME serta PATH agar perintah Hadoop dapat dijalankan melalui terminal. Setelah itu, perintah source digunakan untuk memuat konfigurasi tersebut. Ketika perintah hadoop dijalankan, terminal menampilkan daftar perintah dan opsi Hadoop. Namun, masih terdapat peringatan pada konfigurasi here-document yang perlu diperbaiki agar pengaturan environment dapat diterapkan dengan benar.</p>
 
-## 3. engaturan pdsh dan SSH tanpa password
+## 3. Pengaturan pdsh dan SSH tanpa password
 
 <img width="496" height="431" alt="09" src="https://github.com/user-attachments/assets/7f900b42-f60a-49d0-b5fa-b6f97d15f48b" />
 
