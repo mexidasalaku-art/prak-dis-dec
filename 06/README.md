@@ -83,14 +83,38 @@ wget https://archive.apache.org/dist/hadoop/common/hadoop-3.5.0/hadoop-3.5.0.tar
 #### Pembahasan
 
 ## 6. Atur JAVA_HOME
-## 7. Jalankan daemon HDFS
-## 8 
-## 9
-## 10
-##
-##
+<img width="464" height="38" alt="11_6" src="https://github.com/user-attachments/assets/cae6595f-b9fd-4b5a-a283-62ec56e9afe0" />
 
+#### Pembahasan
+
+
+## 7. Jalankan daemon HDFS
+<img width="461" height="192" alt="12-7" src="https://github.com/user-attachments/assets/ca6ded01-708e-4526-a266-fe2373ff94b1" />
+
+#### Pembahasan
+
+<img width="659" height="457" alt="13-7" src="https://github.com/user-attachments/assets/5f5f3d12-c4fa-45ba-ac37-7864a6ca76ba" />
+
+#### Pembahasan
+
+
+---
 #  TUGAS
+## Contoh operasi dan TUGAS
+<img width="391" height="91" alt="16-tugas" src="https://github.com/user-attachments/assets/bb1ba96e-2d48-40fc-9247-b46124dcd248" />
+
+#### Pembahasan
+
+## 1. Buat direktori datasets
+<img width="307" height="29" alt="17_t1" src="https://github.com/user-attachments/assets/7830b731-3eb6-44a6-86a5-b4a15f6bcf32" />
+
+#### Pembahasan
+
+## 2. Unduh 3 CSV dan salin ke HDFS
+<img width="569" height="469" alt="18" src="https://github.com/user-attachments/assets/36b05266-9f14-40d8-ad0a-b602b2593a18" />
+<img width="480" height="116" alt="19-t2" src="https://github.com/user-attachments/assets/661b23cb-165b-484d-92bd-f43656462d44" />
+
+#### Pembahasan
 
 ---
 # KESIMPULAN
