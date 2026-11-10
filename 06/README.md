@@ -1,4 +1,3 @@
-<img width="666" height="466" alt="05" src="https://github.com/user-attachments/assets/f6b694c5-9b66-4602-bb35-545f4ad94386" /># Praktikum Minggu MODUL 04 - Konsistensi dan Replikasi pada Sistem Terdistribusi
 
 | | |
 | --- | --- |
