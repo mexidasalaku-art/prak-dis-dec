@@ -67,8 +67,21 @@ wget https://archive.apache.org/dist/hadoop/common/hadoop-3.5.0/hadoop-3.5.0.tar
 
 #### Pembahasan
 
+<p align="justify">Pada tahap ini dilakukan konfigurasi lanjutan SSH untuk mendukung proses komunikasi pada Apache Hadoop. Perintah echo digunakan untuk menambahkan konfigurasi Hadoop ke file .bashrc agar dapat dimuat secara otomatis ketika terminal dibuka. Selanjutnya, layanan SSH dijalankan menggunakan perintah sudo service ssh start, kemudian konfigurasi koneksi diperiksa menggunakan pdsh -q -w localhost. Setelah itu, dilakukan pengujian koneksi dengan perintah ssh localhost. Hasilnya menampilkan pesan Welcome to Ubuntu 26.04.1 LTS, yang menunjukkan bahwa layanan SSH dan koneksi ke localhost berhasil berjalan.</p>
+
 ## 4. Konfigurasi Hadoop
+
+<img width="496" height="431" alt="09" src="https://github.com/user-attachments/assets/7f900b42-f60a-49d0-b5fa-b6f97d15f48b" />
+
+#### Pembahasan
+
+<p align="justify">Pada tahap ini dilakukan konfigurasi SSH (Secure Shell) untuk Apache Hadoop agar komunikasi antarproses Hadoop dapat berjalan tanpa perlu memasukkan password secara berulang. Proses dimulai dengan membuat SSH key menggunakan perintah ssh-keygen, kemudian menambahkan public key ke file authorized_keys dan mengatur hak akses menggunakan perintah chmod 0600. Selanjutnya, dilakukan pengujian koneksi menggunakan perintah ssh localhost. Hasilnya menunjukkan pesan Welcome to Ubuntu 26.04.1 LTS, yang menandakan bahwa koneksi SSH ke localhost berhasil dilakukan tanpa memasukkan password.</p>
+
 ## 5. Format NameNode
+<img width="457" height="77" alt="10-langkah-5" src="https://github.com/user-attachments/assets/9769e4b8-2c21-4582-94b9-ae92b6f06c23" />
+
+#### Pembahasan
+
 ## 6. Atur JAVA_HOME
 ## 7. Jalankan daemon HDFS
 ## 8 
