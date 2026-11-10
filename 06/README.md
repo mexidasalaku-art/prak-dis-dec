@@ -105,9 +105,13 @@ wget https://archive.apache.org/dist/hadoop/common/hadoop-3.5.0/hadoop-3.5.0.tar
 
 #### Pembahasan
 
+<p align="justify">Pada tahap ini dilakukan pemeriksaan Hadoop melalui halaman web NameNode dengan mengakses localhost:9870. Halaman Overview menampilkan status NameNode yang aktif (active), versi Hadoop 3.5.0, Cluster ID, serta informasi kapasitas penyimpanan HDFS. Pada bagian Summary terlihat bahwa sistem memiliki kapasitas sebesar 1,73 GB dengan penggunaan penyimpanan sebesar 8 KB. Hal ini menunjukkan bahwa layanan NameNode berhasil berjalan dan sistem HDFS dapat diakses melalui browser.</p>
+
 <img width="659" height="457" alt="13-7" src="https://github.com/user-attachments/assets/5f5f3d12-c4fa-45ba-ac37-7864a6ca76ba" />
 
 #### Pembahasan
+
+<p align="justify">Pada tahap ini dilakukan proses menjalankan layanan Hadoop menggunakan perintah start-dfs.sh setelah mengaktifkan layanan SSH. Namun, terminal menampilkan pesan bahwa proses NameNode, DataNode, dan SecondaryNameNode sudah berjalan sehingga tidak dapat dijalankan kembali. Selanjutnya, perintah jps digunakan untuk memeriksa proses Java yang aktif dan menampilkan NameNode, DataNode, SecondaryNameNode, serta Jps. Hal ini menunjukkan bahwa komponen utama HDFS Hadoop sudah berjalan.</p>
 
 
 ---
