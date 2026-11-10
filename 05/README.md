@@ -1,7 +1,7 @@
 # Praktikum Minggu MODUL 05 - Fault Tolerance
 
 | | |
-| --- | --- |
+| --- | --- | 
 | **Mata Kuliah** | Praktikum Sistem Terdistribusi dan Terdesentralisasi |
 | **Topik** | Fault Tolerance |
 | **Nama** | Yesaya Mexi Dasalaku |
