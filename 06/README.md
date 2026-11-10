@@ -48,9 +48,13 @@ wget https://archive.apache.org/dist/hadoop/common/hadoop-3.5.0/hadoop-3.5.0.tar
 
 #### Pembahasan
 
+<p align="justify">Pada tahap ini dilakukan pencarian dan pemilihan versi Apache Hadoop melalui website resmi Apache Hadoop. Berdasarkan tampilan halaman download, versi yang digunakan adalah Hadoop 3.5.0 dengan tanggal rilis 2 April 2026. Halaman tersebut menyediakan pilihan unduhan berupa source code dan binary download. Versi 3.5.0 dipilih sebagai perangkat lunak yang akan digunakan dalam praktikum pengolahan data terdistribusi.</p>
+
 <img width="917" height="409" alt="04" src="https://github.com/user-attachments/assets/db8b5826-ba91-4bd2-85f6-1ff9fa652899" />
 
 #### Pembahasan
+
+<p align="justify">Pada tahap ini dilakukan pengunduhan file Apache Hadoop versi 3.5.0 melalui terminal Ubuntu menggunakan perintah wget dari server resmi Apache. File yang diunduh bernama hadoop-3.5.0.tar.gz dengan ukuran sekitar 554 MB. Proses pengunduhan berhasil diselesaikan hingga mencapai 100% dan menampilkan status saved, yang menunjukkan bahwa file Hadoop telah berhasil tersimpan dan siap digunakan untuk proses instalasi selanjutnya.</p>
 
 
 
