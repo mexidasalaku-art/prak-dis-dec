@@ -12,11 +12,22 @@
 
 #  TUJUAN PRAKTIKUM
 
+- Mengetahui konsep dasar Distributed File System serta memahami fungsi HDFS dalam mengelola dan menyimpan data berukuran besar.
+- Mempelajari proses instalasi dan persiapan lingkungan Apache Hadoop 3.5.0 dengan dukungan JDK, SSH, dan pdsh.
+- Memahami dan menerapkan konfigurasi Hadoop melalui file core-site.xml, hdfs-site.xml, mapred-site.xml, dan yarn-site.xml.
+- Melakukan proses inisialisasi NameNode serta menjalankan dan memantau layanan Hadoop melalui daemon HDFS.
+- Mempraktikkan penggunaan perintah HDFS untuk membuat direktori, mengunggah file, melihat isi direktori, dan memeriksa data yang tersimpan.
 
 ---
 #  DASAR TEORI
----
 
+<p align="justify">Sistem file terdistribusi (Distributed File System) merupakan sistem penyimpanan yang memungkinkan data disimpan pada beberapa komputer atau node yang saling terhubung melalui jaringan. Sistem ini memudahkan pengguna dalam mengakses data seolah-olah berada pada satu tempat serta memungkinkan kapasitas penyimpanan diperluas sesuai kebutuhan. Salah satu teknologi yang menerapkan konsep tersebut adalah Hadoop Distributed File System (HDFS), yang dirancang untuk menyimpan dan mengelola data berukuran besar dalam lingkungan big data. HDFS menggunakan arsitektur master–worker yang terdiri dari NameNode sebagai pengelola metadata, DataNode sebagai tempat penyimpanan blok data, dan Secondary NameNode yang membantu proses pembuatan checkpoint metadata secara berkala.</p>
+
+<p align="justify">Dalam proses penyimpanan, HDFS membagi file menjadi beberapa blok dengan ukuran standar 128 MB. Setiap blok dapat memiliki beberapa salinan (replication) yang ditempatkan pada DataNode berbeda untuk menjaga keamanan dan ketersediaan data apabila terjadi gangguan. NameNode memantau kondisi DataNode melalui mekanisme heartbeat dan block report. HDFS juga menerapkan konsep write once, read many, yaitu file umumnya ditulis satu kali dan dapat dibaca berulang kali. Karakteristik ini membuat HDFS cocok digunakan untuk pengolahan data berukuran besar, meskipun kurang optimal untuk menangani banyak file kecil atau aplikasi yang membutuhkan perubahan data secara terus-menerus.</p>
+
+<p align="justify">Pengelolaan HDFS dapat dilakukan melalui FileSystem Shell menggunakan perintah hdfs dfs, seperti -ls, -mkdir, -put, -get, dan -rm. Selain itu, Hadoop menyediakan Web UI pada port 9870 untuk memantau kondisi NameNode, DataNode, dan kapasitas penyimpanan. Pada praktikum ini, Hadoop dijalankan dalam mode pseudo-distributed, yaitu seluruh komponen Hadoop berjalan pada satu komputer sebagai proses terpisah yang saling berkomunikasi melalui jaringan lokal. Konfigurasi dilakukan melalui beberapa file XML, yaitu core-site.xml, hdfs-site.xml, mapred-site.xml, dan yarn-site.xml. YARN juga digunakan untuk mengatur sumber daya sistem agar aplikasi pengolahan data seperti MapReduce dapat dijalankan dalam lingkungan Hadoop.</p>
+
+---
 #  PEMBAHASAN
 ## Persyaratan software
 
@@ -142,6 +153,16 @@ wget https://archive.apache.org/dist/hadoop/common/hadoop-3.5.0/hadoop-3.5.0.tar
 ---
 # KESIMPULAN
 
+<p align="justify">Berdasarkan praktikum yang telah dilakukan, dapat disimpulkan bahwa Apache Hadoop dapat dikonfigurasi dan dioperasikan pada satu komputer dengan menggunakan mode pseudo-distributed. Proses persiapan lingkungan, pengaturan file konfigurasi, serta pengaktifan layanan menjadi bagian penting untuk memastikan setiap komponen Hadoop dapat berfungsi dengan baik. Pengaturan jumlah replikasi juga dapat disesuaikan dengan kondisi dan kebutuhan sistem yang digunakan.</p>
+<p align="justify">Melalui praktikum ini, penggunaan HDFS dapat dipahami melalui berbagai operasi penyimpanan, mulai dari membuat direktori, memasukkan dataset, hingga memeriksa file yang tersimpan melalui terminal dan Web UI. Selain itu, praktikum memberikan pemahaman mengenai pembagian tugas NameNode dalam mengelola metadata dan DataNode dalam menyimpan blok data. Pengetahuan tersebut menjadi bekal untuk mempelajari proses pengolahan data dalam lingkungan terdistribusi menggunakan teknologi Hadoop, khususnya MapReduce.</p>
+
 ---
 # REFERENSI
+
+- Apache Software Foundation. Apache Hadoop 3.5.0 Documentation. https://hadoop.apache.org/docs/current/
+- Apache Software Foundation. HDFS Architecture Guide. https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html
+- Apache Software Foundation. FileSystem Shell. https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/FileSystemShell.html
+- Apache Software Foundation. Apache Hadoop Releases. https://hadoop.apache.org/releases.html
+- chaos. pdsh – Parallel Distributed Shell. https://github.com/chaos/pdsh
+- Oracle. Java SE 17 Documentation. https://docs.oracle.com/en/java/javase/17/
 
