@@ -82,6 +82,8 @@ wget https://archive.apache.org/dist/hadoop/common/hadoop-3.5.0/hadoop-3.5.0.tar
 
 #### Pembahasan
 
+<p align="justify">Pada tahap ini dilakukan konfigurasi beberapa file XML Hadoop, yaitu hdfs-site.xml, core-site.xml, mapred-site.xml, dan yarn-site.xml menggunakan perintah cat. Konfigurasi tersebut bertujuan untuk mengatur replikasi HDFS, menentukan alamat NameNode pada localhost:9000, mengatur framework MapReduce menggunakan YARN, serta mengatur layanan dan kapasitas sumber daya NodeManager. Dengan konfigurasi ini, Hadoop dipersiapkan agar komponen HDFS, MapReduce, dan YARN dapat saling terhubung dan berjalan dengan baik.</p>
+
 
 ## 5. Format NameNode
 <img width="457" height="77" alt="10-langkah-5" src="https://github.com/user-attachments/assets/9769e4b8-2c21-4582-94b9-ae92b6f06c23" />
