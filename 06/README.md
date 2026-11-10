@@ -71,7 +71,8 @@ wget https://archive.apache.org/dist/hadoop/common/hadoop-3.5.0/hadoop-3.5.0.tar
 
 
 ## 4. Konfigurasi Hadoop
-
+<img width="639" height="469" alt="14-4" src="https://github.com/user-attachments/assets/0eb07402-05e2-49ca-b4e0-0c80cc5ed82e" />
+<img width="797" height="186" alt="15-4" src="https://github.com/user-attachments/assets/ffdc2809-8654-4527-b8e1-d99296f5928a" />
 
 #### Pembahasan
 
