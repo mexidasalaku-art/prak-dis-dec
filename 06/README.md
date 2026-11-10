@@ -63,6 +63,10 @@ wget https://archive.apache.org/dist/hadoop/common/hadoop-3.5.0/hadoop-3.5.0.tar
 
 ## 3. engaturan pdsh dan SSH tanpa password
 
+<img width="487" height="455" alt="07" src="https://github.com/user-attachments/assets/9049fa43-e093-4348-b581-9184d7bd0ba2" />
+
+#### Pembahasan
+
 ## 4. Konfigurasi Hadoop
 ## 5. Format NameNode
 ## 6. Atur JAVA_HOME
