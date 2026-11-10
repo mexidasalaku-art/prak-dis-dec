@@ -2,7 +2,7 @@
 | | |
 | --- | --- |
 | **Mata Kuliah** | Praktikum Sistem Terdistribusi dan Terdesentralisasi | 
-| **Topik** | Konsistensi dan Replikasi pada Sistem Terdistribusi |
+| **Topik** | Distributed File System - HDFS |
 | **Nama** | Yesaya Mexi Dasalaku |
 | **NIM** | 255410029 | 
 | **Kelas** | IF-1 |
