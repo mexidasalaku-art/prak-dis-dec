@@ -90,10 +90,14 @@ wget https://archive.apache.org/dist/hadoop/common/hadoop-3.5.0/hadoop-3.5.0.tar
 
 #### Pembahasan
 
+<p align="justify">Pada tahap ini dilakukan pemeriksaan versi Java menggunakan perintah java -version dan hasilnya menunjukkan bahwa OpenJDK 17 berhasil terpasang. Selanjutnya, perintah hdfs namenode -format dijalankan untuk memformat NameNode Hadoop, tetapi proses belum berhasil karena NameNode masih berjalan. Oleh karena itu, proses NameNode perlu dihentikan terlebih dahulu sebelum melakukan format ulang.</p>
+
 ## 6. Atur JAVA_HOME
 <img width="464" height="38" alt="11_6" src="https://github.com/user-attachments/assets/cae6595f-b9fd-4b5a-a283-62ec56e9afe0" />
 
 #### Pembahasan
+
+<p align="justify">Pada tahap ini dilakukan pemeriksaan folder instalasi JDK menggunakan perintah ls /usr/lib/jvm/ untuk mengetahui lokasi Java OpenJDK yang tersedia. Selanjutnya, variabel JAVA_HOME ditambahkan ke file hadoop-env.sh menggunakan perintah echo agar Hadoop dapat mengenali lokasi instalasi Java sebagai lingkungan yang dibutuhkan untuk menjalankan Hadoop.</p>
 
 
 ## 7. Jalankan daemon HDFS
