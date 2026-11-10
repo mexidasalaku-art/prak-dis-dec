@@ -121,16 +121,23 @@ wget https://archive.apache.org/dist/hadoop/common/hadoop-3.5.0/hadoop-3.5.0.tar
 
 #### Pembahasan
 
+<p align="justify">Pada tahap ini dilakukan pembuatan direktori pengguna pada HDFS menggunakan perintah hdfs dfs -mkdir -p /user/$USER. Selanjutnya, perintah hdfs dfs -ls / digunakan untuk memeriksa direktori utama dan memastikan folder /user berhasil dibuat. Pemeriksaan dilanjutkan menggunakan hdfs dfs -ls /user yang menampilkan direktori /user/yesaya. Hal ini menunjukkan bahwa direktori pengguna berhasil dibuat di dalam sistem penyimpanan Hadoop Distributed File System (HDFS).</p>
+
 ## 1. Buat direktori datasets
 <img width="307" height="29" alt="17_t1" src="https://github.com/user-attachments/assets/7830b731-3eb6-44a6-86a5-b4a15f6bcf32" />
 
 #### Pembahasan
+
+<p align="justify">Pada tahap ini dilakukan pembuatan direktori datasets di dalam direktori pengguna HDFS menggunakan perintah hdfs dfs -mkdir -p /user/$USER/datasets. Selanjutnya, perintah hdfs dfs -ls /user/$USER digunakan untuk memeriksa isi direktori pengguna. Hasil pemeriksaan menunjukkan satu item, yang menandakan bahwa direktori datasets berhasil dibuat dan siap digunakan untuk menyimpan data pada HDFS.</p>
+
 
 ## 2. Unduh 3 CSV dan salin ke HDFS
 <img width="569" height="469" alt="18" src="https://github.com/user-attachments/assets/36b05266-9f14-40d8-ad0a-b602b2593a18" />
 <img width="480" height="116" alt="19-t2" src="https://github.com/user-attachments/assets/661b23cb-165b-484d-92bd-f43656462d44" />
 
 #### Pembahasan
+
+<p align="justify">Pada tahap ini dilakukan pengunduhan tiga dataset, yaitu iris.csv, tips.csv, dan titanic.csv dari GitHub menggunakan perintah wget ke direktori ~/csv. Setelah proses pengunduhan berhasil, perintah ls -lh digunakan untuk memeriksa file yang telah tersimpan. Selanjutnya, ketiga dataset diunggah ke Hadoop Distributed File System (HDFS) menggunakan perintah hdfs dfs -put ke direktori /user/$USER/datasets/. Pemeriksaan menggunakan perintah hdfs dfs -ls menunjukkan bahwa ketiga file berhasil disimpan di HDFS dan siap digunakan untuk proses pengolahan data menggunakan Hadoop.</p>
 
 ---
 # KESIMPULAN
