@@ -20,7 +20,7 @@
 #  PEMBAHASAN
 ### source
 
-### 1. p
+### 1. Membuat env Python 3.14.4
 
 Salin satu persatu kode dibawah ini:
 
@@ -36,11 +36,14 @@ python --version
 #### Pembahasan
 
 
-###
-###
-###
-###
-###
+### 2. Install Paket yang Diperlukan
+#### Pembahasan
+### 3. Buat Aplikasi Menjadi CA - Docker
+#### Pembahasan
+### 4. Menjalankan Image
+#### Pembahasan
+### 5. Buat Aplikasi Menjadi CA - Podman
+#### Pembahasan
 ###
 ###
 ###
