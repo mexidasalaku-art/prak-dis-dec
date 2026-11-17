@@ -71,21 +71,130 @@ flask --app flaskr run
 
 #### Pembahasan
 
-
 ### 3. Buat Aplikasi Menjadi CA - Docker
+
+Buat Dockerfile
+
+```python
+(
+echo FROM python:3.14
+echo.
+echo RUN mkdir /app
+echo WORKDIR /app
+echo ADD . /app/
+echo RUN pip install -e .
+echo RUN flask --app flaskr init-db
+echo.
+echo EXPOSE 5000
+echo CMD ["flask", "--app", "flaskr", "run", "--host=0.0.0.0", "--port=5000"]
+) > Dockerfile
+```
+
+<img width="516" height="149" alt="10_Buat_Dockerfile" src="https://github.com/user-attachments/assets/ea31eeaa-b072-4848-92e0-f807c1b7c748" />
+
 #### Pembahasan
+
+Buat .dockerignore, supaya .venv Windows tidak ikut masuk ke image Linux:
+
+```python
+(
+echo .venv
+echo __pycache__
+echo instance
+echo *.pyc
+) > .dockerignore
+```
+
+<img width="372" height="84" alt="11_Buat_dockerignore" src="https://github.com/user-attachments/assets/6f6760f7-8eaf-4f4c-91fa-14be85090911" />
+
+#### Pembahasan
+
+Cek isinya
+
+```python
+type Dockerfile
+```
+
+<img width="447" height="139" alt="12_Cek_Isi" src="https://github.com/user-attachments/assets/7c3f2221-8669-4084-a701-6a8dac8cd246" />
+
+#### Pembahasan
+
+Build dan cek image
+
+```python
+docker build -f Dockerfile -t flaskr:1.0.0 .
+docker image ls
+```
+
+<img width="469" height="290" alt="13_Build" src="https://github.com/user-attachments/assets/6f5e70cb-ce54-40c6-a05b-090caddab88f" />
+
+#### Pembahasan
+
+<img width="472" height="131" alt="14_Cek_Image" src="https://github.com/user-attachments/assets/506c0d48-ad76-41c3-b743-36ed79340b59" />
+
+#### Pembahasan
+
 ### 4. Menjalankan Image
+
+```python
+docker run -p 5001:5000 flaskr:1.0.0
+```
+
+<img width="716" height="141" alt="15_jalankan" src="https://github.com/user-attachments/assets/ee3a4215-e495-4121-b6e3-f6be0b2f85f3" />
+
 #### Pembahasan
+
+<img width="464" height="102" alt="16_Tampilan_hasil" src="https://github.com/user-attachments/assets/22bb2240-b86d-4188-a7d1-205aa498bf65" />
+
+#### Pembahasan
+
 ### 5. Buat Aplikasi Menjadi CA - Podman
+Podman
+
+```python
+winget install --id RedHat.Podman -e
+```
+
+<img width="461" height="122" alt="17_Podman" src="https://github.com/user-attachments/assets/f294ff80-3424-48b7-a7c3-1d7b51bab855" />
+
 #### Pembahasan
-###
-###
-###
 
+```python
+podman build -f Dockerfile -t flaskr:1.0.0 .
+```
 
+<img width="779" height="453" alt="18" src="https://github.com/user-attachments/assets/530943e2-8884-4daa-950d-173ba734cabd" />
 
----
-#  TUGAS
+<img width="956" height="339" alt="19" src="https://github.com/user-attachments/assets/982a8bee-17d1-4a18-a8ab-f808ca92c7e2" />
+
+#### Pembahasan
+
+```python
+podman image ls
+```
+
+<img width="494" height="81" alt="20" src="https://github.com/user-attachments/assets/32cffcdd-b597-4469-8cee-9b2a122f170c" />
+
+#### Pembahasan
+
+```python
+podman run -p 5001:5000 flaskr:1.0.0
+```
+
+<img width="713" height="116" alt="21" src="https://github.com/user-attachments/assets/236063e8-5ae9-4a98-b840-21f0fcad7b26" />
+
+#### Pembahasan
+
+Buka http://127.0.0.1:5001. Jika Podman menanyakan registry untuk python:3.14, pilih docker.io.
+
+<img width="472" height="106" alt="22" src="https://github.com/user-attachments/assets/a615ea9e-0ab7-414d-aae1-0e18a728697d" />
+
+#### Pembahasan
+
+<img width="717" height="170" alt="23" src="https://github.com/user-attachments/assets/5161585b-3d6b-4163-94b5-cf7b6bcbce38" />
+
+#### Pembahasan
+
 
 ---
 # KESIMPULAN
