@@ -192,6 +192,8 @@ winget install --id RedHat.Podman -e
 
 #### Pembahasan
 
+<p align="justify">Saya menjalankan winget install RedHat.Podman untuk memasang Podman, yaitu alternatif Docker dari Red Hat yang perintahnya hampir sama, tetapi winget melaporkan bahwa paket tersebut sudah terpasang sebelumnya. Karena itu winget otomatis mencoba memperbaruinya, lalu menampilkan “No available upgrade found” dan “No newer package versions are available”, artinya Podman yang ada sudah versi terbaru dan tidak ada yang perlu diunduh atau diubah. Perhatikan juga bahwa prompt di sini sudah tidak memakai prefiks (flask-app), jadi virtual environment tidak aktif, tetapi hal itu tidak berpengaruh karena Podman adalah aplikasi sistem. Langkah selanjutnya adalah menyiapkan mesin virtualnya dengan podman machine init dan podman machine start, lalu mengecek instalasi dengan podman --version sebelum membangun image Flaskr memakai Dockerfile yang sama lewat podman build -t flaskr:1.0.0 .</p>
+
 ```python
 podman build -f Dockerfile -t flaskr:1.0.0 .
 ```
@@ -202,6 +204,9 @@ podman build -f Dockerfile -t flaskr:1.0.0 .
 
 #### Pembahasan
 
+<p align="justify">Saya menjalankan podman build -f Dockerfile -t flaskr:1.0.0 . dari terminal dengan prefiks (venv), dan Podman membangun image dalam 8 langkah (lebih banyak dari Docker yang menampilkan 6 karena Podman juga menghitung FROM, EXPOSE, dan CMD). Langkah 2 dan 3 (mkdir dan WORKDIR) memakai cache karena sudah pernah dijalankan, lalu ADD . /app/ menyalin proyek dan pip install -e . membangun aplikasi sambil mengunduh Flask beserta dependensinya (blinker, click, itsdangerous, jinja2, markupsafe, werkzeug). Pemasangan berhasil, dengan peringatan bahwa pip dijalankan sebagai root (wajar di dalam container) dan pemberitahuan versi pip baru yang bisa diabaikan. Setelah itu flask --app flaskr init-db menampilkan “Initialized the database”, EXPOSE 5000 dan CMD ditetapkan, dan image di-commit lalu diberi tag localhost/flaskr:1.0.0 dengan ID e2c6d8afb7c7, sehingga build dengan Podman berhasil dan hasilnya sama dengan build Docker sebelumnya.</p>
+
+
 ```python
 podman image ls
 ```
@@ -209,6 +214,8 @@ podman image ls
 <img width="494" height="81" alt="20" src="https://github.com/user-attachments/assets/32cffcdd-b597-4469-8cee-9b2a122f170c" />
 
 #### Pembahasan
+
+<p align="justify">Saya menjalankan podman image ls untuk memastikan hasil build tadi tersimpan, dan image localhost/flaskr dengan tag 1.0.0 muncul paling atas dengan ID e2c6d8afb7c7, dibuat 33 detik yang lalu, dan berukuran 1,18 GB, cocok dengan ID yang tercetak di akhir proses build sebelumnya. Di bawahnya ada dua image tanpa nama dan tag (<none>) yang merupakan sisa build lama (14 menit dan 5 hari lalu, masing-masing 1,16 GB), yaitu image yang namanya diambil alih oleh build terbaru sehingga tersisa tanpa label dan bisa dibersihkan dengan podman image prune bila ingin menghemat ruang. Baris terakhir adalah image dasar docker.io/library/python tag 3.14 (1,14 GB) yang diunduh dari Docker Hub dan dipakai pada instruksi FROM, sehingga ukuran image Flaskr hanya bertambah sekitar 40 MB dari image dasarnya. Image ini siap dijalankan dengan podman run -p 5001:5000 localhost/flaskr:1.0.0.</p>
 
 ```python
 podman run -p 5001:5000 flaskr:1.0.0
@@ -218,15 +225,23 @@ podman run -p 5001:5000 flaskr:1.0.0
 
 #### Pembahasan
 
+<p align="justify">Saya menjalankan podman run -p 5001:5000 flaskr:1.0.0 dan container berhasil hidup: Flask melayani aplikasi flaskr pada port 5000 di dalam container, sedangkan opsi -p 5001:5000 memetakannya ke port 5001 di komputer saya, sehingga aplikasinya dibuka lewat http://localhost:5001. Baris “Running on all addresses (0.0.0.0)” muncul karena CMD memakai --host=0.0.0.0, dan alamat 192.168.116.184:5000 adalah IP internal container di jaringan Podman (berbeda dari Docker yang tadi menampilkan 172.17.0.2, karena Podman di Windows berjalan di dalam mesin virtual dengan jaringannya sendiri). Berbeda dengan log Docker, di sini belum ada baris permintaan GET karena browser belum membuka halaman, jadi log baru akan bertambah setelah alamat tersebut diakses. Peringatan merah tetap sama, yaitu server ini khusus pengembangan dan untuk produksi sebaiknya memakai Gunicorn atau Waitress, dan terminal akan terus “tertahan” selama container berjalan sampai dihentikan dengan CTRL+C.</p>
+
+
 Buka http://127.0.0.1:5001. Jika Podman menanyakan registry untuk python:3.14, pilih docker.io.
 
 <img width="472" height="106" alt="22" src="https://github.com/user-attachments/assets/a615ea9e-0ab7-414d-aae1-0e18a728697d" />
 
 #### Pembahasan
 
+<p align="justify">Ini tampilan halaman utama Flaskr yang saya buka dari container Podman lewat http://localhost:5001, dan aplikasinya berhasil tampil dengan benar. Header masih menampilkan tautan Register dan Log In, bukan nama pengguna, karena database di dalam container ini dibuat baru saat build image, sehingga tidak ada akun dari server lokal maupun container Docker sebelumnya. Daftar post juga masih kosong dan tautan New belum muncul karena saya belum login. Tampilannya identik dengan hasil di Docker, yang membuktikan bahwa Dockerfile yang sama bisa dibangun dan dijalankan di Docker maupun Podman dengan hasil yang konsisten.</p>
+
+
 <img width="717" height="170" alt="23" src="https://github.com/user-attachments/assets/5161585b-3d6b-4163-94b5-cf7b6bcbce38" />
 
 #### Pembahasan
+
+<p align="justify">Ini log container Podman yang sama seperti sebelumnya, tetapi sekarang sudah terisi catatan permintaan setelah saya membuka http://localhost:5001 di browser. Permintaan pertama, GET / dengan status 200, menandakan halaman utama berhasil dimuat, disusul style.css (200) yang menampilkan tampilan halaman, sedangkan favicon.ico bernilai 404 karena aplikasi belum punya ikon situs, jadi itu bukan error yang perlu dikhawatirkan. Permintaan kedua pada pukul 18:44:32 (saya memuat ulang halaman) menunjukkan style.css berstatus 304, artinya browser memakai versi cache karena file tidak berubah. Semua permintaan tercatat berasal dari 192.168.116.184, yaitu alamat gateway jaringan Podman (mesin virtual tempat Podman berjalan di Windows), bukan alamat browser saya secara langsung, sama seperti 172.17.0.1 pada log Docker tadi. Ini membuktikan container Podman benar-benar melayani permintaan dari browser dan aplikasi Flaskr berjalan baik di Podman.</p>
 
 
 ---
