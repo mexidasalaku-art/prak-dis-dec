@@ -48,6 +48,8 @@ uv pip install -e .
 
 #### Pembahasan
 
+<p align="justify">Perintah uv pip install -e . berhasil memasang proyek flaskr Anda dalam mode editable (-e), artinya paket dipasang sebagai tautan ke folder proyek sehingga setiap perubahan pada kode langsung berlaku tanpa perlu instal ulang. uv me-resolve 8 paket dalam 2,27 detik, membangun flaskr versi 1.0.0 dari folder lokal, lalu memasang semuanya dalam 157 ms: selain flaskr sendiri, terpasang flask 3.1.3 beserta dependensinya, yaitu werkzeug (penangan WSGI dan routing), jinja2 (mesin template), click (antarmuka perintah CLI), itsdangerous (penandatanganan data seperti session), markupsafe (pengamanan teks pada template), dan blinker (sistem sinyal/event). Dengan begitu, aplikasi Flask Anda sudah siap dijalankan, misalnya dengan flask --app flaskr run --debug.</p>
+
 ```python
 flask --app flaskr init-db
 flask --app flaskr run
@@ -56,6 +58,8 @@ flask --app flaskr run
 <img width="725" height="97" alt="05_flask" src="https://github.com/user-attachments/assets/201dd2a5-3a7a-4116-9ec5-bd795ef16741" />
 
 #### Pembahasan
+
+<p align="justify">Perintah flask --app flaskr init-db berhasil membuat dan menginisialisasi database aplikasi (ditandai pesan “Initialized the database”), biasanya dengan menjalankan skema SQL yang menghasilkan file SQLite di folder instance. Setelah itu, flask --app flaskr run menjalankan aplikasi flaskr pada server pengembangan bawaan Flask yang dapat diakses di http://127.0.0.1:5000 (localhost, port 5000), sehingga Anda bisa membukanya lewat browser. Pesan Debug mode: off berarti mode debug tidak aktif, jadi server tidak akan memuat ulang otomatis saat kode diubah dan tidak menampilkan debugger interaktif jika terjadi error; untuk pengembangan, tambahkan --debug. Peringatan berwarna merah hanyalah pengingat bahwa server ini khusus untuk pengembangan, bukan untuk produksi, yang seharusnya memakai server WSGI seperti Gunicorn atau Waitress.</p>
 
 <img width="463" height="215" alt="06_Register" src="https://github.com/user-attachments/assets/2ceee64f-b120-4c8d-8ea8-0870ae772540" />
 
