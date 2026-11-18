@@ -111,6 +111,8 @@ echo CMD ["flask", "--app", "flaskr", "run", "--host=0.0.0.0", "--port=5000"]
 
 #### Pembahasan
 
+<p align="justify">Di sini saya membuat file Dockerfile langsung dari Command Prompt dengan memakai blok ( ... ) > Dockerfile, di mana setiap perintah echo menulis satu baris isi file tersebut, dan echo. menghasilkan baris kosong sebagai pemisah. Isinya menyusun image untuk aplikasi Flaskr: dimulai dari image dasar python:3.14, membuat dan menetapkan /app sebagai direktori kerja, menyalin seluruh isi proyek ke dalamnya dengan ADD . /app/, lalu menjalankan pip install -e . untuk memasang aplikasi beserta dependensinya dan flask --app flaskr init-db untuk menyiapkan database di dalam image. Baris EXPOSE 5000 menandai port yang dipakai aplikasi, dan CMD menjalankan Flask dengan --host=0.0.0.0 agar server bisa diakses dari luar container (bukan hanya dari localhost di dalam container), sehingga nanti image ini bisa dibangun dengan docker build -t flaskr . dan dijalankan dengan docker run -p 5000:5000 flaskr.</p>
+
 Buat .dockerignore, supaya .venv Windows tidak ikut masuk ke image Linux:
 
 ```python
@@ -126,6 +128,8 @@ echo *.pyc
 
 #### Pembahasan
 
+<p align="justify">Di langkah ini saya membuat file .dockerignore dengan cara yang sama seperti Dockerfile tadi, yaitu blok ( ... ) > .dockerignore yang menulis satu entri per baris. Isinya empat hal yang sengaja tidak ikut disalin ke image saat perintah ADD . /app/ berjalan: folder .venv (virtual environment lokal yang tidak cocok dibawa ke container karena path dan platformnya berbeda, ditambah ukurannya besar), __pycache__ dan *.pyc (file cache bytecode Python yang dibuat otomatis dan tidak perlu disalin), serta folder instance yang berisi database SQLite lokal saya. Dengan begitu, image menjadi lebih kecil, proses build lebih cepat, dan database di dalam container dibuat bersih lewat flask --app flaskr init-db pada Dockerfile, bukan membawa data akun dari komputer saya.</p>
+
 Cek isinya
 
 ```python
@@ -135,6 +139,8 @@ type Dockerfile
 <img width="447" height="139" alt="12_Cek_Isi" src="https://github.com/user-attachments/assets/7c3f2221-8669-4084-a701-6a8dac8cd246" />
 
 #### Pembahasan
+
+<p align="justify">Di sini saya menjalankan type Dockerfile untuk mengecek isi file yang tadi dibuat lewat blok echo, dan hasilnya sudah sesuai: semua baris tertulis rapi, dengan baris kosong tepat di tempat echo. dipakai sebagai pemisah. Isinya berurutan dari image dasar python:3.14, pembuatan direktori /app dan penetapannya sebagai WORKDIR, penyalinan proyek dengan ADD . /app/, pemasangan aplikasi lewat pip install -e ., dan inisialisasi database dengan flask --app flaskr init-db. Bagian akhirnya EXPOSE 5000 dan CMD yang menjalankan Flask di 0.0.0.0 port 5000 supaya bisa diakses dari luar container. Karena file ini sudah benar, langkah berikutnya adalah membangun image dengan docker build -t flaskr . lalu menjalankannya dengan docker run -p 5000:5000 flaskr.</p>
 
 Build dan cek image
 
@@ -147,9 +153,13 @@ docker image ls
 
 #### Pembahasan
 
+<p align="justify">Saya menjalankan docker build -f Dockerfile -t flaskr:1.0.0 . dan prosesnya selesai dalam 20,3 detik (11 dari 11 langkah, status FINISHED), jadi image berhasil dibuat tanpa error. Docker mulai dengan membaca Dockerfile dan .dockerignore, mengambil metadata image dasar python:3.14, lalu mengirim konteks build yang hanya berukuran sekitar 42,93 kB, kecil karena .venv, instance, dan file cache sudah dikecualikan. Setelah itu keenam instruksi Dockerfile dijalankan berurutan: membuat /app, menetapkan WORKDIR, menyalin proyek, memasang aplikasi lewat pip install -e . (langkah terlama, sekitar 11,7 detik karena mengunduh dependensi), dan menginisialisasi database. Di tahap akhir, Docker mengekspor layer dan menyimpan hasilnya dengan nama docker.io/library/flaskr:1.0.0, sehingga image sudah siap dijalankan dengan docker run -p 5000:5000 flaskr:1.0.0 lalu diakses lewat http://localhost:5000.</p>
+
 <img width="472" height="131" alt="14_Cek_Image" src="https://github.com/user-attachments/assets/506c0d48-ad76-41c3-b743-36ed79340b59" />
 
 #### Pembahasan
+
+<p align="justify">Saya menjalankan docker image ls untuk memastikan image hasil build tadi benar-benar tersimpan, dan flaskr:1.0.0 muncul di daftar dengan ID 5a26919f69b8, memakai ruang disk 1,64 GB dengan ukuran konten sekitar 423 MB. Ukurannya cukup besar karena image dasar python:3.14 versi penuh sudah membawa banyak paket sistem, dan kalau ingin lebih ringan, bisa diganti dengan varian python:3.14-slim. Selain itu ada dua image lain dari proyek sebelumnya, yaitu workspace-05-bs_app:latest (502 MB) dan workspace-05-nginx:latest (241 MB), yang tidak ada hubungannya dengan Flaskr. Kolom “In Use” belum menunjukkan tanda apa pun, artinya belum ada container yang berjalan dari image flaskr, jadi langkah selanjutnya adalah menjalankannya dengan docker run -p 5000:5000 flaskr:1.0.0 lalu mengaksesnya di http://localhost:5000.</p>
 
 ### 4. Menjalankan Image
 
