@@ -65,6 +65,8 @@ flask --app flaskr run
 
 #### Pembahasan
 
+<p align="justify">Gambar ini menunjukkan halaman Register aplikasi Flaskr yang sudah berjalan di browser, berisi formulir pendaftaran dengan kolom Username (terisi “Mexi”) dan Password (terisi enam karakter yang disamarkan menjadi titik-titik), serta tombol Register untuk mengirimkan data. Saat tombol diklik, aplikasi akan memeriksa bahwa kedua kolom terisi dan username belum dipakai, lalu menyimpan akun ke database SQLite dengan password yang sudah di-hash (bukan disimpan sebagai teks asli), dan mengarahkan Anda ke halaman Log In. Bagian header menampilkan tautan Register dan Log In karena pengguna belum login; setelah login, tautan itu akan berganti menjadi nama pengguna dan Log Out, sehingga Anda bisa lanjut membuat dan mengelola post di blog Anda.</p>
+
 <img width="468" height="233" alt="07_Login" src="https://github.com/user-attachments/assets/149d4521-c970-47f7-9156-9f0f3dce5861" />
 
 #### Pembahasan
