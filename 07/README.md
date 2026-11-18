@@ -61,23 +61,32 @@ flask --app flaskr run
 
 <p align="justify">Perintah flask --app flaskr init-db berhasil membuat dan menginisialisasi database aplikasi (ditandai pesan “Initialized the database”), biasanya dengan menjalankan skema SQL yang menghasilkan file SQLite di folder instance. Setelah itu, flask --app flaskr run menjalankan aplikasi flaskr pada server pengembangan bawaan Flask yang dapat diakses di http://127.0.0.1:5000 (localhost, port 5000), sehingga Anda bisa membukanya lewat browser. Pesan Debug mode: off berarti mode debug tidak aktif, jadi server tidak akan memuat ulang otomatis saat kode diubah dan tidak menampilkan debugger interaktif jika terjadi error; untuk pengembangan, tambahkan --debug. Peringatan berwarna merah hanyalah pengingat bahwa server ini khusus untuk pengembangan, bukan untuk produksi, yang seharusnya memakai server WSGI seperti Gunicorn atau Waitress.</p>
 
+
 <img width="463" height="215" alt="06_Register" src="https://github.com/user-attachments/assets/2ceee64f-b120-4c8d-8ea8-0870ae772540" />
 
 #### Pembahasan
 
 <p align="justify">Gambar ini menunjukkan halaman Register aplikasi Flaskr yang sudah berjalan di browser, berisi formulir pendaftaran dengan kolom Username (terisi “Mexi”) dan Password (terisi enam karakter yang disamarkan menjadi titik-titik), serta tombol Register untuk mengirimkan data. Saat tombol diklik, aplikasi akan memeriksa bahwa kedua kolom terisi dan username belum dipakai, lalu menyimpan akun ke database SQLite dengan password yang sudah di-hash (bukan disimpan sebagai teks asli), dan mengarahkan Anda ke halaman Log In. Bagian header menampilkan tautan Register dan Log In karena pengguna belum login; setelah login, tautan itu akan berganti menjadi nama pengguna dan Log Out, sehingga Anda bisa lanjut membuat dan mengelola post di blog Anda.</p>
 
+
 <img width="468" height="233" alt="07_Login" src="https://github.com/user-attachments/assets/149d4521-c970-47f7-9156-9f0f3dce5861" />
 
 #### Pembahasan
+
+<p align="justify">Ini tampilan halaman Log In di Flaskr, yang muncul otomatis setelah proses registrasi berhasil. Di sini saya mengisi username “Mexi” dan password yang sama dengan waktu mendaftar, lalu menekan tombol Log In. Aplikasi akan mengecek apakah username-nya ada di database dan apakah password yang diketik cocok dengan hash yang tersimpan. Kalau cocok, ID pengguna disimpan di session sehingga aplikasi tahu saya sudah login, lalu saya diarahkan ke halaman utama. Kalau salah, muncul pesan error di halaman yang sama. Setelah berhasil masuk, tampilan header berubah: tautan Register dan Log In diganti nama pengguna dan Log Out, dan muncul tautan New untuk membuat post baru.</p>
 
 <img width="464" height="103" alt="08_Hasil" src="https://github.com/user-attachments/assets/21927787-bee2-465c-90ee-771778777ad2" />
 
 #### Pembahasan
 
+<p align="justify">Setelah login berhasil, saya langsung diarahkan ke halaman utama Flaskr yang judulnya “Posts”. Di bagian header, tautan Register dan Log In sudah berganti menjadi nama saya, “Mexi”, dan tautan Log Out, jadi ini menandakan aplikasi sudah mengenali saya lewat session. Daftar post masih kosong karena belum ada tulisan yang dibuat, dan di sebelah kanan judul ada tautan New yang bisa diklik untuk membuat post pertama. Dari sini, proses autentikasi bisa dibilang sudah berjalan dengan baik, mulai dari registrasi, login, sampai tampilan halaman utama untuk pengguna yang sudah masuk.</p>
+
+
 <img width="714" height="300" alt="09_Hasil_tes_lokal" src="https://github.com/user-attachments/assets/c11b8933-41cb-4bc0-9e3d-a274b1626c91" />
 
 #### Pembahasan
+
+<p align="justify">Ini log terminal yang mencatat semua aktivitas saya di aplikasi Flaskr tadi, dan urutannya cocok dengan langkah yang sudah saya lakukan. Pertama, GET / dengan status 200 menandakan halaman utama berhasil dimuat, disusul style.css yang juga berhasil diambil, sedangkan favicon.ico bernilai 404 karena aplikasi memang belum punya ikon situs, jadi itu bukan error yang perlu dikhawatirkan. Lalu GET /auth/register (200) menampilkan formulir pendaftaran, dan POST /auth/register dengan status 302 berarti data berhasil dikirim dan saya dialihkan ke halaman login (GET /auth/login, 200). Setelah itu POST /auth/login juga berstatus 302, artinya login berhasil dan saya diarahkan kembali ke GET / (200). Terakhir, GET /auth/logout (302) menunjukkan saya keluar dari akun dan kembali ke halaman utama. Kode 304 pada style.css berarti browser memakai versi cache karena file tidak berubah, sehingga seluruh alur registrasi, login, dan logout sudah berjalan normal.</p>
 
 ### 3. Buat Aplikasi Menjadi CA - Docker
 
