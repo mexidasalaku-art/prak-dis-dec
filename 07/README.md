@@ -35,6 +35,8 @@ python --version
 
 #### Pembahasan
 
+<p align="justify">Perintah-perintah di terminal ini berhasil menyiapkan lingkungan Python 3.14.4 untuk proyek flask-app Anda menggunakan uv: uv python install 3.14.4 memastikan Python versi tersebut sudah terpasang (hasilnya “already installed”, jadi tidak perlu mengunduh ulang), lalu uv venv --python 3.14.4 membuat virtual environment di folder .venv, dan karena folder tersebut sudah ada, uv menanyakan apakah ingin menggantinya dan Anda menjawab “yes” sehingga .venv lama dibuat ulang dari awal. Setelah itu, .venv\Scripts\activate.bat mengaktifkan environment tersebut (ditandai prefiks (flask-app) di prompt), dan python --version mengonfirmasi bahwa Python yang aktif adalah 3.14.4, artinya environment sudah siap dipakai untuk menginstal dependensi seperti Flask dengan uv pip install flask.</p>
+
 
 ### 2. Install Paket yang Diperlukan
 
