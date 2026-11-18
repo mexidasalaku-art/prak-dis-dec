@@ -13,10 +13,28 @@
 
 #  TUJUAN PRAKTIKUM
 
+1. Memahami konsep Cloud Computing dan model layanannya (SaaS, PaaS, IaaS) beserta peran containerized app.
+2. Menyiapkan lingkungan Python 3.14.4 dengan uv dan menjalankan aplikasi blog Flaskr dari tutorial Flask.
+3. Mengemas aplikasi Flaskr menjadi containerized app dengan Dockerfile, lalu membangun dan menjalankan image-nya memakai Docker dan Podman.
+4. Membandingkan hasil build dan run pada Docker dan Podman.
+
+
 ---
 #  DASAR TEORI
 
+<p align="justify">Cloud Computing dan XaaS. Cloud Computing adalah model penyediaan sumber daya komputasi seperti server, penyimpanan, jaringan, dan aplikasi yang bisa diakses lewat jaringan sesuai kebutuhan dan dibayar sesuai pemakaian (Mell & Grance, 2011). Pendekatan ini disebut juga Everything as a Service (XaaS), dan secara umum dibagi menjadi tiga model. Software as a Service (SaaS) menyediakan aplikasi siap pakai yang diakses lewat browser, misalnya Google Workspace. Platform as a Service (PaaS) menyediakan platform untuk membangun dan menjalankan aplikasi tanpa mengurus infrastruktur di bawahnya, misalnya Heroku. Infrastructure as a Service (IaaS) menyediakan infrastruktur seperti mesin virtual, penyimpanan, dan jaringan, misalnya Amazon EC2. Pada urutan SaaS, PaaS, IaaS, semakin ke kanan tanggung jawab pengguna atas pengelolaan sistem semakin besar.</p>
+
+<p align="justify">Containerized App (CA). CA adalah aplikasi yang dikemas bersama dependensinya dalam satu paket (image) dan dijalankan sebagai container. Container memakai kernel sistem operasi host sehingga lebih ringan daripada mesin virtual, tetapi tetap terisolasi satu sama lain. Karena lingkungan di dalam image sama di mana pun dijalankan, aplikasi berperilaku konsisten dari laptop pengembang sampai server cloud. Inilah yang membuat container menjadi dasar banyak layanan PaaS dan IaaS modern.</p>
+
+<p align="justify">Docker dan Podman. Docker adalah platform container yang bekerja dengan daemon (dockerd) yang harus aktif untuk membangun dan menjalankan container. Podman adalah alternatif dari Red Hat yang perintahnya hampir identik dengan Docker, tetapi berjalan tanpa daemon dan tetap bisa membaca Dockerfile yang sama. Keduanya mengikuti standar image OCI sehingga image yang dihasilkan kompatibel.</p>
+
+<p align="justify">Dockerfile. Dockerfile adalah berkas teks berisi instruksi untuk membangun image secara berurutan. Instruksi yang dipakai pada praktikum ini adalah FROM (image dasar), RUN (menjalankan perintah saat build), WORKDIR (direktori kerja), ADD (menyalin berkas proyek), EXPOSE (menandai port), dan CMD (perintah saat container dijalankan). Berkas .dockerignore dipakai untuk mengecualikan berkas yang tidak perlu masuk ke image, seperti .venv, __pycache__, dan instance.</p>
+  
+<p align="justify">Flask dan uv. Flask adalah microframework web Python yang bergantung pada Werkzeug (WSGI dan routing), Jinja2 (template), Click (CLI), ItsDangerous (penandatanganan session), MarkupSafe, dan Blinker (sinyal). Aplikasi Flaskr memakai SQLite dan autentikasi berbasis session. uv adalah pengelola paket dan virtual environment Python yang cepat, dipakai untuk membuat environment dan memasang dependensi dengan uv pip install -e .. Server bawaan Flask hanya untuk pengembangan, sehingga produksi sebaiknya memakai server WSGI seperti Gunicorn atau Waitress.</p>
+
+
 ---
+
 #  PEMBAHASAN
 ### source
 
@@ -245,7 +263,21 @@ Buka http://127.0.0.1:5001. Jika Podman menanyakan registry untuk python:3.14, p
 
 
 ---
+
 # KESIMPULAN
 
+<p align="justify">Dari praktikum ini, aplikasi Flaskr berhasil dijalankan secara lokal di Python 3.14.4, lengkap dengan registrasi, login, dan logout, yang terlihat dari log permintaan berstatus 200 dan 302. Aplikasi kemudian berhasil dikemas menjadi containerized app dengan Dockerfile dan .dockerignore. Build dengan Docker selesai dalam 20,3 detik dan menghasilkan image flaskr:1.0.0 berukuran 1,64 GB, sedangkan Podman menghasilkan image localhost/flaskr:1.0.0 berukuran 1,18 GB dari Dockerfile yang sama. Keduanya berjalan dengan pemetaan port 5001:5000 dan halaman utama dapat diakses lewat http://localhost:5001. Karena database dibuat ulang saat build image, akun yang didaftarkan di server lokal tidak terbawa ke container. Praktikum ini menunjukkan bahwa satu Dockerfile dapat dipakai oleh Docker maupun Podman dengan hasil yang konsisten, dan konsep container inilah yang mendasari layanan PaaS dan IaaS pada Cloud Computing. Ukuran image masih bisa dikecilkan, misalnya dengan image dasar python:3.14-slim.</p>
+
 ---
+
 # REFERENSI
+
+- Purnomosidi D. P., B. (2026). Modul 7: Cloud Computing, Praktikum Sistem Terdistribusi dan Terdesentralisasi. Prodi Informatika, Universitas Teknologi Digital Indonesia.
+- Mell, P., & Grance, T. (2011). The NIST Definition of Cloud Computing (NIST Special Publication 800-145). National Institute of Standards and Technology.
+- Pallets Projects. Flask Tutorial. https://flask.palletsprojects.com/en/stable/tutorial/
+- Pallets Projects. Flask examples/tutorial (versi 3.1.3). https://github.com/pallets/flask/tree/3.1.3/examples/tutorial
+- Docker Inc. Dockerfile reference dan Docker Documentation. https://docs.docker.com
+- Podman Project. Podman Documentation. https://docs.podman.io
+- NEO-X School. Catatan penggunaan uv. https://github.com/NEO-X-School/notes/tree/main/uv
+
+
