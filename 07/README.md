@@ -155,6 +155,7 @@ docker image ls
 
 <p align="justify">Saya menjalankan docker build -f Dockerfile -t flaskr:1.0.0 . dan prosesnya selesai dalam 20,3 detik (11 dari 11 langkah, status FINISHED), jadi image berhasil dibuat tanpa error. Docker mulai dengan membaca Dockerfile dan .dockerignore, mengambil metadata image dasar python:3.14, lalu mengirim konteks build yang hanya berukuran sekitar 42,93 kB, kecil karena .venv, instance, dan file cache sudah dikecualikan. Setelah itu keenam instruksi Dockerfile dijalankan berurutan: membuat /app, menetapkan WORKDIR, menyalin proyek, memasang aplikasi lewat pip install -e . (langkah terlama, sekitar 11,7 detik karena mengunduh dependensi), dan menginisialisasi database. Di tahap akhir, Docker mengekspor layer dan menyimpan hasilnya dengan nama docker.io/library/flaskr:1.0.0, sehingga image sudah siap dijalankan dengan docker run -p 5000:5000 flaskr:1.0.0 lalu diakses lewat http://localhost:5000.</p>
 
+
 <img width="472" height="131" alt="14_Cek_Image" src="https://github.com/user-attachments/assets/506c0d48-ad76-41c3-b743-36ed79340b59" />
 
 #### Pembahasan
@@ -171,9 +172,14 @@ docker run -p 5001:5000 flaskr:1.0.0
 
 #### Pembahasan
 
+<p align="justify">Saya menjalankan docker run -p 5001:5000 flaskr:1.0.0 dan container berhasil hidup: Flask melayani aplikasi flaskr di dalam container pada port 5000, sedangkan opsi -p 5001:5000 memetakannya ke port 5001 di komputer saya, jadi aplikasinya dibuka lewat http://localhost:5001, bukan 5000 (tidak bentrok dengan server Flask lokal tadi). Baris “Running on all addresses (0.0.0.0)” muncul karena CMD memakai --host=0.0.0.0, dan alamat 172.17.0.2:5000 adalah IP internal container di jaringan Docker. Log di bawahnya menunjukkan permintaan pertama dari 172.17.0.1 (gateway Docker, yaitu browser saya yang masuk lewat port mapping): GET / dan style.css berstatus 200 yang berarti halaman berhasil tampil, sedangkan favicon.ico 404 hanya karena aplikasi belum punya ikon situs. Peringatan merah tetap sama, yaitu server ini khusus pengembangan dan untuk produksi sebaiknya memakai Gunicorn atau Waitress. Karena database dibuat ulang saat build, akun yang saya daftarkan sebelumnya tidak ikut terbawa, jadi di container ini saya perlu mendaftar lagi.</p>
+
+
 <img width="464" height="102" alt="16_Tampilan_hasil" src="https://github.com/user-attachments/assets/22bb2240-b86d-4188-a7d1-205aa498bf65" />
 
 #### Pembahasan
+
+<p align="justify">Ini tampilan halaman utama Flaskr yang saya buka dari container Docker lewat http://localhost:5001, dan aplikasinya berhasil tampil dengan benar. Di header masih muncul tautan Register dan Log In, bukan nama “Mexi”, karena ini adalah database baru yang dibuat ulang saat build image, sehingga akun yang saya daftarkan sebelumnya di server lokal tidak ikut terbawa. Daftar post juga masih kosong dan tidak ada tautan New karena saya belum login. Hal ini membuktikan bahwa container berjalan terpisah dari server lokal, dengan database sendiri di dalamnya, dan proses containerisasi aplikasi Flaskr dengan Docker sudah berhasil dari build, run, sampai diakses lewat browser.</p>
 
 ### 5. Buat Aplikasi Menjadi CA - Podman
 Podman
