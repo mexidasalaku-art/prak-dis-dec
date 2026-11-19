@@ -1,10 +1,10 @@
-# Praktikum Minggu MODUL 08 - Cloud Computing
+# Praktikum Minggu MODUL 08 - Arsitektur Microservices untuk Sistem Terdistribusi
 
 
 | | |
 | --- | --- |
 | **Mata Kuliah** | Praktikum Sistem Terdistribusi dan Terdesentralisasi | 
-| **Topik** | Cloud Computing |
+| **Topik** | Arsitektur Microservices untuk Sistem Terdistribusi |
 | **Nama** | Yesaya Mexi Dasalaku |
 | **NIM** | 255410029 | 
 | **Kelas** | IF-1 |
