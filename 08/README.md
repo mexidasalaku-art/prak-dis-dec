@@ -51,7 +51,7 @@ uv python list
 
 #### Pembahasan
 
-<p align="justify">
+<p align="justify">Perintah uv python install 3.14 menjawab bahwa Python 3.14 sudah terpasang, lalu uv python list menampilkan daftar interpreter Python yang dikenali uv. Versi yang sudah ada di komputermu ditandai dengan path lengkap, yaitu CPython 3.15.0, beberapa versi 3.14 (3.14.8 dan 3.14.4, baik yang dikelola uv di folder AppData\Roaming\uv\python maupun instalasi Python biasa), serta Python 3.13.0 dari Laragon. Sisanya, seperti 3.16.0a2, 3.15.2, 3.14.10, 3.12 sampai 3.8, PyPy, dan GraalPy, bertanda <download available>, artinya belum terpasang tetapi bisa diunduh uv kapan saja. Karena yang terpasang cukup banyak, kamu bisa mengunci versi untuk proyek praktikum dengan uv python pin 3.14 atau memakai uv venv --python 3.14 agar tidak tertukar antar instalasi.</p>
 
 
 ```python
@@ -62,7 +62,7 @@ uv python pin 3.14
 
 #### Pembahasan
 
-<p align="justify">
+<p align="justify">Perintah uv python pin 3.14 berhasil memperbarui file .python-version di folder modul praktikum, dari isi sebelumnya C:\path\dari\kolom\kanan\python.exe menjadi 3.14. Isi lama itu sebenarnya path contoh yang tidak valid (kemungkinan tersalin dari teks petunjuk), jadi pembaruan ini justru memperbaikinya. Mulai sekarang, setiap perintah uv di folder ini, seperti uv venv, uv run, atau uv sync, akan memakai Python 3.14 secara konsisten dan tidak lagi tertukar dengan instalasi 3.15 atau 3.13 yang ada di komputermu.</p>
 
 
 ```python
@@ -74,7 +74,7 @@ python --version
 
 #### Pembahasan
 
-<p align="justify">
+<p align="justify">Perintah type .python-version menampilkan isi file .python-version di folder modul praktikum, yaitu 3.14. Ini mengonfirmasi bahwa uv python pin 3.14 sebelumnya benar-benar tersimpan, dan path contoh yang tidak valid tadi sudah terganti. Dengan begitu, perintah uv seperti uv venv, uv run, dan uv sync di folder ini akan otomatis memakai Python 3.14, sehingga proyek praktikummu siap dilanjutkan ke tahap pembuatan environment.</p>
 
 ### 1.3 Buat dan aktifkan environment
 
@@ -88,7 +88,7 @@ where python
 
 #### Pembahasan
 
-<p align="justify">
+<p align="justify">Perintah uv venv membuat virtual environment .venv di folder modul dengan CPython 3.14.8, sesuai versi yang sebelumnya dikunci lewat .python-version. Karena .venv sudah ada, uv menanyakan apakah ingin menggantinya dan kamu menjawab yes, sehingga environment lama ditimpa dengan yang baru. Setelah diaktifkan lewat .venv\Scripts\activate.bat, prompt berubah menjadi (MODUL), dan hasil where python menunjukkan entri pertama adalah .venv\Scripts\python.exe di folder modul, tanda bahwa environment sudah aktif dan mengalahkan instalasi Python lain (Laragon 3.13, Python 3.15, dan alias WindowsApps). Sekarang paket apa pun yang dipasang dengan uv pip install akan masuk ke environment ini saja, sehingga proyek praktikummu tetap terisolasi.</p>
 
 ### 1.4 Install FastAPI dan SQLModel
 
@@ -170,7 +170,7 @@ Installed 61 packages in 5.61s
 
 #### Pembahasan
 
-<p align="justify">
+<p align="justify">Output ini menunjukkan uv berhasil menyelesaikan dan memasang 61 paket ke dalam .venv hanya dalam sekitar 5,6 detik. Daftar paketnya mengindikasikan kamu memasang FastAPI beserta ekosistemnya: fastapi dan fastapi-cli, server uvicorn dengan websockets dan watchfiles, validasi data lewat pydantic, ORM sqlmodel dengan sqlalchemy, serta httpx dan requests untuk klien HTTP. Ada pula paket OpenTelemetry dan sentry-sdk yang ikut terpasang sebagai dependensi bawaan. Peringatan "Failed to hardlink files" tidak berbahaya, karena cache uv dan folder proyek berada di drive berbeda (kemungkinan C: dan D:), sehingga uv menyalin file secara penuh dan hanya sedikit lebih lambat. Kalau ingin peringatan itu hilang, jalankan set UV_LINK_MODE=copy sebelum perintah uv. Setelah ini, kamu bisa langsung menjalankan aplikasi dengan fastapi dev atau uvicorn main:app --reload.</p>
 
 
 <p align="justify">Proses instalasi Python dilakukan menggunakan uv dengan versi 3.14.4. Sebelum memulai instalasi, terlebih dahulu dilakukan pengecekan terhadap daftar versi Python yang tersedia dan dikenali oleh uv melalui perintah berikut.</p>
@@ -247,6 +247,7 @@ websockets                               17.4
 
 #### Pembahasan
 
+<p align="justify">Output ini adalah hasil uv pip list yang menampilkan 61 paket di dalam .venv, dan daftarnya sama persis dengan yang baru dipasang pada langkah sebelumnya, sehingga instalasi terkonfirmasi berhasil dan lengkap. Paket intinya adalah fastapi 0.165.0 dengan starlette sebagai fondasi web, uvicorn sebagai server, pydantic 2.14.4 untuk validasi data, serta sqlmodel dan sqlalchemy untuk akses database. Sisanya adalah dependensi pendukung seperti httpx, requests, jinja2, python-dotenv, python-multipart, rich, typer, serta rangkaian opentelemetry dan sentry-sdk yang ikut terpasang otomatis. Karena python-multipart dan email-validator sudah ada, proyekmu siap menangani form, upload file, dan validasi email tanpa instalasi tambahan. Langkah berikutnya adalah membuat file main.py lalu menjalankannya dengan fastapi dev.</p>
 
 ```python
 uv pip freeze > requirements.txt
@@ -317,9 +318,17 @@ watchfiles==1.3.0
 websockets==17.4
 ```
 
+#### Pembahasan
+
+<p align="justify">Output ini adalah hasil uv pip freeze (atau pip freeze), yaitu daftar 61 paket di .venv dengan format nama==versi yang sama persis dengan hasil uv pip list sebelumnya. Format ini sering dipakai sebagai isi requirements.txt agar environment bisa dibuat ulang di komputer lain atau oleh rekan satu kelompok praktikum. Kamu bisa menyimpannya dengan uv pip freeze > requirements.txt, lalu memasangnya kembali dengan uv pip install -r requirements.txt. Namun karena daftar ini juga memuat semua dependensi turunan, proyek yang dikelola uv biasanya lebih rapi bila hanya mencatat paket utama (misalnya fastapi dan sqlmodel) lewat uv add, sehingga pyproject.toml dan uv.lock yang mengurus sisanya.</p>
+
 ### 1.5 Install SQLite (command-line tools)
 
 <img width="947" height="425" alt="07_1 5" src="https://github.com/user-attachments/assets/b79ab030-41af-448c-86fc-81d548f49705" />
+
+#### Pembahasan
+
+<p align="justify">Halaman ini adalah SQLite Download Page yang menyediakan unduhan SQLite versi 3.54.1 dalam beberapa kelompok. Ada kode sumber (sqlite-src-3540100.zip sebagai pohon sumber lengkap, serta versi amalgamation dan autoconf yang lebih ringkas untuk dikompilasi), dokumentasi dalam bentuk file HTML statis (sqlite-doc-3540100.zip), pustaka siap pakai untuk Android (sqlite-android-3540100.aar), dan alat command-line untuk Linux x64 (sqlite-tools-linux-x64-3540100.zip) yang berisi shell sqlite3, sqldiff, sqlite3_analyzer, dan sqlite3_rsync. Setiap berkas dilengkapi checksum SHA3-256 untuk memverifikasi keaslian unduhan. Karena kamu memakai Windows, bagian yang relevan ada di sisi bawah halaman, yaitu bagian Precompiled Binaries for Windows (biasanya sqlite-tools-win-x64-...zip untuk shell sqlite3.exe). Namun untuk proyek FastAPI dengan SQLModel, kamu sebenarnya tidak perlu mengunduh apa pun, karena modul sqlite3 sudah bawaan Python dan database SQLite langsung bisa dipakai. Unduhan ini hanya berguna bila ingin membuka dan memeriksa file .db lewat terminal.</p>
 
 
 Cari lokasi sqlite3.exe untuk memastikan:
@@ -330,7 +339,7 @@ where /r . sqlite3.exe
 
 #### Pembahasan
 
-<p align="justify">
+<p align="justify">Perintah set "PATH=%PATH%;%CD%\sqlite-tools-win-x64-3540100" menambahkan folder sqlite-tools-win-x64-3540100 di dalam folder modul ke PATH, sehingga sqlite3 bisa dipanggil dari mana saja. Hasil sqlite3 --version menampilkan versi 3.54.1 (build 2026-10-16, 64-bit), yang cocok dengan versi di halaman unduhan sebelumnya, jadi pemasangan alat command-line SQLite berhasil. Perlu diingat bahwa set hanya berlaku untuk jendela terminal yang sedang terbuka, jadi pengaturan ini hilang saat terminal ditutup. Kalau ingin permanen, tambahkan folder itu lewat Environment Variables Windows (sebaiknya dipindah ke lokasi tetap, misalnya C:\sqlite), atau cukup jalankan ulang perintah set di setiap sesi. Setelah ini, kamu bisa membuka database dengan sqlite3 nama.db dan memeriksa tabel lewat perintah .tables atau .schema.</p>
 
 
 Daftarkan ke PATH
