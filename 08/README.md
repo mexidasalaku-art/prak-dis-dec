@@ -38,7 +38,7 @@ uv --version
 
 #### Pembahasan
 
-<p align="justify">
+<p align="justify">uv --version di terminal yang menampilkan uv 0.13.9 (build 6b2d39dcc, tanggal 2026-11-17, x86_64-pc-windows-msvc). Versi ini sedikit lebih lama daripada 0.13.10 yang baru saja dipasang lewat winget di gambar sebelumnya, jadi kemungkinan jendela terminal ini masih memakai sesi lama yang belum memuat pembaruan, atau alias uv masih mengarah ke instalasi sebelumnya. Coba tutup lalu buka kembali terminal dan jalankan uv --version lagi. Kalau masih tampil 0.13.9, cek lokasi yang dipakai dengan where uv.</p>
 
 ### 1.2 Buat workspace dan pin Python 3.14
 
