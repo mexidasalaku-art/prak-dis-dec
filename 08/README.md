@@ -156,6 +156,7 @@ Installed 61 packages in 5.61s
 
 #### Pembahasan
 
+
 <p align="justify">Proses instalasi Python dilakukan menggunakan uv dengan versi 3.14.4. Sebelum memulai instalasi, terlebih dahulu dilakukan pengecekan terhadap daftar versi Python yang tersedia dan dikenali oleh uv melalui perintah berikut.</p>
 
 ```python
