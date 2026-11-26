@@ -16,6 +16,9 @@
 
 ---
 #  DASAR TEORI
+
+---
+#  PEMBAHASAN PRAKTIKUM
 ### 1.1 Install uv
 
 ```python
@@ -305,10 +308,15 @@ websockets==17.4
 
 <img width="947" height="425" alt="07_1 5" src="https://github.com/user-attachments/assets/b79ab030-41af-448c-86fc-81d548f49705" />
 
+
 Cari lokasi sqlite3.exe untuk memastikan:
 ```python
 where /r . sqlite3.exe
 ```
+<img width="898" height="59" alt="09" src="https://github.com/user-attachments/assets/5362626a-e1a9-44fe-b7f8-483d75e93c9e" />
+
+#### Pembahasan
+
 
 Daftarkan ke PATH
 ```python
@@ -324,16 +332,241 @@ sqlite3 --version
 
 # TUGAS
 
+### 1. Buat satu tabel baru menggunakan SQLite, tabel berbeda dari yang ada pada contoh. Tabel tersebut mempunyai 1 primary key dan setidaknya berisi data dengan tipe INT, CHAR, VARCHAR, BOOLEAN, dan FLOAT.
+
 ### Buat satu tabel baru menggunakan SQLite, tabel berbeda dari yang ada pada contoh. Tabel tersebut mempunyai 1 primary key dan setidaknya berisi data dengan tipe INT, CHAR, VARCHAR, BOOLEAN, dan FLOAT.
 
-###
-###
+```python
+sqlite3 toko-produk.db
+```
+
+Di prompt sqlite>:
+```python
+CREATE TABLE produk (id INTEGER PRIMARY KEY, kode CHAR(6), nama VARCHAR(50), harga FLOAT, stok INT, tersedia BOOLEAN);
+.tables
+.schema produk
+.quit
+```
+
+<img width="730" height="148" alt="10_T1" src="https://github.com/user-attachments/assets/018cac98-14ef-4e05-aee1-74be809ff132" />
+
+#### Pembahasan
+
+Buat File Python di Folder MODUL
+
+### Buat File Python di Folder MODUL
+
+```python
+notepad isi_data.py
+```
+Kode py:
+
+```python
+import sqlite3
+
+DB_FILE = "toko-produk.db"
+
+DATA = [
+    ("PRD001", "Keyboard Mekanik", 450000.0, 25, True),
+    ("PRD002", "Mouse Wireless", 175000.5, 40, True),
+    ("PRD003", "Monitor 24 Inci", 1850000.0, 0, False),
+    ("PRD004", "Headset Gaming", 320000.75, 15, True),
+    ("PRD005", "Webcam Full HD", 275000.0, 0, False),
+]
+
+conn = sqlite3.connect(DB_FILE)
+cur = conn.cursor()
+
+cur.execute(
+    """
+    CREATE TABLE IF NOT EXISTS produk (
+        id INTEGER PRIMARY KEY,
+        kode CHAR(6),
+        nama VARCHAR(50),
+        harga FLOAT,
+        stok INT,
+        tersedia BOOLEAN
+    )
+    """
+)
+
+cur.execute("DELETE FROM produk")
+cur.executemany(
+    "INSERT INTO produk (kode, nama, harga, stok, tersedia) VALUES (?, ?, ?, ?, ?)",
+    DATA,
+)
+conn.commit()
+
+for row in cur.execute("SELECT * FROM produk"):
+    print(row)
+
+conn.close()
+print("Selesai: 5 data berhasil diisikan.")
+```
+
+```python
+notepad service.py
+```
+Isi kode service.py:
+
+```python
+from typing import List
+
+from fastapi import Depends, FastAPI
+from sqlmodel import Field, Session, SQLModel, create_engine, select
+
+
+class Produk(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    kode: str
+    nama: str
+    harga: float
+    stok: int
+    tersedia: bool
+
+
+engine = create_engine("sqlite:///toko-produk.db")
+
+
+def get_session():
+    with Session(engine) as session:
+        yield session
+
+
+app = FastAPI()
+
+
+@app.get("/produk/", response_model=List[Produk])
+def read_produk(session: Session = Depends(get_session)):
+    statement = select(Produk)
+    results = session.exec(statement).all()
+    return results
+```
+
+Menggecek:
+```python
+dir *.py
+```
+
+<img width="462" height="125" alt="11" src="https://github.com/user-attachments/assets/d2cd028b-a0c5-48a2-bfc6-38e608992cd6" />
+
+#### Pembahasan
+
+### 2. Isikan 5 data menggunakan script Python
+
+```python
+python isi_data.py
+```
+
+<img width="465" height="101" alt="12_T2" src="https://github.com/user-attachments/assets/91844ea1-b152-48c9-8b44-1d3703041da6" />
+
+#### Pembahasan
+
+Lihat isi tabel di SQLite:
+```python
+sqlite3 toko-produk.db
+```
+
+```python
+.mode table
+SELECT * FROM produk;
+.quit
+```
+
+<img width="466" height="226" alt="13" src="https://github.com/user-attachments/assets/5ba825ff-58de-46ea-85ff-1b759eccd1fa" />
+
+#### Pembahasan
+
+
+### 3. Buat RESTful API endpoint untuk menampilkan semua data yang telah diisikan
+
+Jalankan kode Tunggu sampai muncul Uvicorn running on http://127.0.0.1:8000 dan Application startup complete. Biarkan jendela ini terbuka.
+
+```python
+uvicorn service:app --reload
+```
+
+<img width="478" height="103" alt="14_T3" src="https://github.com/user-attachments/assets/22d2dcfc-4adf-4cca-acb1-14f1d7e67ed8" />
+
+#### Pembahasan
+
+Cek di browser: http://localhost:8000/produk/ (dokumentasi otomatis: http://localhost:8000/docs).
+
+<img width="477" height="134" alt="15" src="https://github.com/user-attachments/assets/8db7d28d-b10b-476f-b960-c7a7c03167fc" />
+
+#### Pembahasan
+
+<img width="470" height="229" alt="16" src="https://github.com/user-attachments/assets/73f6e1c6-0c1e-4724-a1f0-27a4055179d8" />
+
+#### Pembahasan
 
 
 
----
+### 4. Tampilkan hasil RESTful API endpoint tersebut menggunakan curl.
 
-#  PEMBAHASAN/PRASYARAT
+Buka jendela CMD kedua (tidak perlu venv), lalu:
+
+```python
+curl http://localhost:8000/produk/
+```
+
+curl langsung memanggil curl.exe bawaan Windows. Hasilnya JSON berisi 5 data:
+
+```python
+[{"kode":"PRD001","nama":"Keyboard Mekanik","harga":450000.0,"stok":25,"tersedia":true,"id":1}, ... ]
+```
+
+```python
+curl -s http://localhost:8000/produk/ | python -m json.tool
+```
+
+```python
+[
+    {
+        "harga": 450000.0,
+        "id": 1,
+        "tersedia": true,
+        "kode": "PRD001",
+        "nama": "Keyboard Mekanik",
+        "stok": 25
+    },
+    {
+        "harga": 175000.5,
+        "id": 2,
+        "tersedia": true,
+        "kode": "PRD002",
+        "nama": "Mouse Wireless",
+        "stok": 40
+    },
+    {
+        "harga": 1850000.0,
+        "id": 3,
+        "tersedia": false,
+        "kode": "PRD003",
+        "nama": "Monitor 24 Inci",
+        "stok": 0
+    },
+    {
+        "harga": 320000.75,
+        "id": 4,
+        "tersedia": true,
+        "kode": "PRD004",
+        "nama": "Headset Gaming",
+        "stok": 15
+    },
+    {
+        "harga": 275000.0,
+        "id": 5,
+        "tersedia": false,
+        "kode": "PRD005",
+        "nama": "Webcam Full HD",
+        "stok": 0
+    }
+]
+```
+
+#### Pembahasan
+
 
 ---
 # KESIMPULAN
