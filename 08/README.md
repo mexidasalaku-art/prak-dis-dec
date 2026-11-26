@@ -535,7 +535,7 @@ Cek di browser: http://localhost:8000/produk/ (dokumentasi otomatis: http://loca
 
 #### Pembahasan
 
-<p align="justify">
+<p align="justify">Log ini memperlihatkan server uvicorn service:app --reload yang menerima beberapa permintaan lalu dihentikan. Permintaan pertama ke /Produk (P kapital) mendapat 404 Not Found karena rute di FastAPI peka huruf besar-kecil, lalu permintaan ke /produk (tanpa garis miring di akhir) dijawab 307 Temporary Redirect ke /produk/, dan tiga permintaan ke /produk/ berhasil dengan 200 OK. Redirect itu terjadi karena rute didefinisikan dengan garis miring di akhir (kemungkinan memakai APIRouter dengan prefix /produk dan path /), sehingga FastAPI mengarahkan otomatis. Bagian akhir log (Shutting down sampai Stopping reloader process) muncul setelah kamu menekan CTRL+C, dan semua proses berhenti dengan bersih tanpa error. Kalau ingin /produk langsung 200 tanpa redirect, definisikan rutenya tanpa garis miring di akhir atau atur redirect_slashes=False pada aplikasi.</p>
 
 
 
@@ -604,7 +604,7 @@ curl -s http://localhost:8000/produk/ | python -m json.tool
 
 #### Pembahasan
 
-<p align="justify">
+<p align="justify">Teks ini adalah respons JSON yang sama dengan sebelumnya, tetapi kini sudah diformat rapi dengan indentasi empat spasi, sehingga jauh lebih mudah dibaca. Isinya tetap lima produk dari tabel produk, yaitu Keyboard Mekanik, Mouse Wireless, Monitor 24 Inci, Headset Gaming, dan Webcam Full HD, lengkap dengan id, kode, nama, harga, stok, dan tersedia. Nilainya konsisten dengan data di SQLite: tiga produk berstatus true dan dua produk (monitor dan webcam) berstatus false dengan stok 0. Urutan kuncinya masih alfabetis, jadi format ini kemungkinan hasil json.dumps(..., indent=4, sort_keys=True) atau tampilan "pretty print" di browser, dan bisa kamu simpan sebagai file contoh respons untuk laporan praktikum.</p>
 
 
 ---
