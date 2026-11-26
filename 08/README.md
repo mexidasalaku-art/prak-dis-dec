@@ -302,6 +302,26 @@ websockets==17.4
 ```
 
 ### 1.5 Install SQLite (command-line tools)
+
+<img width="947" height="425" alt="07_1 5" src="https://github.com/user-attachments/assets/b79ab030-41af-448c-86fc-81d548f49705" />
+
+Cari lokasi sqlite3.exe untuk memastikan:
+```python
+where /r . sqlite3.exe
+```
+
+Daftarkan ke PATH
+```python
+set "PATH=%PATH%;%CD%\sqlite-tools-win-x64-3540100"
+sqlite3 --version
+```
+
+<img width="466" height="89" alt="08" src="https://github.com/user-attachments/assets/5b576e24-898d-41b9-a61a-bce166dd6ae1" />
+
+#### Pembahasan
+
+
+
 # TUGAS
 
 ### Buat satu tabel baru menggunakan SQLite, tabel berbeda dari yang ada pada contoh. Tabel tersebut mempunyai 1 primary key dan setidaknya berisi data dengan tipe INT, CHAR, VARCHAR, BOOLEAN, dan FLOAT.
