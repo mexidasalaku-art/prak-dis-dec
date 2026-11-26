@@ -77,6 +77,229 @@ where python
 #### Pembahasan
 
 ### 1.4 Install FastAPI dan SQLModel
+
+Paket FastAPI dan SQLModel dipasang dengan perintah berikut.
+
+```python
+uv pip install "fastapi[standard]" sqlmodel
+```
+
+```python
+Resolved 61 packages in 2.95s
+Prepared 6 packages in 2.14s
+░░░░░░░░░░░░░░░░░░░░ [0/61] Installing wheels...                     warning: Failed to hardlink files; falling back to full copy. This may lead to degraded performance.
+         If the cache and target directories are on different filesystems, hardlinking may not be supported.
+         If this is intentional, set `export UV_LINK_MODE=copy` or use `--link-mode=copy` to suppress this warning.
+Installed 61 packages in 5.61s
+ + agent-detector==2.0.0
+ + annotated-doc==0.0.7
+ + annotated-types==0.8.0
+ + anyio==4.16.0
+ + certifi==2026.11.20
+ + charset-normalizer==3.5.3
+ + click==8.5.1
+ + colorama==0.4.6
+ + detect-installer==0.2.1
+ + dnspython==2.9.2
+ + email-validator==2.4.0
+ + fastapi==0.165.0
+ + fastapi-cli==0.0.34
+ + fastapi-cloud-cli==0.28.0
+ + fastar==0.12.0
+ + googleapis-common-protos==1.76.0
+ + h11==0.16.0
+ + httpcore==1.0.9
+ + httpcore2==2.16.2
+ + httptools==0.9.0
+ + httpx==0.28.1
+ + httpx2==2.16.2
+ + idna==3.20
+ + jinja2==3.1.6
+ + markdown-it-py==4.3.0
+ + markupsafe==3.0.4
+ + mdurl==0.1.2
+ + opentelemetry-api==1.45.2
+ + opentelemetry-exporter-http-transport==0.66b2
+ + opentelemetry-exporter-otlp-common==0.66b2
+ + opentelemetry-exporter-otlp-proto-common==1.45.2
+ + opentelemetry-exporter-otlp-proto-http==1.45.2
+ + opentelemetry-proto==1.45.2
+ + opentelemetry-sdk==1.45.2
+ + opentelemetry-semantic-conventions==0.66b2
+ + protobuf==7.36.2
+ + pydantic==2.14.4
+ + pydantic-core==2.50.5
+ + pydantic-extra-types==2.11.1
+ + pydantic-settings==2.16.3
+ + pygments==2.21.0
+ + python-dotenv==1.2.4
+ + python-multipart==0.0.34
+ + pyyaml==6.0.4
+ + requests==2.34.2
+ + rich==15.0.0
+ + rich-toolkit==0.20.6
+ + rignore==0.8.1
+ + sentry-sdk==3.0.1
+ + shellingham==1.5.4
+ + sqlalchemy==2.1.9
+ + sqlmodel==0.0.50
+ + starlette==1.10.0
+ + truststore==0.10.5
+ + typer==0.29.2
+ + typing-extensions==4.16.0
+ + typing-inspection==0.4.5
+ + urllib3==2.8.0
+ + uvicorn==0.54.0
+ + watchfiles==1.3.0
+ + websockets==17.4
+```
+
+#### Pembahasan
+
+<p align="justify">Proses instalasi Python dilakukan menggunakan uv dengan versi 3.14.4. Sebelum memulai instalasi, terlebih dahulu dilakukan pengecekan terhadap daftar versi Python yang tersedia dan dikenali oleh uv melalui perintah berikut.</p>
+
+```python
+uv pip list
+```
+
+```python
+Package                                  Version
+---------------------------------------- ----------
+agent-detector                           2.0.0
+annotated-doc                            0.0.7
+annotated-types                          0.8.0
+anyio                                    4.16.0
+certifi                                  2026.11.20
+charset-normalizer                       3.5.3
+click                                    8.5.1
+colorama                                 0.4.6
+detect-installer                         0.2.1
+dnspython                                2.9.2
+email-validator                          2.4.0
+fastapi                                  0.165.0
+fastapi-cli                              0.0.34
+fastapi-cloud-cli                        0.28.0
+fastar                                   0.12.0
+googleapis-common-protos                 1.76.0
+h11                                      0.16.0
+httpcore                                 1.0.9
+httpcore2                                2.16.2
+httptools                                0.9.0
+httpx                                    0.28.1
+httpx2                                   2.16.2
+idna                                     3.20
+jinja2                                   3.1.6
+markdown-it-py                           4.3.0
+markupsafe                               3.0.4
+mdurl                                    0.1.2
+opentelemetry-api                        1.45.2
+opentelemetry-exporter-http-transport    0.66b2
+opentelemetry-exporter-otlp-common       0.66b2
+opentelemetry-exporter-otlp-proto-common 1.45.2
+opentelemetry-exporter-otlp-proto-http   1.45.2
+opentelemetry-proto                      1.45.2
+opentelemetry-sdk                        1.45.2
+opentelemetry-semantic-conventions       0.66b2
+protobuf                                 7.36.2
+pydantic                                 2.14.4
+pydantic-core                            2.50.5
+pydantic-extra-types                     2.11.1
+pydantic-settings                        2.16.3
+pygments                                 2.21.0
+python-dotenv                            1.2.4
+python-multipart                         0.0.34
+pyyaml                                   6.0.4
+requests                                 2.34.2
+rich                                     15.0.0
+rich-toolkit                             0.20.6
+rignore                                  0.8.1
+sentry-sdk                               3.0.1
+shellingham                              1.5.4
+sqlalchemy                               2.1.9
+sqlmodel                                 0.0.50
+starlette                                1.10.0
+truststore                               0.10.5
+typer                                    0.29.2
+typing-extensions                        4.16.0
+typing-inspection                        0.4.5
+urllib3                                  2.8.0
+uvicorn                                  0.54.0
+watchfiles                               1.3.0
+websockets                               17.4
+```
+
+#### Pembahasan
+
+
+```python
+uv pip freeze > requirements.txt
+type requirements.txt
+```
+
+```python
+agent-detector==2.0.0
+annotated-doc==0.0.7
+annotated-types==0.8.0
+anyio==4.16.0
+certifi==2026.11.20
+charset-normalizer==3.5.3
+click==8.5.1
+colorama==0.4.6
+detect-installer==0.2.1
+dnspython==2.9.2
+email-validator==2.4.0
+fastapi==0.165.0
+fastapi-cli==0.0.34
+fastapi-cloud-cli==0.28.0
+fastar==0.12.0
+googleapis-common-protos==1.76.0
+h11==0.16.0
+httpcore==1.0.9
+httpcore2==2.16.2
+httptools==0.9.0
+httpx==0.28.1
+httpx2==2.16.2
+idna==3.20
+jinja2==3.1.6
+markdown-it-py==4.3.0
+markupsafe==3.0.4
+mdurl==0.1.2
+opentelemetry-api==1.45.2
+opentelemetry-exporter-http-transport==0.66b2
+opentelemetry-exporter-otlp-common==0.66b2
+opentelemetry-exporter-otlp-proto-common==1.45.2
+opentelemetry-exporter-otlp-proto-http==1.45.2
+opentelemetry-proto==1.45.2
+opentelemetry-sdk==1.45.2
+opentelemetry-semantic-conventions==0.66b2
+protobuf==7.36.2
+pydantic==2.14.4
+pydantic-core==2.50.5
+pydantic-extra-types==2.11.1
+pydantic-settings==2.16.3
+pygments==2.21.0
+python-dotenv==1.2.4
+python-multipart==0.0.34
+pyyaml==6.0.4
+requests==2.34.2
+rich==15.0.0
+rich-toolkit==0.20.6
+rignore==0.8.1
+sentry-sdk==3.0.1
+shellingham==1.5.4
+sqlalchemy==2.1.9
+sqlmodel==0.0.50
+starlette==1.10.0
+truststore==0.10.5
+typer==0.29.2
+typing-extensions==4.16.0
+typing-inspection==0.4.5
+urllib3==2.8.0
+uvicorn==0.54.0
+watchfiles==1.3.0
+websockets==17.4
+```
+
 ### 1.5 Install SQLite (command-line tools)
 # TUGAS
 
