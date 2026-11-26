@@ -28,6 +28,8 @@ winget install --id=astral-sh.uv -e
 
 #### Pembahasan
 
+<p align="justify">Perintah winget install --id=astral-sh.uv -e ini berhasil memperbarui uv, package manager Python buatan Astral, yang sebelumnya sudah terpasang di komputermu. Winget mendeteksi paket lama, lalu mengunduh versi 0.13.10 (14,9 MB) dari GitHub, memverifikasi hash installer, mengekstrak arsipnya, dan memasang ulang sehingga alias uv, uvx, dan uvw terdaftar di command line. Proses diakhiri dengan pesan "Successfully installed", artinya kamu sekarang bisa langsung menjalankan uv dari terminal untuk mengelola paket dan virtual environment Python dengan cepat. Dependensi Microsoft.VCRedist.2015+.x64 juga disebutkan sebagai prasyarat, dan biasanya sudah ada di Windows.</p>
+
 ```python
 uv --version
 ```
@@ -35,6 +37,8 @@ uv --version
 <img width="471" height="96" alt="02" src="https://github.com/user-attachments/assets/469200cc-bd48-41c8-9b8b-37ccf40f4353" />
 
 #### Pembahasan
+
+<p align="justify">
 
 ### 1.2 Buat workspace dan pin Python 3.14
 
@@ -47,6 +51,8 @@ uv python list
 
 #### Pembahasan
 
+<p align="justify">
+
 
 ```python
 uv python pin 3.14
@@ -55,6 +61,8 @@ uv python pin 3.14
 <img width="468" height="67" alt="04" src="https://github.com/user-attachments/assets/c4061f8a-48ba-4b90-8140-719bc8807fa1" />
 
 #### Pembahasan
+
+<p align="justify">
 
 
 ```python
@@ -66,6 +74,7 @@ python --version
 
 #### Pembahasan
 
+<p align="justify">
 
 ### 1.3 Buat dan aktifkan environment
 
@@ -78,6 +87,8 @@ where python
 <img width="735" height="240" alt="06_1 3" src="https://github.com/user-attachments/assets/cab6ab8d-6dfb-4b04-9387-6584e8a31361" />
 
 #### Pembahasan
+
+<p align="justify">
 
 ### 1.4 Install FastAPI dan SQLModel
 
@@ -158,6 +169,8 @@ Installed 61 packages in 5.61s
 ```
 
 #### Pembahasan
+
+<p align="justify">
 
 
 <p align="justify">Proses instalasi Python dilakukan menggunakan uv dengan versi 3.14.4. Sebelum memulai instalasi, terlebih dahulu dilakukan pengecekan terhadap daftar versi Python yang tersedia dan dikenali oleh uv melalui perintah berikut.</p>
@@ -317,6 +330,8 @@ where /r . sqlite3.exe
 
 #### Pembahasan
 
+<p align="justify">
+
 
 Daftarkan ke PATH
 ```python
@@ -328,7 +343,7 @@ sqlite3 --version
 
 #### Pembahasan
 
-
+<p align="justify">
 
 # TUGAS
 
