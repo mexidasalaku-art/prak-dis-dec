@@ -13,9 +13,37 @@
 
 #  TUJUAN PRAKTIKUM
 
+1.  Menyiapkan lingkungan kerja Python yang terisolasi menggunakan uv, mencakup instalasi Python, pin versi, pembuatan virtual environment, dan pengelolaan paket.
+2.  Menginstal SQLite dan membuat basis data beserta tabel produk dengan tipe data INT, CHAR, VARCHAR, BOOLEAN, dan FLOAT, serta satu primary key.
+3.  Mengisi tabel dengan 5 data menggunakan script Python.
+4.  Membuat service berbasis FastAPI dan SQLModel dengan endpoint GET /produk/ yang menampilkan seluruh data tabel.
+5.  Menjalankan service menggunakan uvicorn dan mengakses datanya melalui browser maupun curl.
 
 ---
 #  DASAR TEORI
+
+#### 1. Basis Data Relasional dan SQLite
+<p align="justify">Basis data relasional menyimpan data dalam tabel yang terdiri dari baris (record) dan kolom (field). Setiap kolom memiliki tipe data, dan setiap tabel memiliki primary key, yaitu kolom yang nilainya unik dan mengidentifikasi satu baris. SQLite adalah sistem basis data relasional yang berbentuk library ringan tanpa server terpisah. Seluruh basis data disimpan dalam satu file (pada praktikum ini toko-produk.db), dan diakses melalui bahasa SQL, misalnya CREATE TABLE untuk membuat tabel dan SELECT untuk membaca data. SQLite menyediakan antarmuka baris perintah sqlite3 untuk mengelola basis data secara langsung.</p>
+
+#### 2. Tipe Data
+<p align="justify">Tabel produk memakai lima tipe data. Tipe INTEGER atau INT menyimpan bilangan bulat, yaitu kolom id (primary key) dan stok. Tipe CHAR(n) menyimpan teks dengan panjang tetap, yaitu kolom kode. Tipe VARCHAR(n) menyimpan teks dengan panjang bervariasi, yaitu kolom nama. Tipe FLOAT menyimpan bilangan desimal, yaitu kolom harga. Tipe BOOLEAN menyimpan nilai benar atau salah, yaitu kolom tersedia, yang disimpan sebagai 1 atau 0 di SQLite.</p>
+         
+#### 3. REST API dan HTTP
+
+<p align="justify">REST (Representational State Transfer) adalah gaya arsitektur layanan web yang memperlakukan data sebagai resource yang diakses melalui URL dan metode HTTP seperti GET, POST, PUT, dan DELETE. Metode GET digunakan untuk membaca data, dan pada praktikum ini endpoint /produk/ mengembalikan daftar produk. Pertukaran data umumnya memakai format JSON (JavaScript Object Notation), yaitu format teks ringan berpasangan kunci dan nilai yang mudah dibaca manusia dan mesin. Layanan semacam ini dapat diakses oleh berbagai klien (browser, aplikasi, atau curl), sehingga mendukung sistem terdistribusi.</p>
+
+#### 4. FastAPI dan Uvicorn
+
+<p align="justify">FastAPI adalah framework web Python modern untuk membangun API. Endpoint didefinisikan dengan decorator seperti @app.get("/produk/"), dan FastAPI otomatis membuat dokumentasi interaktif di /docs. FastAPI memakai type hints Python untuk validasi data dan serialisasi ke JSON, termasuk lewat response_model. Mekanisme dependency injection (Depends) dipakai untuk menyediakan sesi basis data pada setiap permintaan. Uvicorn adalah server ASGI yang menjalankan aplikasi FastAPI, dan opsi --reload memuat ulang aplikasi otomatis saat kode berubah.</p>
+
+#### 5. SQLModel dan ORM
+<p align="justify">Object Relational Mapping (ORM) menghubungkan tabel basis data dengan class pada bahasa pemrograman sehingga data dapat diakses sebagai objek tanpa menulis SQL manual. SQLModel menggabungkan SQLAlchemy dan Pydantic: class Produk(SQLModel, table=True) mewakili tabel produk, create_engine membuat koneksi ke basis data, Session mengelola transaksi, dan select(Produk) membentuk query yang setara dengan SELECT * FROM produk.</p>
+
+#### 6. uv, Virtual Environment, dan Paket Python
+<p align="justify">uv adalah peranti untuk mengelola instalasi Python, virtual environment, dan paket. Perintah uv python pin menetapkan versi Python proyek pada file .python-version, uv venv membuat virtual environment di folder .venv, dan uv pip install memasang paket khusus untuk environment tersebut. Virtual environment memisahkan versi Python dan paket tiap proyek sehingga tidak saling mengganggu, dan daftar paket dapat disimpan dengan uv pip freeze > requirements.txt agar environment mudah direproduksi.</p>
+
+#### 7. curl
+<p align="justify">curl adalah peranti baris perintah untuk mengirim permintaan HTTP ke server. Dengan curl http://localhost:8000/produk/, klien mengirim permintaan GET ke service dan menampilkan respons JSON. curl banyak dipakai untuk menguji API tanpa browser.</p>
 
 ---
 #  PEMBAHASAN PRAKTIKUM
@@ -611,12 +639,18 @@ curl -s http://localhost:8000/produk/ | python -m json.tool
 ---
 # KESIMPULAN
 
-<p align="justify">
+<p align="justify">Berdasarkan praktikum yang telah dilakukan, lingkungan kerja Python berhasil disiapkan menggunakan uv pada Windows, termasuk pin versi Python, pembuatan virtual environment, dan instalasi paket FastAPI serta SQLModel. Basis data SQLite toko-produk.db berhasil dibuat dengan tabel produk yang memuat kolom bertipe INTEGER, CHAR, VARCHAR, FLOAT, dan BOOLEAN, dan tabel tersebut berhasil diisi dengan 5 data melalui script Python. Service berbasis FastAPI dan SQLModel berhasil dijalankan dengan uvicorn, dan endpoint GET /produk/ menampilkan kelima data dalam format JSON, baik melalui browser maupun curl. Dengan demikian, tujuan praktikum tercapai, dan praktikum ini menunjukkan bahwa data pada basis data dapat disediakan sebagai layanan REST API yang dapat diakses oleh berbagai klien, sehingga menjadi dasar bagi pengembangan sistem terdistribusi.</p>
 
 
 ---
 
 # REFERENSI
+
+- Modul 8 - Arsitektur Microservices untuk Sistem Terdistribusi, Praktikum Sistem Terdistribusi dan Terdesentralisasi, Universitas Teknologi Digital Indonesia.
+- Dokumentasi FastAPI. https://fastapi.tiangolo.com/
+- Dokumentasi SQLModel. https://sqlmodel.tiangolo.com/
+- Dokumentasi SQLite. https://sqlite.org/docs.html
+- Dokumentasi uv. https://docs.astral.sh/uv/
 
 
 
