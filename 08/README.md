@@ -339,7 +339,7 @@ where /r . sqlite3.exe
 
 #### Pembahasan
 
-<p align="justify">Perintah set "PATH=%PATH%;%CD%\sqlite-tools-win-x64-3540100" menambahkan folder sqlite-tools-win-x64-3540100 di dalam folder modul ke PATH, sehingga sqlite3 bisa dipanggil dari mana saja. Hasil sqlite3 --version menampilkan versi 3.54.1 (build 2026-10-16, 64-bit), yang cocok dengan versi di halaman unduhan sebelumnya, jadi pemasangan alat command-line SQLite berhasil. Perlu diingat bahwa set hanya berlaku untuk jendela terminal yang sedang terbuka, jadi pengaturan ini hilang saat terminal ditutup. Kalau ingin permanen, tambahkan folder itu lewat Environment Variables Windows (sebaiknya dipindah ke lokasi tetap, misalnya C:\sqlite), atau cukup jalankan ulang perintah set di setiap sesi. Setelah ini, kamu bisa membuka database dengan sqlite3 nama.db dan memeriksa tabel lewat perintah .tables atau .schema.</p>
+<p align="justify">Perintah where /r . sqlite3.exe mencari sqlite3.exe secara rekursif dari folder modul dan menemukannya di sqlite-tools-win-x64-3540100\sqlite3.exe, jadi lokasi file ini terkonfirmasi tepat berada di dalam folder modul praktikum. Setelah itu kamu menjalankan lagi perintah set "PATH=%PATH%;%CD%\sqlite-tools-win-x64-3540100" untuk menambahkan folder tersebut ke PATH sesi terminal yang sedang aktif. Seperti sebelumnya, pengaturan ini hanya berlaku sementara sampai terminal ditutup, dan kalau perintah set dijalankan berulang kali, PATH akan berisi entri ganda, yang tidak berbahaya tetapi tidak perlu. Agar permanen dan tidak bergantung pada folder kerja, pertimbangkan memindahkan folder sqlite-tools-win-x64-3540100 ke lokasi tetap seperti C:\sqlite, lalu menambahkannya lewat Environment Variables Windows.</p>
 
 
 Daftarkan ke PATH
@@ -352,7 +352,7 @@ sqlite3 --version
 
 #### Pembahasan
 
-<p align="justify">
+<p align="justify">Perintah set "PATH=%PATH%;%CD%\sqlite-tools-win-x64-3540100" menambahkan folder sqlite-tools-win-x64-3540100 di dalam folder modul ke PATH, sehingga sqlite3 bisa dipanggil dari mana saja. Hasil sqlite3 --version menampilkan versi 3.54.1 (build 2026-10-16, 64-bit), yang cocok dengan versi di halaman unduhan sebelumnya, jadi pemasangan alat command-line SQLite berhasil. Perlu diingat bahwa set hanya berlaku untuk jendela terminal yang sedang terbuka, jadi pengaturan ini hilang saat terminal ditutup. Kalau ingin permanen, tambahkan folder itu lewat Environment Variables Windows (sebaiknya dipindah ke lokasi tetap, misalnya C:\sqlite), atau cukup jalankan ulang perintah set di setiap sesi. Setelah ini, kamu bisa membuka database dengan sqlite3 nama.db dan memeriksa tabel lewat perintah .tables atau .schema.</p>
 
 # TUGAS
 
