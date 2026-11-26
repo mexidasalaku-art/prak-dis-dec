@@ -19,6 +19,7 @@
 
 ---
 #  PEMBAHASAN PRAKTIKUM
+## Prasyarat
 ### 1.1 Install uv
 
 ```python
