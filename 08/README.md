@@ -358,8 +358,6 @@ sqlite3 --version
 
 ### 1. Buat satu tabel baru menggunakan SQLite, tabel berbeda dari yang ada pada contoh. Tabel tersebut mempunyai 1 primary key dan setidaknya berisi data dengan tipe INT, CHAR, VARCHAR, BOOLEAN, dan FLOAT.
 
-### Buat satu tabel baru menggunakan SQLite, tabel berbeda dari yang ada pada contoh. Tabel tersebut mempunyai 1 primary key dan setidaknya berisi data dengan tipe INT, CHAR, VARCHAR, BOOLEAN, dan FLOAT.
-
 ```python
 sqlite3 toko-produk.db
 ```
@@ -375,6 +373,8 @@ CREATE TABLE produk (id INTEGER PRIMARY KEY, kode CHAR(6), nama VARCHAR(50), har
 <img width="730" height="148" alt="10_T1" src="https://github.com/user-attachments/assets/018cac98-14ef-4e05-aee1-74be809ff132" />
 
 #### Pembahasan
+
+<p align="justify">Perintah sqlite3 toko-produk.db membuka database toko-produk.db di shell SQLite 3.54.1, lalu .tables menunjukkan satu tabel bernama produk. Hasil .schema produk memperlihatkan strukturnya: kolom id (INTEGER PRIMARY KEY), kode (CHAR(6)), nama (VARCHAR(50)), harga (FLOAT), stok (INT), dan tersedia (BOOLEAN). Perintah .quit lalu menutup shell dan kamu kembali ke prompt (MODUL). Perlu dicatat, SQLite bersifat fleksibel soal tipe data, jadi panjang CHAR(6) dan VARCHAR(50) tidak benar-benar dipaksakan, dan BOOLEAN disimpan sebagai angka 0 atau 1. Untuk melihat isi tabel, buka lagi databasenya lalu jalankan SELECT * FROM produk;, dan kalau ingin tampilan lebih rapi, aktifkan dulu .headers on dan .mode column.
 
 Buat File Python di Folder MODUL
 
@@ -428,6 +428,7 @@ conn.close()
 print("Selesai: 5 data berhasil diisikan.")
 ```
 
+
 ```python
 notepad service.py
 ```
@@ -476,6 +477,8 @@ dir *.py
 
 #### Pembahasan
 
+<p align="justify">Perintah dir *.py menampilkan dua file Python di folder modul praktikum, yaitu isi_data.py (928 byte) dan service.py (690 byte), keduanya bertanggal 26/11/2026 pukul 10:34. Dari namanya, isi_data.py kemungkinan berisi skrip untuk mengisi data awal ke tabel produk di toko-produk.db, sedangkan service.py biasanya memuat logika layanan atau endpoint yang nanti dijalankan bersama FastAPI. Ukurannya yang kecil menunjukkan isinya masih ringkas, dan karena .venv sudah aktif, kamu bisa menjalankan skrip pengisi data dengan python isi_data.py lalu mengeceknya di SQLite lewat SELECT * FROM produk;. Untuk layanan, jalankan dengan fastapi dev service.py atau uvicorn service:app --reload, asalkan di dalamnya ada objek app.</p>
+
 ### 2. Isikan 5 data menggunakan script Python
 
 ```python
@@ -485,6 +488,8 @@ python isi_data.py
 <img width="465" height="101" alt="12_T2" src="https://github.com/user-attachments/assets/91844ea1-b152-48c9-8b44-1d3703041da6" />
 
 #### Pembahasan
+
+<p align="justify">Perintah python isi_data.py berjalan sukses dan mencetak kelima baris yang baru disisipkan ke tabel produk, diakhiri pesan "Selesai: 5 data berhasil diisikan." Hasilnya sesuai dugaan sebelumnya: kolom id terisi otomatis dari 1 sampai 5, harga tetap bertipe desimal (misalnya 175000.5 dan 320000.75), dan nilai boolean tersedia tampil sebagai angka, yaitu 1 untuk produk yang tersedia dan 0 untuk Monitor 24 Inci dan Webcam Full HD yang stoknya habis. Karena sebelumnya .venv aktif dan skrip memakai modul sqlite3 bawaan Python, tidak ada paket tambahan yang dibutuhkan. Data ini bisa langsung diperiksa lewat sqlite3 toko-produk.db dengan SELECT * FROM produk;, dan sudah siap dipakai oleh service.py untuk menguji endpoint pembacaan data.</p>
 
 Lihat isi tabel di SQLite:
 ```python
@@ -501,6 +506,8 @@ SELECT * FROM produk;
 
 #### Pembahasan
 
+<p align="justify">Perintah sqlite3 toko-produk.db dengan .mode table lalu SELECT * FROM produk; menampilkan isi tabel dalam bentuk tabel rapi, dan hasilnya cocok dengan data yang tadi dimasukkan skrip isi_data.py. Terlihat lima produk dengan id 1 sampai 5: Keyboard Mekanik (450000.0, stok 25), Mouse Wireless (175000.5, stok 40), Monitor 24 Inci (1850000.0, stok 0), Headset Gaming (320000.75, stok 15), dan Webcam Full HD (275000.0, stok 0). Kolom tersedia bernilai 1 untuk tiga produk yang stoknya ada dan 0 untuk monitor dan webcam, sehingga konsisten dengan stoknya. Ini membuktikan data benar-benar tersimpan permanen di file toko-produk.db, bukan hanya tercetak oleh skrip, jadi database siap dipakai oleh service.py untuk menguji endpoint pembacaan data.</p>
+
 
 ### 3. Buat RESTful API endpoint untuk menampilkan semua data yang telah diisikan
 
@@ -514,15 +521,21 @@ uvicorn service:app --reload
 
 #### Pembahasan
 
+<p align="justify">Perintah uvicorn service:app --reload berhasil menjalankan layanan FastAPI dari file service.py. Uvicorn aktif di http://127.0.0.1:8000, memantau perubahan file di folder modul lewat WatchFiles (proses reloader 13748 dan proses server 12116), dan log ditutup dengan "Application startup complete", artinya aplikasi siap menerima permintaan. Berkat opsi --reload, setiap kali kamu menyimpan perubahan di service.py, server akan restart otomatis. Sekarang kamu bisa membuka http://127.0.0.1:8000/docs di browser untuk mencoba endpoint lewat Swagger UI, dan tekan CTRL+C di terminal untuk menghentikan server. Karena terminal ini terpakai oleh server, buka jendela terminal baru bila ingin menjalankan perintah lain.</p>
+
 Cek di browser: http://localhost:8000/produk/ (dokumentasi otomatis: http://localhost:8000/docs).
 
 <img width="477" height="134" alt="15" src="https://github.com/user-attachments/assets/8db7d28d-b10b-476f-b960-c7a7c03167fc" />
 
 #### Pembahasan
 
+<p align="justify">Tampilan ini adalah respons JSON dari endpoint layanan FastAPI yang berisi lima produk dari tabel produk, sehingga terbukti service.py berhasil membaca toko-produk.db dan mengirimkannya lewat HTTP. Setiap objek memuat id, kode, nama, harga, stok, dan tersedia, dan nilainya sama dengan hasil SELECT di SQLite sebelumnya. Perbedaannya, kolom tersedia kini tampil sebagai true atau false, bukan 1 dan 0, karena data dikonversi ke tipe boolean saat diubah menjadi JSON. Urutan kuncinya tampak alfabetis (harga, id, tersedia, kode, nama, stok), yang menandakan JSON dibuat dengan sort key, kemungkinan memakai json.dumps(..., sort_keys=True) atau jsonify ala Flask, bukan model Pydantic bawaan FastAPI. Hal ini tidak masalah, tetapi kalau ingin urutan lebih rapi dan dokumentasi otomatis di /docs lebih lengkap, kamu bisa mendefinisikan response_model dengan Pydantic atau SQLModel.</p>
+
 <img width="470" height="229" alt="16" src="https://github.com/user-attachments/assets/73f6e1c6-0c1e-4724-a1f0-27a4055179d8" />
 
 #### Pembahasan
+
+<p align="justify">
 
 
 
@@ -591,9 +604,13 @@ curl -s http://localhost:8000/produk/ | python -m json.tool
 
 #### Pembahasan
 
+<p align="justify">
+
 
 ---
 # KESIMPULAN
+
+<p align="justify">
 
 
 ---
